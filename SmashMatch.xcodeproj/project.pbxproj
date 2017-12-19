@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		39A7721748C209E39393310F /* Pods_SmashMatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C473C2ADA23E6755C17305D /* Pods_SmashMatch.framework */; };
 		750F139B1FE9CD4600121507 /* DataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F139A1FE9CD4600121507 /* DataMapper.swift */; };
-		75197E251FE7C5F00006EDBA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75197E241FE7C5F00006EDBA /* AppDelegate.swift */; };
+		750F139D1FE9DC7500121507 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F139C1FE9DC7500121507 /* AppDelegate.swift */; };
+		75197E251FE7C5F00006EDBA /* (null) in Sources */ = {isa = PBXBuildFile; };
 		75197E2B1FE7C5F00006EDBA /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75197E2A1FE7C5F00006EDBA /* GameScene.swift */; };
 		75197E2D1FE7C5F00006EDBA /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75197E2C1FE7C5F00006EDBA /* GameViewController.swift */; };
 		75197E301FE7C5F00006EDBA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75197E2E1FE7C5F00006EDBA /* Main.storyboard */; };
@@ -41,6 +42,7 @@
 		542BB719EA50B9834E6C95D3 /* Pods-SmashMatch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmashMatch.release.xcconfig"; path = "Pods/Target Support Files/Pods-SmashMatch/Pods-SmashMatch.release.xcconfig"; sourceTree = "<group>"; };
 		6C473C2ADA23E6755C17305D /* Pods_SmashMatch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmashMatch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		750F139A1FE9CD4600121507 /* DataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMapper.swift; sourceTree = "<group>"; };
+		750F139C1FE9DC7500121507 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		75197E211FE7C5F00006EDBA /* SmashMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmashMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75197E2A1FE7C5F00006EDBA /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		75197E2C1FE7C5F00006EDBA /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -154,8 +156,8 @@
 		75197E411FE7C8820006EDBA /* Misc */ = {
 			isa = PBXGroup;
 			children = (
+				750F139C1FE9DC7500121507 /* AppDelegate.swift */,
 				750F139A1FE9CD4600121507 /* DataMapper.swift */,
-				75197E241FE7C5F00006EDBA /* AppDelegate.swift */,
 				75197E361FE7C5F00006EDBA /* Info.plist */,
 				75197E2E1FE7C5F00006EDBA /* Main.storyboard */,
 				75197E331FE7C5F00006EDBA /* LaunchScreen.storyboard */,
@@ -366,8 +368,9 @@
 				75F00F7C1FE7E69300F83F0A /* Swap.swift in Sources */,
 				75F00F6D1FE7DF5F00F83F0A /* Tile.swift in Sources */,
 				75197E2D1FE7C5F00006EDBA /* GameViewController.swift in Sources */,
+				750F139D1FE9DC7500121507 /* AppDelegate.swift in Sources */,
 				75F00F6B1FE7DA2F00F83F0A /* MainMenuViewController.swift in Sources */,
-				75197E251FE7C5F00006EDBA /* AppDelegate.swift in Sources */,
+				75197E251FE7C5F00006EDBA /* (null) in Sources */,
 				750F139B1FE9CD4600121507 /* DataMapper.swift in Sources */,
 				75F00F661FE7CD4300F83F0A /* Array2D.swift in Sources */,
 			);
