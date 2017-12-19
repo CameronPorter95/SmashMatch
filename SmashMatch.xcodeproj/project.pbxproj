@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		39A7721748C209E39393310F /* Pods_SmashMatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C473C2ADA23E6755C17305D /* Pods_SmashMatch.framework */; };
+		75197E251FE7C5F00006EDBA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75197E241FE7C5F00006EDBA /* AppDelegate.swift */; };
 		75197E2B1FE7C5F00006EDBA /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75197E2A1FE7C5F00006EDBA /* GameScene.swift */; };
 		75197E2D1FE7C5F00006EDBA /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75197E2C1FE7C5F00006EDBA /* GameViewController.swift */; };
 		75197E301FE7C5F00006EDBA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75197E2E1FE7C5F00006EDBA /* Main.storyboard */; };
@@ -35,6 +37,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		542BB719EA50B9834E6C95D3 /* Pods-SmashMatch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmashMatch.release.xcconfig"; path = "Pods/Target Support Files/Pods-SmashMatch/Pods-SmashMatch.release.xcconfig"; sourceTree = "<group>"; };
+		6C473C2ADA23E6755C17305D /* Pods_SmashMatch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmashMatch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75197E211FE7C5F00006EDBA /* SmashMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmashMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75197E2A1FE7C5F00006EDBA /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		75197E2C1FE7C5F00006EDBA /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -62,6 +66,7 @@
 		75F00F6C1FE7DF5F00F83F0A /* Tile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
 		75F00F6E1FE7DFDB00F83F0A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		75F00F7B1FE7E69300F83F0A /* Swap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swap.swift; sourceTree = "<group>"; };
+		AAE41AE1E837F049E845EA54 /* Pods-SmashMatch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmashMatch.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SmashMatch/Pods-SmashMatch.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,17 +74,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39A7721748C209E39393310F /* Pods_SmashMatch.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6E6320BAD56CC4B8D2714D26 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				AAE41AE1E837F049E845EA54 /* Pods-SmashMatch.debug.xcconfig */,
+				542BB719EA50B9834E6C95D3 /* Pods-SmashMatch.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		75197E181FE7C5F00006EDBA = {
 			isa = PBXGroup;
 			children = (
 				75197E231FE7C5F00006EDBA /* SmashMatch */,
 				75197E221FE7C5F00006EDBA /* Products */,
+				6E6320BAD56CC4B8D2714D26 /* Pods */,
+				BFFB663BE5E21F8A0906968E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -188,6 +205,14 @@
 			path = OtherAppScreens;
 			sourceTree = "<group>";
 		};
+		BFFB663BE5E21F8A0906968E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6C473C2ADA23E6755C17305D /* Pods_SmashMatch.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -195,9 +220,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 75197E391FE7C5F00006EDBA /* Build configuration list for PBXNativeTarget "SmashMatch" */;
 			buildPhases = (
+				BA7512A1A9409A49CBD81295 /* [CP] Check Pods Manifest.lock */,
 				75197E1D1FE7C5F00006EDBA /* Sources */,
 				75197E1E1FE7C5F00006EDBA /* Frameworks */,
 				75197E1F1FE7C5F00006EDBA /* Resources */,
+				86AEDAA389E222AABD0EEF18 /* [CP] Embed Pods Frameworks */,
+				4C1889BB07B172B41ADD167C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -266,6 +294,60 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4C1889BB07B172B41ADD167C /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SmashMatch/Pods-SmashMatch-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		86AEDAA389E222AABD0EEF18 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-SmashMatch/Pods-SmashMatch-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SQLite.swift/SQLite.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SQLite.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SmashMatch/Pods-SmashMatch-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BA7512A1A9409A49CBD81295 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SmashMatch-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		75197E1D1FE7C5F00006EDBA /* Sources */ = {
@@ -416,6 +498,7 @@
 		};
 		75197E3A1FE7C5F00006EDBA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AAE41AE1E837F049E845EA54 /* Pods-SmashMatch.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -431,6 +514,7 @@
 		};
 		75197E3B1FE7C5F00006EDBA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 542BB719EA50B9834E6C95D3 /* Pods-SmashMatch.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
