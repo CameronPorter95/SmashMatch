@@ -42,7 +42,6 @@
 		6C473C2ADA23E6755C17305D /* Pods_SmashMatch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmashMatch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		750F139A1FE9CD4600121507 /* DataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMapper.swift; sourceTree = "<group>"; };
 		75197E211FE7C5F00006EDBA /* SmashMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmashMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		75197E241FE7C5F00006EDBA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		75197E2A1FE7C5F00006EDBA /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		75197E2C1FE7C5F00006EDBA /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		75197E2F1FE7C5F00006EDBA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
