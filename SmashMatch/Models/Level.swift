@@ -8,13 +8,14 @@
 
 import Foundation
 
-let NumColumns = 9
-let NumRows = 9
+let NumColumns = 10
+let NumRows = 10
 let NumLevels = 4 // Excluding level 0
 
 class Level {
     fileprivate var cookies = Array2D<Cookie>(columns: NumColumns, rows: NumRows)
     private var tiles = Array2D<Tile>(columns: NumColumns, rows: NumRows)
+    private var cannons = Set<Cannon>()
     private var possibleSwaps = Set<Swap>()
     var targetScore = 0
     var maximumMoves = 0
@@ -44,19 +45,27 @@ class Level {
         for row in 0..<NumRows {
             for column in 0..<NumColumns {
                 if tiles[column, row] != nil {
-                    var cookieType: CookieType
-                    repeat {
-                        cookieType = CookieType.random()
-                    } while (column >= 2 &&
-                        cookies[column - 1, row]?.cookieType == cookieType &&
-                        cookies[column - 2, row]?.cookieType == cookieType)
-                        || (row >= 2 &&
-                            cookies[column, row - 1]?.cookieType == cookieType &&
-                            cookies[column, row - 2]?.cookieType == cookieType)
-                    
-                    let cookie = Cookie(column: column, row: row, cookieType: cookieType)
-                    cookies[column, row] = cookie
-                    set.insert(cookie)
+                    if(row == 0 || row == NumRows-1 || column == 0 || column == NumColumns-1){
+                        //Make a wall if underlying tile exists and on border
+                        let wall = Wall(column: column, row: row, wallType: WallType.new)
+                        cookies[column, row] = wall
+                        set.insert(wall)
+                        continue;
+                    } else {
+                        var cookieType: CookieType
+                        repeat {
+                            cookieType = CookieType.random()
+                        } while (column >= 2 &&
+                            cookies[column - 1, row]?.cookieType == cookieType &&
+                            cookies[column - 2, row]?.cookieType == cookieType)
+                            || (row >= 2 &&
+                                cookies[column, row - 1]?.cookieType == cookieType &&
+                                cookies[column, row - 2]?.cookieType == cookieType)
+                        
+                        let cookie = Cookie(column: column, row: row, cookieType: cookieType)
+                        cookies[column, row] = cookie
+                        set.insert(cookie)
+                    }
                 }
             }
         }
@@ -68,10 +77,18 @@ class Level {
         for row in 0..<NumRows {
             for column in 0..<NumColumns {
                 if tiles[column, row] != nil {
-                    let cookieType = cookiesFromFileArray![row][column]
-                    let cookie = Cookie(column: column, row: row, cookieType: CookieType(rawValue: cookieType)!)
-                    cookies[column, row] = cookie
-                    set.insert(cookie)
+                    if(row == 0 || row == NumRows-1 || column == 0 || column == NumColumns-1){
+                        //Make a wall if underlying tile exists and on border
+                        let wall = Wall(column: column, row: row, wallType: WallType.new)
+                        cookies[column, row] = wall
+                        set.insert(wall)
+                        continue;
+                    } else {
+                        let cookieType = cookiesFromFileArray![row][column]
+                        let cookie = Cookie(column: column, row: row, cookieType: CookieType(rawValue: cookieType)!)
+                        cookies[column, row] = cookie
+                        set.insert(cookie)
+                    }
                 }
             }
         }
@@ -222,19 +239,29 @@ class Level {
     func removeMatches() -> Set<Chain> {
         let horizontalChains = detectHorizontalMatches()
         let verticalChains = detectVerticalMatches()
+        
+        var cannons = Set<Cannon>()
+        //Get cannon positions from straight chains.
+        createCannons(chains: horizontalChains, cannons: &cannons)
+        createCannons(chains: verticalChains, cannons: &cannons)
+        
+        //Check for chain interceptions for L and T chains and create cannons from L and T's.
         for horzChain in horizontalChains {
             for vertChain in verticalChains {
                 for cookie in horzChain.cookies {
                     if vertChain.cookies.contains(cookie) {
-                        print("Forming a 4 way intercept cannon at location row: \(cookie.row) col: \(cookie.column)")
+                        let cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.fourWay)
+                        if cannons.contains(cannon) {
+                            cannons.remove(cannon)
+                        }
+                        cannons.insert(cannon)
+                        print("Forming a 4 way intercept \(cannon.description) with type \(cannon.cannonType.description)")
                     }
                 }
             }
         }
         
-        //Get cannon positions from straight chains.
-        getCannonPositions(chains: horizontalChains)
-        getCannonPositions(chains: verticalChains)
+        self.cannons = cannons
         removeCookies(chains: horizontalChains)
         removeCookies(chains: verticalChains)
         
@@ -248,20 +275,37 @@ class Level {
         return horizontalChains.union(verticalChains)
     }
     
-    func getCannonPositions(chains: Set<Chain>){
+    func createCannons(chains: Set<Chain>, cannons: inout Set<Cannon>) {
         for chain in chains {
             if(chain.length > 3){
                 for cookie in chain.cookies {
                     if(cookie.moved == true){
                         if(chain.length > 4){
-                            print("Forming a 4 way cannon at location row: \(cookie.row) col: \(cookie.column)")
+                            let cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.fourWay)
+                            cannons.insert(cannon)
+                            print("Forming a 4 Way\(cannon.description) with type \(cannon.cannonType.description)")
                             break;
                         }
-                        print("Forming a 2 way cannon at location row: \(cookie.row) col: \(cookie.column)")
+                        let cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.twoWay)
+                        cannons.insert(cannon)
+                        print("Forming a 2 Way \(cannon.description) with type \(cannon.cannonType.description)")
                     }
                 }
             }
         }
+    }
+    
+    func createWall(){
+        
+    }
+    
+    func getCannons() -> Set<Cannon>{
+        for cannon in self.cannons {
+            let column = cannon.column
+            let row = cannon.row
+            cookies[column, row] = cannon
+        }
+        return self.cannons
     }
     
     private func removeCookies(chains: Set<Chain>) {

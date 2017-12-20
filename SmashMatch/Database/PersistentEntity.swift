@@ -119,6 +119,54 @@ class PersistentEntity {
         }
     }
     
+    func updateAt(id: Int64, index: Int, value: AnyObject) -> Bool {
+        if Database.shared.connection == nil {
+            return false
+        }
+        do {
+            let tblFilterPersistent = self.tblPersistent.filter(self.id == id)
+            var setters:[SQLite.Setter] = [SQLite.Setter]()
+            if index == 2 {
+                setters.append(self.soundEffectsEnabled <- soundEffectsEnabled)
+            }
+            if index == 3 {
+                setters.append(self.musicEnabled <- musicEnabled)
+            }
+            if index == 4 {
+                setters.append(self.numberOfLives <- numberOfLives)
+            }
+            if index == 5 {
+                setters.append(self.timeStopped <- timeStopped)
+            }
+            if index == 6 {
+                setters.append(self.displayAds <- displayAds)
+            }
+            if index == 7 {
+                setters.append(self.highscoreArcade <- highscoreArcade)
+            }
+            if index == 8 {
+                setters.append(self.highscoreDemolition <- highscoreDemolition)
+            }
+            if index == 9 {
+                setters.append(self.highestLevelAchieved <- highestLevelAchieved)
+            }
+            if setters.count == 0  {
+                print("Nothing to update")
+                return false
+            }
+            let update = tblFilterPersistent.update(setters)
+            if try Database.shared.connection!.run(update) <= 0 {
+                //Update unsuccessful
+                return false
+            }
+            return true
+        } catch {
+            let nserror = error as NSError
+            print("Cannot update objects in tblPersistent. Error is: \(nserror), \(nserror.userInfo)")
+            return false
+        }
+    }
+    
     func queryFirst() -> AnySequence<Row>? {
         do {
             return try Database.shared.connection?.prepare(self.tblPersistent.filter(self.id == 1))
@@ -153,6 +201,31 @@ class PersistentEntity {
             """
         
         print(tableDescription)
+    }
+    
+    func getKeyAt(persistent: Row, index: Int) -> AnyObject? {
+        switch index {
+            case 1:
+                return persistent[self.id] as AnyObject
+            case 2:
+                return persistent[self.soundEffectsEnabled] as AnyObject
+            case 3:
+                return persistent[self.musicEnabled] as AnyObject
+            case 4:
+                return persistent[self.numberOfLives] as AnyObject
+            case 5:
+                return persistent[self.timeStopped] as AnyObject
+            case 6:
+                return persistent[self.displayAds] as AnyObject
+            case 7:
+                return persistent[self.highscoreArcade] as AnyObject
+            case 8:
+                return persistent[self.highscoreDemolition] as AnyObject
+            case 8:
+                return persistent[self.highestLevelAchieved] as AnyObject
+        default:
+            return nil
+        }
     }
     
     func hasRow(persistent: Row) -> Bool {

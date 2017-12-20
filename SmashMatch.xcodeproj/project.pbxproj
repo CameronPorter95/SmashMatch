@@ -20,6 +20,7 @@
 		75197E301FE7C5F00006EDBA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75197E2E1FE7C5F00006EDBA /* Main.storyboard */; };
 		75197E321FE7C5F00006EDBA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75197E311FE7C5F00006EDBA /* Assets.xcassets */; };
 		75197E351FE7C5F00006EDBA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75197E331FE7C5F00006EDBA /* LaunchScreen.storyboard */; };
+		75238B0B1FEA323400FFF7BA /* Cannon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75238B0A1FEA323400FFF7BA /* Cannon.swift */; };
 		753738D71FE8FB2000B08292 /* Scrape.wav in Resources */ = {isa = PBXBuildFile; fileRef = 75B62C881FE8DAB300D4F88F /* Scrape.wav */; };
 		753738D81FE8FB2000B08292 /* Ka-Ching.wav in Resources */ = {isa = PBXBuildFile; fileRef = 75B62C891FE8DAB300D4F88F /* Ka-Ching.wav */; };
 		753738D91FE8FB2000B08292 /* Mining by Moonlight.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 75B62C8A1FE8DAB300D4F88F /* Mining by Moonlight.mp3 */; };
@@ -48,10 +49,10 @@
 		2C739E241FEA16A70005211D /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		2C739E261FEB005F0005211D /* PauseMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PauseMenuViewController.swift; sourceTree = "<group>"; };
 		542BB719EA50B9834E6C95D3 /* Pods-SmashMatch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmashMatch.release.xcconfig"; path = "Pods/Target Support Files/Pods-SmashMatch/Pods-SmashMatch.release.xcconfig"; sourceTree = "<group>"; };
-		750F139A1FE9CD4600121507 /* DataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMapper.swift; sourceTree = "<group>"; };
 		750F139C1FE9DC7500121507 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		750F13AA1FEA1F3600121507 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		750F13AB1FEA1F3600121507 /* PersistentEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentEntity.swift; sourceTree = "<group>"; };
+		7513834C1FEAEFD600AE0D5A /* Wall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wall.swift; sourceTree = "<group>"; };
 		75197E211FE7C5F00006EDBA /* SmashMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmashMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75197E2A1FE7C5F00006EDBA /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		75197E2C1FE7C5F00006EDBA /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -59,6 +60,7 @@
 		75197E311FE7C5F00006EDBA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		75197E341FE7C5F00006EDBA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		75197E361FE7C5F00006EDBA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		75238B0A1FEA323400FFF7BA /* Cannon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cannon.swift; sourceTree = "<group>"; };
 		757A2A2B1FE9062F000E98D9 /* Sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Sprites.atlas; sourceTree = "<group>"; };
 		757A2A2E1FE906C4000E98D9 /* Level_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Level_2.json; sourceTree = "<group>"; };
 		757A2A2F1FE906C4000E98D9 /* Level_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Level_3.json; sourceTree = "<group>"; };
@@ -183,7 +185,6 @@
 			isa = PBXGroup;
 			children = (
 				750F139C1FE9DC7500121507 /* AppDelegate.swift */,
-				750F139A1FE9CD4600121507 /* DataMapper.swift */,
 				75197E361FE7C5F00006EDBA /* Info.plist */,
 				75197E2E1FE7C5F00006EDBA /* Main.storyboard */,
 				75197E331FE7C5F00006EDBA /* LaunchScreen.storyboard */,
@@ -225,6 +226,8 @@
 				75F00F6C1FE7DF5F00F83F0A /* Tile.swift */,
 				75F00F7B1FE7E69300F83F0A /* Swap.swift */,
 				75B62C8E1FE8DBB300D4F88F /* Chain.swift */,
+				75238B0A1FEA323400FFF7BA /* Cannon.swift */,
+				7513834C1FEAEFD600AE0D5A /* Wall.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -400,9 +403,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				75F00F681FE7CED900F83F0A /* Level.swift in Sources */,
+				7513834D1FEAEFD600AE0D5A /* Wall.swift in Sources */,
 				75F00F6F1FE7DFDB00F83F0A /* Extensions.swift in Sources */,
 				75197E2B1FE7C5F00006EDBA /* GameScene.swift in Sources */,
 				75B62C8F1FE8DBB300D4F88F /* Chain.swift in Sources */,
+				75238B0B1FEA323400FFF7BA /* Cannon.swift in Sources */,
 				75F00F631FE7CAE400F83F0A /* Cookie.swift in Sources */,
 				2C739E251FEA16A70005211D /* SettingViewController.swift in Sources */,
 				75F00F7C1FE7E69300F83F0A /* Swap.swift in Sources */,
@@ -414,7 +419,6 @@
 				75F00F6B1FE7DA2F00F83F0A /* MainMenuViewController.swift in Sources */,
 				75197E251FE7C5F00006EDBA /* (null) in Sources */,
 				2C739E211FE9E6B40005211D /* LevelsViewController.swift in Sources */,
-				750F139B1FE9CD4600121507 /* DataMapper.swift in Sources */,
 				750F13AC1FEA1F3600121507 /* Database.swift in Sources */,
 				75F00F661FE7CD4300F83F0A /* Array2D.swift in Sources */,
 			);
