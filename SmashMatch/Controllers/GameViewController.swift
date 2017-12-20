@@ -119,7 +119,7 @@ class GameViewController: UIViewController {
             return
         }
         scene.animateMatchedCookies(for: chains) {
-            let cannons = self.level.createCannons()
+            let cannons = self.level.getCannons()
             self.scene.animateNewCannons(cannons: cannons) {
                 let columns = self.level.fillHoles()
                 self.scene.animateFallingCookies(columns: columns) {

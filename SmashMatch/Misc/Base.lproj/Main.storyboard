@@ -268,7 +268,7 @@
                                 </constraints>
                                 <state key="normal" title="Back"/>
                                 <connections>
-                                    <segue destination="BV1-FR-VrT" kind="show" id="eKR-EF-brD"/>
+                                    <segue destination="BV1-FR-VrT" kind="showDetail" action="showViewController:sender:" id="eKR-EF-brD"/>
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Dnf-e7-9Bd">
@@ -362,6 +362,6 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="dkU-WQ-Dma"/>
-        <segue reference="dv7-Cf-Vc1"/>
+        <segue reference="eKR-EF-brD"/>
     </inferredMetricsTieBreakers>
 </document>

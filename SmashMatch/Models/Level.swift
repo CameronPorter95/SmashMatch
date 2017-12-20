@@ -226,17 +226,20 @@ class Level {
         
         var cannons = Set<Cannon>()
         //Get cannon positions from straight chains.
-        getCannonPositions(chains: horizontalChains, cannons: &cannons)
-        getCannonPositions(chains: verticalChains, cannons: &cannons)
+        createCannons(chains: horizontalChains, cannons: &cannons)
+        createCannons(chains: verticalChains, cannons: &cannons)
         
-        //Check for chain interceptions for L and T chains and get cannon positions from L and T's.
+        //Check for chain interceptions for L and T chains and create cannons from L and T's.
         for horzChain in horizontalChains {
             for vertChain in verticalChains {
                 for cookie in horzChain.cookies {
                     if vertChain.cookies.contains(cookie) {
-                        print("Forming a 4 way intercept cannon at location row: \(cookie.row) col: \(cookie.column)")
                         let cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.fourWay)
+                        if cannons.contains(cannon) {
+                            cannons.remove(cannon)
+                        }
                         cannons.insert(cannon)
+                        print("Forming a 4 way intercept \(cannon.description) with type \(cannon.cannonType.description)")
                     }
                 }
             }
@@ -256,27 +259,27 @@ class Level {
         return horizontalChains.union(verticalChains)
     }
     
-    func getCannonPositions(chains: Set<Chain>, cannons: inout Set<Cannon>) {
+    func createCannons(chains: Set<Chain>, cannons: inout Set<Cannon>) {
         for chain in chains {
             if(chain.length > 3){
                 for cookie in chain.cookies {
                     if(cookie.moved == true){
                         if(chain.length > 4){
-                            print("Forming a 4 way cannon at location row: \(cookie.row) col: \(cookie.column)")
                             let cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.fourWay)
                             cannons.insert(cannon)
+                            print("Forming a 4 Way\(cannon.description) with type \(cannon.cannonType.description)")
                             break;
                         }
-                        print("Forming a 2 way cannon at location row: \(cookie.row) col: \(cookie.column)")
-                        let cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.fourWay)
+                        let cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.twoWay)
                         cannons.insert(cannon)
+                        print("Forming a 2 Way \(cannon.description) with type \(cannon.cannonType.description)")
                     }
                 }
             }
         }
     }
     
-    func createCannons() -> Set<Cannon>{
+    func getCannons() -> Set<Cannon>{
         for cannon in self.cannons {
             let column = cannon.column
             let row = cannon.row

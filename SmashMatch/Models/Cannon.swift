@@ -12,8 +12,8 @@ enum CannonType: Int, CustomStringConvertible  {
     case unknown = 0, twoWay, fourWay
     var spriteName: String {
         let spriteNames = [
-            "twoWayCannon",
-            "fourWayCannon"]
+            "Macaroon",
+            "SugarCookie"]
         
         return spriteNames[rawValue - 1]
     }

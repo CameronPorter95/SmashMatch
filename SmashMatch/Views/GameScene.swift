@@ -256,7 +256,7 @@ class GameScene: SKScene {
     //Animates the creation of cannons
     func animateNewCannons(cannons: Set<Cannon>, completion: @escaping () -> ()){
         for cannon in cannons {
-            let sprite = SKSpriteNode(imageNamed: "SugarCookie") //TODO change to cannon image
+            let sprite = SKSpriteNode(imageNamed: cannon.cannonType.spriteName) //TODO change to cannon image
             sprite.size = CGSize(width: TileWidth, height: TileHeight)
             sprite.position = pointFor(column: cannon.column, row: cannon.row)
             cookiesLayer.addChild(sprite)
