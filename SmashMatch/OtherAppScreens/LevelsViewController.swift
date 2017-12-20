@@ -10,6 +10,12 @@ import UIKit
 
 class LevelsViewController: UIViewController {
 
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         print("this page is alive...")
