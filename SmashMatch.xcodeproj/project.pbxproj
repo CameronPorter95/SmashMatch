@@ -7,15 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-<<<<<<< HEAD
+		1A1EF34098445D3D89DC3FD6 /* Pods_SmashMatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85B07C5B5E55A3462749B0A1 /* Pods_SmashMatch.framework */; };
 		750F139B1FE9CD4600121507 /* DataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F139A1FE9CD4600121507 /* DataMapper.swift */; };
-=======
-		39A7721748C209E39393310F /* Pods_SmashMatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C473C2ADA23E6755C17305D /* Pods_SmashMatch.framework */; };
->>>>>>> 5fdbd3476cf1aa811dffd77dddae5bee4a2ee210
 		750F139D1FE9DC7500121507 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F139C1FE9DC7500121507 /* AppDelegate.swift */; };
-		750F13A11FE9F63500121507 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F13A01FE9F63500121507 /* Database.swift */; };
-		750F13A41FE9F84200121507 /* PersistentEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F13A31FE9F84200121507 /* PersistentEntity.swift */; };
-		75197E251FE7C5F00006EDBA /* (null) in Sources */ = {isa = PBXBuildFile; };
+		750F13AC1FEA1F3600121507 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F13AA1FEA1F3600121507 /* Database.swift */; };
+		750F13AD1FEA1F3600121507 /* PersistentEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F13AB1FEA1F3600121507 /* PersistentEntity.swift */; };
+		75197E251FE7C5F00006EDBA /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		75197E2B1FE7C5F00006EDBA /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75197E2A1FE7C5F00006EDBA /* GameScene.swift */; };
 		75197E2D1FE7C5F00006EDBA /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75197E2C1FE7C5F00006EDBA /* GameViewController.swift */; };
 		75197E301FE7C5F00006EDBA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75197E2E1FE7C5F00006EDBA /* Main.storyboard */; };
@@ -46,14 +43,10 @@
 
 /* Begin PBXFileReference section */
 		542BB719EA50B9834E6C95D3 /* Pods-SmashMatch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmashMatch.release.xcconfig"; path = "Pods/Target Support Files/Pods-SmashMatch/Pods-SmashMatch.release.xcconfig"; sourceTree = "<group>"; };
-<<<<<<< HEAD
 		750F139A1FE9CD4600121507 /* DataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMapper.swift; sourceTree = "<group>"; };
-=======
-		6C473C2ADA23E6755C17305D /* Pods_SmashMatch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmashMatch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
->>>>>>> 5fdbd3476cf1aa811dffd77dddae5bee4a2ee210
 		750F139C1FE9DC7500121507 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		750F13A01FE9F63500121507 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
-		750F13A31FE9F84200121507 /* PersistentEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentEntity.swift; sourceTree = "<group>"; };
+		750F13AA1FEA1F3600121507 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		750F13AB1FEA1F3600121507 /* PersistentEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentEntity.swift; sourceTree = "<group>"; };
 		75197E211FE7C5F00006EDBA /* SmashMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmashMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75197E2A1FE7C5F00006EDBA /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		75197E2C1FE7C5F00006EDBA /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -81,6 +74,7 @@
 		75F00F6C1FE7DF5F00F83F0A /* Tile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
 		75F00F6E1FE7DFDB00F83F0A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		75F00F7B1FE7E69300F83F0A /* Swap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swap.swift; sourceTree = "<group>"; };
+		85B07C5B5E55A3462749B0A1 /* Pods_SmashMatch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmashMatch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAE41AE1E837F049E845EA54 /* Pods-SmashMatch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmashMatch.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SmashMatch/Pods-SmashMatch.debug.xcconfig"; sourceTree = "<group>"; };
 		B3C2058C1FE9F86D00308B65 /* SmashMatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SmashMatch.entitlements; sourceTree = "<group>"; };
 		B3C2058D1FE9FA4400308B65 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
@@ -92,6 +86,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B3C2058E1FE9FA4400308B65 /* GameKit.framework in Frameworks */,
+				1A1EF34098445D3D89DC3FD6 /* Pods_SmashMatch.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,11 +102,11 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		750F13A21FE9F7C300121507 /* Database */ = {
+		750F13A91FEA1F3600121507 /* Database */ = {
 			isa = PBXGroup;
 			children = (
-				750F13A01FE9F63500121507 /* Database.swift */,
-				750F13A31FE9F84200121507 /* PersistentEntity.swift */,
+				750F13AA1FEA1F3600121507 /* Database.swift */,
+				750F13AB1FEA1F3600121507 /* PersistentEntity.swift */,
 			);
 			path = Database;
 			sourceTree = "<group>";
@@ -143,7 +138,7 @@
 				75197E411FE7C8820006EDBA /* Misc */,
 				75F00F641FE7CB0B00F83F0A /* Models */,
 				75197E401FE7C85F0006EDBA /* Views */,
-				750F13A21FE9F7C300121507 /* Database */,
+				750F13A91FEA1F3600121507 /* Database */,
 				75F00F6E1FE7DFDB00F83F0A /* Extensions.swift */,
 				75197E3E1FE7C8250006EDBA /* Resources */,
 			);
@@ -181,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				750F139C1FE9DC7500121507 /* AppDelegate.swift */,
+				750F139A1FE9CD4600121507 /* DataMapper.swift */,
 				75197E361FE7C5F00006EDBA /* Info.plist */,
 				75197E2E1FE7C5F00006EDBA /* Main.storyboard */,
 				75197E331FE7C5F00006EDBA /* LaunchScreen.storyboard */,
@@ -238,6 +234,7 @@
 			isa = PBXGroup;
 			children = (
 				B3C2058D1FE9FA4400308B65 /* GameKit.framework */,
+				85B07C5B5E55A3462749B0A1 /* Pods_SmashMatch.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -281,15 +278,12 @@
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.GameCenter = {
-<<<<<<< HEAD
 								enabled = 1;
 							};
 							com.apple.Push = {
 								enabled = 0;
 							};
 							com.apple.iCloud = {
-=======
->>>>>>> 5fdbd3476cf1aa811dffd77dddae5bee4a2ee210
 								enabled = 0;
 							};
 						};
@@ -404,13 +398,14 @@
 				75B62C8F1FE8DBB300D4F88F /* Chain.swift in Sources */,
 				75F00F631FE7CAE400F83F0A /* Cookie.swift in Sources */,
 				75F00F7C1FE7E69300F83F0A /* Swap.swift in Sources */,
-				750F13A41FE9F84200121507 /* PersistentEntity.swift in Sources */,
+				750F13AD1FEA1F3600121507 /* PersistentEntity.swift in Sources */,
 				75F00F6D1FE7DF5F00F83F0A /* Tile.swift in Sources */,
 				75197E2D1FE7C5F00006EDBA /* GameViewController.swift in Sources */,
 				750F139D1FE9DC7500121507 /* AppDelegate.swift in Sources */,
 				75F00F6B1FE7DA2F00F83F0A /* MainMenuViewController.swift in Sources */,
-				75197E251FE7C5F00006EDBA /* (null) in Sources */,
-				750F13A11FE9F63500121507 /* Database.swift in Sources */,
+				75197E251FE7C5F00006EDBA /* BuildFile in Sources */,
+				750F139B1FE9CD4600121507 /* DataMapper.swift in Sources */,
+				750F13AC1FEA1F3600121507 /* Database.swift in Sources */,
 				75F00F661FE7CD4300F83F0A /* Array2D.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
