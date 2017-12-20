@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C739E211FE9E6B40005211D /* LevelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C739E201FE9E6B40005211D /* LevelsViewController.swift */; };
+		2C739E251FEA16A70005211D /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C739E241FEA16A70005211D /* SettingViewController.swift */; };
 		39A7721748C209E39393310F /* Pods_SmashMatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C473C2ADA23E6755C17305D /* Pods_SmashMatch.framework */; };
 		750F139B1FE9CD4600121507 /* DataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F139A1FE9CD4600121507 /* DataMapper.swift */; };
 		750F139D1FE9DC7500121507 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F139C1FE9DC7500121507 /* AppDelegate.swift */; };
@@ -39,6 +41,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2C739E201FE9E6B40005211D /* LevelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LevelsViewController.swift; path = SmashMatch/Controllers/LevelsViewController.swift; sourceTree = SOURCE_ROOT; };
+		2C739E241FEA16A70005211D /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		542BB719EA50B9834E6C95D3 /* Pods-SmashMatch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmashMatch.release.xcconfig"; path = "Pods/Target Support Files/Pods-SmashMatch/Pods-SmashMatch.release.xcconfig"; sourceTree = "<group>"; };
 		6C473C2ADA23E6755C17305D /* Pods_SmashMatch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmashMatch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		750F139A1FE9CD4600121507 /* DataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMapper.swift; sourceTree = "<group>"; };
@@ -140,7 +144,9 @@
 		75197E3F1FE7C8530006EDBA /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				2C739E201FE9E6B40005211D /* LevelsViewController.swift */,
 				75197E2C1FE7C5F00006EDBA /* GameViewController.swift */,
+				2C739E241FEA16A70005211D /* SettingViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -255,6 +261,11 @@
 					75197E201FE7C5F00006EDBA = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -365,12 +376,14 @@
 				75197E2B1FE7C5F00006EDBA /* GameScene.swift in Sources */,
 				75B62C8F1FE8DBB300D4F88F /* Chain.swift in Sources */,
 				75F00F631FE7CAE400F83F0A /* Cookie.swift in Sources */,
+				2C739E251FEA16A70005211D /* SettingViewController.swift in Sources */,
 				75F00F7C1FE7E69300F83F0A /* Swap.swift in Sources */,
 				75F00F6D1FE7DF5F00F83F0A /* Tile.swift in Sources */,
 				75197E2D1FE7C5F00006EDBA /* GameViewController.swift in Sources */,
 				750F139D1FE9DC7500121507 /* AppDelegate.swift in Sources */,
 				75F00F6B1FE7DA2F00F83F0A /* MainMenuViewController.swift in Sources */,
 				75197E251FE7C5F00006EDBA /* (null) in Sources */,
+				2C739E211FE9E6B40005211D /* LevelsViewController.swift in Sources */,
 				750F139B1FE9CD4600121507 /* DataMapper.swift in Sources */,
 				75F00F661FE7CD4300F83F0A /* Array2D.swift in Sources */,
 			);
