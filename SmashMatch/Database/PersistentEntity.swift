@@ -39,9 +39,8 @@ class PersistentEntity {
                     table.column(self.highscoreDemolition)
                     table.column(self.highestLevelAchieved)
                 }))
-                print("Created table tblpersistent successfully")
             } else {
-                print("Create table tblpersistent failed")
+                print("Create table wrapper tblpersistent failed")
             }
         } catch {
             let nserror = error as NSError
@@ -70,6 +69,66 @@ class PersistentEntity {
         }
     }
     
+    //UPDATE tblPersistent SET(id= ... and soundEffectsEnabled = ... and ...) WHERE id == ??
+    func update(id: Int64, soundEffectsEnabled: Bool?, musicEnabled: Bool?, numberOfLives: Int64?, timeStopped: Int64?,
+                displayAds: Bool?, highscoreArcade: Int64?, highscoreDemolition: Int64?, highestLevelAchieved: Int64?) -> Bool {
+        if Database.shared.connection == nil {
+            return false
+        }
+        do {
+            let tblFilterPersistent = self.tblPersistent.filter(self.id == id)
+            var setters:[SQLite.Setter] = [SQLite.Setter]()
+            if soundEffectsEnabled != nil {
+                setters.append(self.soundEffectsEnabled <- soundEffectsEnabled!)
+            }
+            if musicEnabled != nil {
+                setters.append(self.musicEnabled <- musicEnabled!)
+            }
+            if numberOfLives != nil {
+                setters.append(self.numberOfLives <- numberOfLives!)
+            }
+            if timeStopped != nil {
+                setters.append(self.timeStopped <- timeStopped!)
+            }
+            if displayAds != nil {
+                setters.append(self.displayAds <- displayAds!)
+            }
+            if highscoreArcade != nil {
+                setters.append(self.highscoreArcade <- highscoreArcade!)
+            }
+            if highscoreDemolition != nil {
+                setters.append(self.highscoreDemolition <- highscoreDemolition!)
+            }
+            if highestLevelAchieved != nil {
+                setters.append(self.highestLevelAchieved <- highestLevelAchieved!)
+            }
+            if setters.count == 0  {
+                print("Nothing to update")
+                return false
+            }
+            let update = tblFilterPersistent.update(setters)
+            if try Database.shared.connection!.run(update) <= 0 {
+                //Update unsuccessful
+                return false
+            }
+            return true
+        } catch {
+            let nserror = error as NSError
+            print("Cannot update objects in tblPersistent. Error is: \(nserror), \(nserror.userInfo)")
+            return false
+        }
+    }
+    
+    func queryFirst() -> AnySequence<Row>? {
+        do {
+            return try Database.shared.connection?.prepare(self.tblPersistent.filter(self.id == 1))
+        } catch {
+            let nserror = error as NSError
+            print("Cannot query all tblPersistent. Error is: \(nserror), \(nserror.userInfo)")
+            return nil
+        }
+    }
+    
     func queryAll() -> AnySequence<Row>? {
         do {
             return try Database.shared.connection?.prepare(self.tblPersistent)
@@ -80,18 +139,25 @@ class PersistentEntity {
         }
     }
     
-    func toString(persistent: Row){
-        print("""
-            Persistent details. soundEffectsEnabled = \(persistent[self.soundEffectsEnabled]), \
+    func toString(persistent: Row) {
+        let tableDescription = """
+            Persistent details. id = \(persistent[self.id]), \
+            soundEffectsEnabled = \(persistent[self.soundEffectsEnabled]),
             musicEnabled = \(persistent[self.musicEnabled]),
             numberOfLives = \(persistent[self.numberOfLives]),
-            timeStopped = \(persistent[self.timeStopped]),
             timeStopped = \(persistent[self.timeStopped]),
             displayAds = \(persistent[self.displayAds]),
             highscoreArcade = \(persistent[self.highscoreArcade]),
             highscoreDemolition = \(persistent[self.highscoreDemolition]),
             highestLevelAchieved = \(persistent[self.highestLevelAchieved]))
-            """)
+            """
+        
+        print(tableDescription)
+    }
+    
+    func hasRow(persistent: Row) -> Bool {
+        let id = "\(persistent[self.id])"
+        return id != ""
     }
 }
 
