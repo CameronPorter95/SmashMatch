@@ -253,6 +253,30 @@ class GameScene: SKScene {
         run(SKAction.wait(forDuration: longestDuration), completion: completion)
     }
     
+    //Animates the creation of cannons
+    func animateNewCannons(cannons: [Cannon], completion: @escaping () -> ()){
+        for cannon in cannons {
+            let sprite = SKSpriteNode(imageNamed: "SugarCookie") //TODO change to cannon image
+            sprite.size = CGSize(width: TileWidth, height: TileHeight)
+            sprite.position = pointFor(column: cannon.column, row: cannon.row)
+            cookiesLayer.addChild(sprite)
+            cannon.sprite = sprite
+            // Give each cookie sprite a small, random delay. Then fade them in.
+            sprite.alpha = 0
+            sprite.xScale = 0.5
+            sprite.yScale = 0.5
+            
+            sprite.run(
+                SKAction.sequence([
+                    SKAction.group([
+                        SKAction.fadeIn(withDuration: 0.25),
+                        SKAction.scale(to: 1.0, duration: 0.25)
+                        ])
+                    ]))
+        }
+        run(SKAction.wait(forDuration: 0.25), completion: completion)
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let location = touch.location(in: cookiesLayer)

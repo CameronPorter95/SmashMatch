@@ -9,7 +9,7 @@
 import SpriteKit
 
 enum CookieType: Int, CustomStringConvertible  {
-    case unknown = 0, croissant, cupcake, danish, donut, macaroon, sugarCookie
+    case unknown = 0, croissant, cupcake, danish, donut, macaroon, sugarCookie, cannon
     var spriteName: String {
         let spriteNames = [
             "Croissant",
@@ -17,7 +17,8 @@ enum CookieType: Int, CustomStringConvertible  {
             "Danish",
             "Donut",
             "Macaroon",
-            "SugarCookie"]
+            "SugarCookie",
+            "Cannon"]
         
         return spriteNames[rawValue - 1]
     }
@@ -44,7 +45,7 @@ class Cookie: CustomStringConvertible, Hashable {
     var row: Int
     let cookieType: CookieType
     var sprite: SKSpriteNode?
-    var moved: Bool = false;
+    var moved: Bool = false; //Used for flaging possible cookies that could have caused chains (potential future cannons).
     
     init(column: Int, row: Int, cookieType: CookieType) {
         self.column = column

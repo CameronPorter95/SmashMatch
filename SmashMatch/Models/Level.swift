@@ -15,6 +15,7 @@ let NumLevels = 4 // Excluding level 0
 class Level {
     fileprivate var cookies = Array2D<Cookie>(columns: NumColumns, rows: NumRows)
     private var tiles = Array2D<Tile>(columns: NumColumns, rows: NumRows)
+    private var cannonPositions = [[Int]]()
     private var possibleSwaps = Set<Swap>()
     var targetScore = 0
     var maximumMoves = 0
@@ -222,19 +223,24 @@ class Level {
     func removeMatches() -> Set<Chain> {
         let horizontalChains = detectHorizontalMatches()
         let verticalChains = detectVerticalMatches()
+        var cannonPositions = [[Int]]()
+        //Get cannon positions from straight chains.
+        getCannonPositions(chains: horizontalChains, cannonPositions: &cannonPositions)
+        getCannonPositions(chains: verticalChains, cannonPositions: &cannonPositions)
+        
+        //Check for chain interceptions for L and T chains and get cannon positions from L and T's.
         for horzChain in horizontalChains {
             for vertChain in verticalChains {
                 for cookie in horzChain.cookies {
                     if vertChain.cookies.contains(cookie) {
                         print("Forming a 4 way intercept cannon at location row: \(cookie.row) col: \(cookie.column)")
+                        cannonPositions.append([cookie.row, cookie.column])
                     }
                 }
             }
         }
         
-        //Get cannon positions from straight chains.
-        getCannonPositions(chains: horizontalChains)
-        getCannonPositions(chains: verticalChains)
+        self.cannonPositions = cannonPositions
         removeCookies(chains: horizontalChains)
         removeCookies(chains: verticalChains)
         
@@ -248,20 +254,34 @@ class Level {
         return horizontalChains.union(verticalChains)
     }
     
-    func getCannonPositions(chains: Set<Chain>){
+    func getCannonPositions(chains: Set<Chain>, cannonPositions: inout [[Int]]) {
         for chain in chains {
             if(chain.length > 3){
                 for cookie in chain.cookies {
                     if(cookie.moved == true){
                         if(chain.length > 4){
                             print("Forming a 4 way cannon at location row: \(cookie.row) col: \(cookie.column)")
+                            cannonPositions.append([cookie.row, cookie.column])
                             break;
                         }
                         print("Forming a 2 way cannon at location row: \(cookie.row) col: \(cookie.column)")
+                        cannonPositions.append([cookie.row, cookie.column])
                     }
                 }
             }
         }
+    }
+    
+    func createCannons() -> [Cannon]{
+        var cannons = [Cannon]()
+        for cannonPos in 0..<cannonPositions.count {
+            let row = cannonPositions[cannonPos][0]
+            let column = cannonPositions[cannonPos][1]
+            let cannon = Cannon(column: column, row: row)
+            cookies[column, row] = cannon
+            cannons.append(cannon)
+        }
+        return cannons
     }
     
     private func removeCookies(chains: Set<Chain>) {
