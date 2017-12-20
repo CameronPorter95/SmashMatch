@@ -39,6 +39,12 @@ class GameViewController: UIViewController {
         shuffle()
     }
     
+    @IBAction func backPressed(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let mainMenuViewController = storyboard.instantiateViewController(withIdentifier: "MainMenu")
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.window?.rootViewController = mainMenuViewController
+    }
     override var prefersStatusBarHidden: Bool {
         return true
     }

@@ -60,7 +60,7 @@
         <!--Main Menu View Controller-->
         <scene sceneID="tXr-a1-R10">
             <objects>
-                <viewController id="BV1-FR-VrT" customClass="MainMenuViewController" customModule="SmashMatch" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MainMenu" id="BV1-FR-VrT" customClass="MainMenuViewController" customModule="SmashMatch" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="3se-qz-xqx">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -79,7 +79,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Arcade"/>
                                 <connections>
-                                    <segue destination="e1s-3O-59S" kind="show" id="dkU-WQ-Dma"/>
+                                    <action selector="arcadeModePressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="QhS-MW-tRF"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XdC-w6-M8O">
@@ -95,7 +95,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Demolition"/>
                                 <connections>
-                                    <segue destination="e1s-3O-59S" kind="show" id="8gE-0H-8AC"/>
+                                    <action selector="demolitionModePressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="TSL-Vk-V3q"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WOn-zk-7wE">
@@ -256,7 +256,7 @@
         <!--Game View Controller-->
         <scene sceneID="Gy2-51-ja0">
             <objects>
-                <viewController id="e1s-3O-59S" customClass="GameViewController" customModule="SmashMatch" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GameView" id="e1s-3O-59S" customClass="GameViewController" customModule="SmashMatch" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Rqe-AT-E95" customClass="SKView">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -268,7 +268,7 @@
                                 </constraints>
                                 <state key="normal" title="Back"/>
                                 <connections>
-                                    <segue destination="BV1-FR-VrT" kind="showDetail" action="showViewController:sender:" id="eKR-EF-brD"/>
+                                    <action selector="backPressed:" destination="e1s-3O-59S" eventType="touchUpInside" id="UHJ-MQ-Uys"/>
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Dnf-e7-9Bd">
@@ -338,7 +338,7 @@
                                 <rect key="frame" x="259" y="20" width="42" height="30"/>
                                 <state key="normal" title="Pause"/>
                                 <connections>
-                                    <segue destination="bEA-h3-wjx" kind="presentation" id="DZ8-r6-b51"/>
+                                    <segue destination="bEA-h3-wjx" kind="showDetail" id="DZ8-r6-b51"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -426,8 +426,4 @@
             <point key="canvasLocation" x="2151.1999999999998" y="131.78410794602701"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="dkU-WQ-Dma"/>
-        <segue reference="eKR-EF-brD"/>
-    </inferredMetricsTieBreakers>
 </document>
