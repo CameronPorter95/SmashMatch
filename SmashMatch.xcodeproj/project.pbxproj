@@ -562,6 +562,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ND3B2MH3V6;
 				INFOPLIST_FILE = "$(SRCROOT)/SmashMatch/Misc/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = nz.co.siso.smashmatch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -580,6 +581,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ND3B2MH3V6;
 				INFOPLIST_FILE = "$(SRCROOT)/SmashMatch/Misc/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = nz.co.siso.smashmatch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
