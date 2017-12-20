@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		2C739E211FE9E6B40005211D /* LevelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C739E201FE9E6B40005211D /* LevelsViewController.swift */; };
 		2C739E251FEA16A70005211D /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C739E241FEA16A70005211D /* SettingViewController.swift */; };
-		750F139B1FE9CD4600121507 /* DataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F139A1FE9CD4600121507 /* DataMapper.swift */; };
 		750F139D1FE9DC7500121507 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F139C1FE9DC7500121507 /* AppDelegate.swift */; };
 		750F13AC1FEA1F3600121507 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F13AA1FEA1F3600121507 /* Database.swift */; };
 		750F13AD1FEA1F3600121507 /* PersistentEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F13AB1FEA1F3600121507 /* PersistentEntity.swift */; };
@@ -47,7 +46,6 @@
 		2C739E201FE9E6B40005211D /* LevelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LevelsViewController.swift; path = SmashMatch/Controllers/LevelsViewController.swift; sourceTree = SOURCE_ROOT; };
 		2C739E241FEA16A70005211D /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		542BB719EA50B9834E6C95D3 /* Pods-SmashMatch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmashMatch.release.xcconfig"; path = "Pods/Target Support Files/Pods-SmashMatch/Pods-SmashMatch.release.xcconfig"; sourceTree = "<group>"; };
-		750F139A1FE9CD4600121507 /* DataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMapper.swift; sourceTree = "<group>"; };
 		750F139C1FE9DC7500121507 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		750F13AA1FEA1F3600121507 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		750F13AB1FEA1F3600121507 /* PersistentEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentEntity.swift; sourceTree = "<group>"; };
@@ -182,7 +180,6 @@
 			isa = PBXGroup;
 			children = (
 				750F139C1FE9DC7500121507 /* AppDelegate.swift */,
-				750F139A1FE9CD4600121507 /* DataMapper.swift */,
 				75197E361FE7C5F00006EDBA /* Info.plist */,
 				75197E2E1FE7C5F00006EDBA /* Main.storyboard */,
 				75197E331FE7C5F00006EDBA /* LaunchScreen.storyboard */,
@@ -414,7 +411,6 @@
 				75F00F6B1FE7DA2F00F83F0A /* MainMenuViewController.swift in Sources */,
 				75197E251FE7C5F00006EDBA /* (null) in Sources */,
 				2C739E211FE9E6B40005211D /* LevelsViewController.swift in Sources */,
-				750F139B1FE9CD4600121507 /* DataMapper.swift in Sources */,
 				750F13AC1FEA1F3600121507 /* Database.swift in Sources */,
 				75F00F661FE7CD4300F83F0A /* Array2D.swift in Sources */,
 			);
