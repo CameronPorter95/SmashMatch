@@ -21,6 +21,7 @@ class MainMenuViewController: UIViewController, GKGameCenterControllerDelegate {
     var gcDefaultLeaderBoard = String() // Check the default leaderboardID
     var startTime = 0;
     var timer = Timer()
+    var lives = 3;
     var score = 0
     
     // IMPORTANT: replace the red string below with your own Leaderboard ID (the one you've set in iTunes Connect)
@@ -29,12 +30,37 @@ class MainMenuViewController: UIViewController, GKGameCenterControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeDatabase()
-        startTime = Int(mach_absolute_time()/1000000000)
+        setupLifeTimer()
+
         // Call the GC authentication controller
         authenticateLocalPlayer()
          let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.touchedLives(sender:)))
         livesCounter.addGestureRecognizer(tapGesture)
         runTimer()
+    }
+    
+    func setupLifeTimer(){
+        if let persistentQuery: AnySequence<Row> = PersistentEntity.shared.queryFirst() {
+            for eachPersistent in persistentQuery {
+                startTime = PersistentEntity.shared.getKeyAt(persistent: eachPersistent, index: 5)! as! Int
+                lives = PersistentEntity.shared.getKeyAt(persistent: eachPersistent, index: 4)! as! Int
+            }
+        }
+        
+        if(startTime == 0){
+              startTime = Int(mach_absolute_time()/1000000000)
+            //PersistentEntity.shared.update
+        }
+        else{
+            let currTime = Int(mach_absolute_time()/1000000000)
+            let timeDiff = currTime - startTime
+            
+            
+            
+        }
+        
+        
+        
     }
     
     func runTimer() {
