@@ -16,7 +16,6 @@ class MainMenuViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        connectToDatabase()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.touchedLives(sender:)))
         livesCounter.addGestureRecognizer(tapGesture)
         
