@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		39A7721748C209E39393310F /* Pods_SmashMatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C473C2ADA23E6755C17305D /* Pods_SmashMatch.framework */; };
 		750F139B1FE9CD4600121507 /* DataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F139A1FE9CD4600121507 /* DataMapper.swift */; };
 		750F139D1FE9DC7500121507 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F139C1FE9DC7500121507 /* AppDelegate.swift */; };
 		75197E251FE7C5F00006EDBA /* (null) in Sources */ = {isa = PBXBuildFile; };
@@ -36,11 +35,11 @@
 		75F00F6D1FE7DF5F00F83F0A /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F00F6C1FE7DF5F00F83F0A /* Tile.swift */; };
 		75F00F6F1FE7DFDB00F83F0A /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F00F6E1FE7DFDB00F83F0A /* Extensions.swift */; };
 		75F00F7C1FE7E69300F83F0A /* Swap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F00F7B1FE7E69300F83F0A /* Swap.swift */; };
+		B3C2058E1FE9FA4400308B65 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3C2058D1FE9FA4400308B65 /* GameKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		542BB719EA50B9834E6C95D3 /* Pods-SmashMatch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmashMatch.release.xcconfig"; path = "Pods/Target Support Files/Pods-SmashMatch/Pods-SmashMatch.release.xcconfig"; sourceTree = "<group>"; };
-		6C473C2ADA23E6755C17305D /* Pods_SmashMatch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmashMatch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		750F139A1FE9CD4600121507 /* DataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMapper.swift; sourceTree = "<group>"; };
 		750F139C1FE9DC7500121507 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		75197E211FE7C5F00006EDBA /* SmashMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmashMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -71,6 +70,8 @@
 		75F00F6E1FE7DFDB00F83F0A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		75F00F7B1FE7E69300F83F0A /* Swap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swap.swift; sourceTree = "<group>"; };
 		AAE41AE1E837F049E845EA54 /* Pods-SmashMatch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmashMatch.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SmashMatch/Pods-SmashMatch.debug.xcconfig"; sourceTree = "<group>"; };
+		B3C2058C1FE9F86D00308B65 /* SmashMatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SmashMatch.entitlements; sourceTree = "<group>"; };
+		B3C2058D1FE9FA4400308B65 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,7 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39A7721748C209E39393310F /* Pods_SmashMatch.framework in Frameworks */,
+				B3C2058E1FE9FA4400308B65 /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,6 +116,7 @@
 		75197E231FE7C5F00006EDBA /* SmashMatch */ = {
 			isa = PBXGroup;
 			children = (
+				B3C2058C1FE9F86D00308B65 /* SmashMatch.entitlements */,
 				75F00F691FE7D9FD00F83F0A /* OtherAppScreens */,
 				75197E3F1FE7C8530006EDBA /* Controllers */,
 				75197E411FE7C8820006EDBA /* Misc */,
@@ -214,7 +216,7 @@
 		BFFB663BE5E21F8A0906968E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				6C473C2ADA23E6755C17305D /* Pods_SmashMatch.framework */,
+				B3C2058D1FE9FA4400308B65 /* GameKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -254,7 +256,19 @@
 				TargetAttributes = {
 					75197E201FE7C5F00006EDBA = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 0;
+							};
+							com.apple.iCloud = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -510,12 +524,14 @@
 			baseConfigurationReference = AAE41AE1E837F049E845EA54 /* Pods-SmashMatch.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ND3B2MH3V6;
 				INFOPLIST_FILE = "$(SRCROOT)/SmashMatch/Misc/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sisosolutions.CookieCrunch;
+				PRODUCT_BUNDLE_IDENTIFIER = nz.co.siso.smashmatch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -526,11 +542,12 @@
 			baseConfigurationReference = 542BB719EA50B9834E6C95D3 /* Pods-SmashMatch.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ND3B2MH3V6;
 				INFOPLIST_FILE = "$(SRCROOT)/SmashMatch/Misc/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sisosolutions.CookieCrunch;
+				PRODUCT_BUNDLE_IDENTIFIER = nz.co.siso.smashmatch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
