@@ -48,15 +48,20 @@ class MainMenuViewController: UIViewController, GKGameCenterControllerDelegate {
         }
         
         if(startTime == 0){
-              startTime = Int(mach_absolute_time()/1000000000)
-            //PersistentEntity.shared.update
+            startTime = Int(mach_absolute_time()/1000000000)
+            PersistentEntity.shared.updateAt(id: 1, index: 5, value: startTime as AnyObject)
         }
         else{
             let currTime = Int(mach_absolute_time()/1000000000)
-            let timeDiff = currTime - startTime
+            let timeDiff = Double(currTime - startTime)
             
-            
-            
+            lives = lives + Int(floor(timeDiff/3600.0))
+            if(lives > 5){
+                lives = 5
+            }
+            startTime = currTime + Int(timeDiff.remainder(dividingBy: 3600))
+            PersistentEntity.shared.updateAt(id: 1, index: 5, value: startTime as AnyObject)
+            PersistentEntity.shared.updateAt(id: 1, index: 4, value: lives as AnyObject)
         }
         
         
@@ -68,8 +73,9 @@ class MainMenuViewController: UIViewController, GKGameCenterControllerDelegate {
     }
     
     @objc func updateTimer(){
-        //Check the change in time from DB time to Curr time to see how many lifes the player gains
+        if(lives < 5){
         let currTime = Int(mach_absolute_time()/1000000000)
+        PersistentEntity.shared.updateAt(id: 1, index: 5, value: currTime as AnyObject)
         let timeLeftForNextLife = 3600 - (currTime - startTime)
         
         let (m,s) = secondsToMinutesSeconds(seconds: timeLeftForNextLife)
@@ -97,6 +103,7 @@ class MainMenuViewController: UIViewController, GKGameCenterControllerDelegate {
         if(timeLeftForNextLife == 0){
             //remove a life
             //startTime = currTime
+        }
         }
     }
     
