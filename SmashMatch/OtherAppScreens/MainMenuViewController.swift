@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import SQLite
+import SQLite3
 
 class MainMenuViewController: UIViewController {
     
@@ -14,8 +16,19 @@ class MainMenuViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.touchedLives(sender:)))
+        connectToDatabase()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.touchedLives(sender:)))
         livesCounter.addGestureRecognizer(tapGesture)
+        
+        //Inserts the initial values into the database (only call this if row does not already exist).
+        let persistentId = PersistentEntity.shared.insert(soundEffectsEnabled: true, musicEnabled: true, numberOfLives: 3, timeStopped: 0,
+                                                          displayAds: true, highscoreArcade: 0, highscoreDemolition: 0, highestLevelAchieved: 1)
+        
+        if let persistentQuery: AnySequence<Row> = PersistentEntity.shared.queryAll() {
+            for eachPersistent in persistentQuery {
+                PersistentEntity.shared.toString(persistent: eachPersistent)
+            }
+        }
     }
     
     @objc func touchedLives(sender: UITapGestureRecognizer) {
