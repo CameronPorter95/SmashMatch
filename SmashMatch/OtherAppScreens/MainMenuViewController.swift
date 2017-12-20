@@ -15,6 +15,18 @@ class MainMenuViewController: UIViewController, GKGameCenterControllerDelegate {
     
     @IBOutlet weak var countDownLabel: UILabel!
     @IBOutlet weak var livesCounter: UIView!
+    @IBAction func arcadeModePressed(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let gameViewController = storyboard.instantiateViewController(withIdentifier: "GameView")
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.window?.rootViewController = gameViewController
+    }
+    @IBAction func demolitionModePressed(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let gameViewController = storyboard.instantiateViewController(withIdentifier: "GameView")
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.window?.rootViewController = gameViewController
+    }
     
     /* Variables */
     var gcEnabled = Bool() // Check if the user has Game Center enabled
