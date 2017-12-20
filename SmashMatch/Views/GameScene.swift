@@ -25,6 +25,7 @@ class GameScene: SKScene {
     let gameLayer = SKNode()
     let tilesLayer = SKNode()
     let cookiesLayer = SKNode()
+    let wallsLayer = SKNode()
     
     let swapSound = SKAction.playSoundFileNamed("Chomp.wav", waitForCompletion: false)
     let invalidSwapSound = SKAction.playSoundFileNamed("Error.wav", waitForCompletion: false)
@@ -48,8 +49,10 @@ class GameScene: SKScene {
         
         tilesLayer.position = layerPosition
         cookiesLayer.position = layerPosition
+        wallsLayer.position = layerPosition
         gameLayer.addChild(tilesLayer)
         gameLayer.addChild(cookiesLayer)
+        gameLayer.addChild(wallsLayer)
         
         swipeFromColumn = nil
         swipeFromRow = nil
@@ -58,7 +61,7 @@ class GameScene: SKScene {
     func addTiles() {
         for row in 0..<NumRows {
             for column in 0..<NumColumns {
-                if level.tileAt(column: column, row: row) != nil {
+                if level.tileAt(column: column, row: row) != nil && column != 0 && column != NumColumns-1 && row != 0 && row != NumRows-1{
                     let tileNode = SKSpriteNode(imageNamed: "Tile")
                     tileNode.size = CGSize(width: TileWidth, height: TileHeight)
                     tileNode.position = pointFor(column: column, row: row)
@@ -70,10 +73,17 @@ class GameScene: SKScene {
     
     func addSprites(for cookies: Set<Cookie>) {
         for cookie in cookies {
-            let sprite = SKSpriteNode(imageNamed: cookie.cookieType.spriteName)
+            var sprite: SKSpriteNode
+            if(cookie is Wall){
+                let wall = cookie as! Wall
+                sprite = SKSpriteNode(imageNamed: wall.wallType.spriteName)
+                wallsLayer.addChild(sprite)
+            } else {
+                sprite = SKSpriteNode(imageNamed: cookie.cookieType.spriteName)
+                cookiesLayer.addChild(sprite)
+            }
             sprite.size = CGSize(width: TileWidth, height: TileHeight)
             sprite.position = pointFor(column: cookie.column, row: cookie.row)
-            cookiesLayer.addChild(sprite)
             cookie.sprite = sprite
             // Give each cookie sprite a small, random delay. Then fade them in.
             sprite.alpha = 0

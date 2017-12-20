@@ -9,7 +9,7 @@
 import SpriteKit
 
 enum CookieType: Int, CustomStringConvertible  {
-    case unknown = 0, croissant, cupcake, danish, donut, macaroon, sugarCookie, cannon
+    case unknown = 0, croissant, cupcake, danish, donut, macaroon, sugarCookie, cannon, wall
     var spriteName: String {
         let spriteNames = [
             "Croissant",
@@ -18,7 +18,8 @@ enum CookieType: Int, CustomStringConvertible  {
             "Donut",
             "Macaroon",
             "SugarCookie",
-            "Cannon"]
+            "Cannon",
+            "Wall"]
         
         return spriteNames[rawValue - 1]
     }

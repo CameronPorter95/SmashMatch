@@ -155,6 +155,31 @@ class PersistentEntity {
         print(tableDescription)
     }
     
+    func getKeyAt(persistent: Row, index: Int) -> AnyObject? {
+        switch index {
+            case 1:
+                return persistent[self.id] as AnyObject
+            case 2:
+                return persistent[self.soundEffectsEnabled] as AnyObject
+            case 3:
+                return persistent[self.musicEnabled] as AnyObject
+            case 4:
+                return persistent[self.numberOfLives] as AnyObject
+            case 5:
+                return persistent[self.timeStopped] as AnyObject
+            case 6:
+                return persistent[self.displayAds] as AnyObject
+            case 7:
+                return persistent[self.highscoreArcade] as AnyObject
+            case 8:
+                return persistent[self.highscoreDemolition] as AnyObject
+            case 8:
+                return persistent[self.highestLevelAchieved] as AnyObject
+        default:
+            return nil
+        }
+    }
+    
     func hasRow(persistent: Row) -> Bool {
         let id = "\(persistent[self.id])"
         return id != ""

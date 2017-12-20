@@ -8,8 +8,8 @@
 
 import Foundation
 
-let NumColumns = 9
-let NumRows = 9
+let NumColumns = 10
+let NumRows = 10
 let NumLevels = 4 // Excluding level 0
 
 class Level {
@@ -45,19 +45,27 @@ class Level {
         for row in 0..<NumRows {
             for column in 0..<NumColumns {
                 if tiles[column, row] != nil {
-                    var cookieType: CookieType
-                    repeat {
-                        cookieType = CookieType.random()
-                    } while (column >= 2 &&
-                        cookies[column - 1, row]?.cookieType == cookieType &&
-                        cookies[column - 2, row]?.cookieType == cookieType)
-                        || (row >= 2 &&
-                            cookies[column, row - 1]?.cookieType == cookieType &&
-                            cookies[column, row - 2]?.cookieType == cookieType)
-                    
-                    let cookie = Cookie(column: column, row: row, cookieType: cookieType)
-                    cookies[column, row] = cookie
-                    set.insert(cookie)
+                    if(row == 0 || row == NumRows-1 || column == 0 || column == NumColumns-1){
+                        //Make a wall if underlying tile exists and on border
+                        let wall = Wall(column: column, row: row, wallType: WallType.new)
+                        cookies[column, row] = wall
+                        set.insert(wall)
+                        continue;
+                    } else {
+                        var cookieType: CookieType
+                        repeat {
+                            cookieType = CookieType.random()
+                        } while (column >= 2 &&
+                            cookies[column - 1, row]?.cookieType == cookieType &&
+                            cookies[column - 2, row]?.cookieType == cookieType)
+                            || (row >= 2 &&
+                                cookies[column, row - 1]?.cookieType == cookieType &&
+                                cookies[column, row - 2]?.cookieType == cookieType)
+                        
+                        let cookie = Cookie(column: column, row: row, cookieType: cookieType)
+                        cookies[column, row] = cookie
+                        set.insert(cookie)
+                    }
                 }
             }
         }
@@ -69,10 +77,18 @@ class Level {
         for row in 0..<NumRows {
             for column in 0..<NumColumns {
                 if tiles[column, row] != nil {
-                    let cookieType = cookiesFromFileArray![row][column]
-                    let cookie = Cookie(column: column, row: row, cookieType: CookieType(rawValue: cookieType)!)
-                    cookies[column, row] = cookie
-                    set.insert(cookie)
+                    if(row == 0 || row == NumRows-1 || column == 0 || column == NumColumns-1){
+                        //Make a wall if underlying tile exists and on border
+                        let wall = Wall(column: column, row: row, wallType: WallType.new)
+                        cookies[column, row] = wall
+                        set.insert(wall)
+                        continue;
+                    } else {
+                        let cookieType = cookiesFromFileArray![row][column]
+                        let cookie = Cookie(column: column, row: row, cookieType: CookieType(rawValue: cookieType)!)
+                        cookies[column, row] = cookie
+                        set.insert(cookie)
+                    }
                 }
             }
         }
@@ -277,6 +293,10 @@ class Level {
                 }
             }
         }
+    }
+    
+    func createWall(){
+        
     }
     
     func getCannons() -> Set<Cannon>{
