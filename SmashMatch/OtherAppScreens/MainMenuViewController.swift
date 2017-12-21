@@ -33,7 +33,13 @@ class MainMenuViewController: UIViewController, GKGameCenterControllerDelegate {
     var gcDefaultLeaderBoard = String() // Check the default leaderboardID
     var startTime = 0;
     var timer = Timer()
+    var lives = 3;
     var score = 0
+    
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
     
     // IMPORTANT: replace the red string below with your own Leaderboard ID (the one you've set in iTunes Connect)
     let LEADERBOARD_ID = "com.score.smashmatch"
@@ -41,7 +47,8 @@ class MainMenuViewController: UIViewController, GKGameCenterControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeDatabase()
-        startTime = Int(mach_absolute_time()/1000000000)
+        setupLifeTimer()
+
         // Call the GC authentication controller
         authenticateLocalPlayer()
          let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.touchedLives(sender:)))
@@ -49,13 +56,43 @@ class MainMenuViewController: UIViewController, GKGameCenterControllerDelegate {
         runTimer()
     }
     
+    func setupLifeTimer(){
+        if let persistentQuery: AnySequence<Row> = PersistentEntity.shared.queryFirst() {
+            for eachPersistent in persistentQuery {
+                startTime = PersistentEntity.shared.getKeyAt(persistent: eachPersistent, index: 5)! as! Int
+                lives = PersistentEntity.shared.getKeyAt(persistent: eachPersistent, index: 4)! as! Int
+            }
+        }
+        
+        if(startTime == 0){
+            startTime = Int(mach_absolute_time()/1000000000)
+            PersistentEntity.shared.updateAt(id: 1, index: 5, value: startTime as AnyObject)
+        }
+        else{
+            let currTime = Int(mach_absolute_time()/1000000000)
+            let timeDiff = Double(currTime - startTime)
+            
+            lives = lives + Int(floor(timeDiff/3600.0))
+            if(lives > 5){
+                lives = 5
+            }
+            startTime = currTime + Int(timeDiff.remainder(dividingBy: 3600))
+            PersistentEntity.shared.updateAt(id: 1, index: 5, value: startTime as AnyObject)
+            PersistentEntity.shared.updateAt(id: 1, index: 4, value: lives as AnyObject)
+        }
+        
+        
+        
+    }
+    
     func runTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(updateTimer)), userInfo: nil, repeats: true)
     }
     
     @objc func updateTimer(){
-        //Check the change in time from DB time to Curr time to see how many lifes the player gains
+        if(lives < 5){
         let currTime = Int(mach_absolute_time()/1000000000)
+        PersistentEntity.shared.updateAt(id: 1, index: 5, value: currTime as AnyObject)
         let timeLeftForNextLife = 3600 - (currTime - startTime)
         
         let (m,s) = secondsToMinutesSeconds(seconds: timeLeftForNextLife)
@@ -83,6 +120,7 @@ class MainMenuViewController: UIViewController, GKGameCenterControllerDelegate {
         if(timeLeftForNextLife == 0){
             //remove a life
             //startTime = currTime
+        }
         }
     }
     

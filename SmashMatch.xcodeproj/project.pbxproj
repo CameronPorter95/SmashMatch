@@ -13,7 +13,7 @@
 		750F139D1FE9DC7500121507 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F139C1FE9DC7500121507 /* AppDelegate.swift */; };
 		750F13AC1FEA1F3600121507 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F13AA1FEA1F3600121507 /* Database.swift */; };
 		750F13AD1FEA1F3600121507 /* PersistentEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F13AB1FEA1F3600121507 /* PersistentEntity.swift */; };
-        7513834D1FEAEFD600AE0D5A /* Wall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7513834C1FEAEFD600AE0D5A /* Wall.swift */; };
+		7513834D1FEAEFD600AE0D5A /* Wall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7513834C1FEAEFD600AE0D5A /* Wall.swift */; };
 		75197E251FE7C5F00006EDBA /* (null) in Sources */ = {isa = PBXBuildFile; };
 		75197E2B1FE7C5F00006EDBA /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75197E2A1FE7C5F00006EDBA /* GameScene.swift */; };
 		75197E2D1FE7C5F00006EDBA /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75197E2C1FE7C5F00006EDBA /* GameViewController.swift */; };
@@ -45,7 +45,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2C739E201FE9E6B40005211D /* LevelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LevelsViewController.swift; path = SmashMatch/Controllers/LevelsViewController.swift; sourceTree = SOURCE_ROOT; };
+		2C739E201FE9E6B40005211D /* LevelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LevelsViewController.swift; path = SmashMatch/OtherAppScreens/LevelsViewController.swift; sourceTree = SOURCE_ROOT; };
 		2C739E241FEA16A70005211D /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		2C739E261FEB005F0005211D /* PauseMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PauseMenuViewController.swift; sourceTree = "<group>"; };
 		542BB719EA50B9834E6C95D3 /* Pods-SmashMatch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmashMatch.release.xcconfig"; path = "Pods/Target Support Files/Pods-SmashMatch/Pods-SmashMatch.release.xcconfig"; sourceTree = "<group>"; };
@@ -165,10 +165,7 @@
 		75197E3F1FE7C8530006EDBA /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				2C739E201FE9E6B40005211D /* LevelsViewController.swift */,
 				75197E2C1FE7C5F00006EDBA /* GameViewController.swift */,
-				2C739E241FEA16A70005211D /* SettingViewController.swift */,
-				2C739E261FEB005F0005211D /* PauseMenuViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -236,6 +233,9 @@
 			isa = PBXGroup;
 			children = (
 				75F00F6A1FE7DA2F00F83F0A /* MainMenuViewController.swift */,
+				2C739E201FE9E6B40005211D /* LevelsViewController.swift */,
+				2C739E241FEA16A70005211D /* SettingViewController.swift */,
+				2C739E261FEB005F0005211D /* PauseMenuViewController.swift */,
 			);
 			path = OtherAppScreens;
 			sourceTree = "<group>";
@@ -562,6 +562,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ND3B2MH3V6;
 				INFOPLIST_FILE = "$(SRCROOT)/SmashMatch/Misc/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = nz.co.siso.smashmatch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -580,6 +581,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ND3B2MH3V6;
 				INFOPLIST_FILE = "$(SRCROOT)/SmashMatch/Misc/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = nz.co.siso.smashmatch;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -18,7 +18,7 @@ class GameViewController: UIViewController {
     var currentLevelNum = 0
     var movesMade = 0
     var score = 0
-    
+
     lazy var backgroundMusic: AVAudioPlayer? = {
         guard let url = Bundle.main.url(forResource: "Mining by Moonlight", withExtension: "mp3") else {
             return nil
