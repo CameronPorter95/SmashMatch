@@ -23,7 +23,7 @@ class Level {
     var maximumMoves = 0
     
     var cookiesFromFileArray: [[Int]]?
-    var isClassicMode = false; //Set this based on the game mode
+    var isClassicMode = true; //Set this based on the game mode
     var initialLoad = true;
     
     func shuffle() -> Set<Cookie> {
@@ -331,26 +331,49 @@ class Level {
     func createCannons(chains: Set<Chain>, cannons: inout Set<Cannon>, isHorz: Bool) {
         for chain in chains {
             if(chain.length > 3){
+                var chainCookies = [Cookie]() //The cookies that moved to create this chain
                 for cookie in chain.cookies {
                     if(cookie.moved == true){
-                        if(chain.length > 4){
-                            let cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.fourWay, cookieType: cookie.cookieType)
-                            cannons.insert(cannon)
-                            print("Forming a 4 Way\(cannon.description) with type \(cannon.cannonType.description)")
-                            break;
-                        }
-                        var cannon: Cannon
-                        if isHorz {
-                            cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.twoWayHorz, cookieType: cookie.cookieType)
-                            print("Forming a 2 Way \(cannon.description) with type \(cannon.cannonType.description)")
-                        }
-                        else {
-                            cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.twoWayVert, cookieType: cookie.cookieType)
-                            print("Forming a 2 Way \(cannon.description) with type \(cannon.cannonType.description)")
-                        }
-                        cannons.insert(cannon)
+                        chainCookies.append(cookie)
                     }
                 }
+                var cookie = chainCookies[0]
+                if(chainCookies.count > 1){
+//                    for cookie2 in chainCookies {
+//                        if(isHorz){
+//                            cookie = chainCookies[0]
+//                        } else {
+//                            if(cookie2.row > cookie.row){
+//                                cookie = cookie2
+//                            }
+//                        }
+//                    }
+                    if(isHorz){
+                        if chainCookies.last!.column < chain.lastCookie().column {
+                            cookie = chainCookies.last!
+                        } else {
+                            cookie = chainCookies.first!
+                        }
+                    } else {
+                        cookie = chainCookies.first!
+                    }
+                }
+                if(chain.length > 4){
+                    let cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.fourWay, cookieType: cookie.cookieType)
+                    cannons.insert(cannon)
+                    print("Forming a 4 Way\(cannon.description) with type \(cannon.cannonType.description)")
+                    break;
+                }
+                var cannon: Cannon
+                if isHorz {
+                    cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.twoWayHorz, cookieType: cookie.cookieType)
+                    print("Forming a 2 Way \(cannon.description) with type \(cannon.cannonType.description)")
+                }
+                else {
+                    cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.twoWayVert, cookieType: cookie.cookieType)
+                    print("Forming a 2 Way \(cannon.description) with type \(cannon.cannonType.description)")
+                }
+                cannons.insert(cannon)
             }
         }
     }
