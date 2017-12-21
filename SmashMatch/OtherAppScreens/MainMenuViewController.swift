@@ -49,7 +49,9 @@ class MainMenuViewController: UIViewController, GKGameCenterControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeDatabase()
+        
         setupLifeTimer()
+        addLife()
 
         // Call the GC authentication controller
         authenticateLocalPlayer()
@@ -77,6 +79,7 @@ class MainMenuViewController: UIViewController, GKGameCenterControllerDelegate {
         if(startTime == 0){
             startTime = mach_absolute_time()
             PersistentEntity.shared.updateAt(id: 1, index: 5, value: startTime as AnyObject)
+            lives = 3
         }
         else{
             let currTime = mach_absolute_time()
@@ -132,11 +135,44 @@ class MainMenuViewController: UIViewController, GKGameCenterControllerDelegate {
             countDownLabel.text = String("\(m):\(s)")
         }
 
-        if(timeLeftForNextLife == 0){
-            //remove a life
-            //startTime = currTime
+        if(timeLeftForNextLife < 0){
+            lives += 1
+            addLife()
+            startTime = currTime
         }
         }
+    }
+    
+    @IBOutlet weak var heart1: UIImageView!
+    @IBOutlet weak var heart2: UIImageView!
+    @IBOutlet weak var heart3: UIImageView!
+    @IBOutlet weak var heart4: UIImageView!
+    @IBOutlet weak var heart5: UIImageView!
+    
+    func addLife(){
+        heart1.image = UIImage.init(named: "greyheart.png")
+        heart2.image = UIImage.init(named: "greyheart.png")
+        heart3.image = UIImage.init(named: "greyheart.png")
+        heart4.image = UIImage.init(named: "greyheart.png")
+        heart5.image = UIImage.init(named: "greyheart.png")
+        
+        if(lives > 0){
+            heart1.image = UIImage.init(named: "heartbig.png")
+            if(lives > 1){
+                heart2.image = UIImage.init(named: "heartbig.png")
+                if(lives > 2){
+                    heart3.image = UIImage.init(named: "heartbig.png")
+                    if(lives > 3){
+                        heart4.image = UIImage.init(named: "heartbig.png")
+                        if(lives > 4){
+                            heart5.image = UIImage.init(named: "heartbig.png")
+                        }
+                    }
+                }
+            }
+        }
+        
+        
     }
     
     func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {

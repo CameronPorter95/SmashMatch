@@ -41,6 +41,7 @@
 		75F00F6D1FE7DF5F00F83F0A /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F00F6C1FE7DF5F00F83F0A /* Tile.swift */; };
 		75F00F6F1FE7DFDB00F83F0A /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F00F6E1FE7DFDB00F83F0A /* Extensions.swift */; };
 		75F00F7C1FE7E69300F83F0A /* Swap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F00F7B1FE7E69300F83F0A /* Swap.swift */; };
+		B3628A071FEB82CA00F432B1 /* The Builder.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B36289F81FEB82C900F432B1 /* The Builder.mp3 */; };
 		B3C2058E1FE9FA4400308B65 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3C2058D1FE9FA4400308B65 /* GameKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -198,6 +199,7 @@
 		75F00F7B1FE7E69300F83F0A /* Swap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swap.swift; sourceTree = "<group>"; };
 		85B07C5B5E55A3462749B0A1 /* Pods_SmashMatch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmashMatch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAE41AE1E837F049E845EA54 /* Pods-SmashMatch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmashMatch.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SmashMatch/Pods-SmashMatch.debug.xcconfig"; sourceTree = "<group>"; };
+		B36289F81FEB82C900F432B1 /* The Builder.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "The Builder.mp3"; sourceTree = "<group>"; };
 		B3B79F5B1FEB1DAE000ADFD7 /* SQLite.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SQLite.xcodeproj; path = "../../Downloads/SQLite-2.swift-master/SQLite.xcodeproj"; sourceTree = "<group>"; };
 		B3C2058C1FE9F86D00308B65 /* SmashMatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SmashMatch.entitlements; sourceTree = "<group>"; };
 		B3C2058D1FE9FA4400308B65 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
@@ -337,6 +339,7 @@
 			children = (
 				75B62C881FE8DAB300D4F88F /* Scrape.wav */,
 				75B62C891FE8DAB300D4F88F /* Ka-Ching.wav */,
+				B36289F81FEB82C900F432B1 /* The Builder.mp3 */,
 				75B62C8A1FE8DAB300D4F88F /* Mining by Moonlight.mp3 */,
 				75B62C8B1FE8DAB300D4F88F /* Drip.wav */,
 				75B62C8C1FE8DAB300D4F88F /* Chomp.wav */,
@@ -586,6 +589,7 @@
 				753738D71FE8FB2000B08292 /* Scrape.wav in Resources */,
 				757A2A351FE906C4000E98D9 /* Level_4.json in Resources */,
 				753738D81FE8FB2000B08292 /* Ka-Ching.wav in Resources */,
+				B3628A071FEB82CA00F432B1 /* The Builder.mp3 in Resources */,
 				753738D91FE8FB2000B08292 /* Mining by Moonlight.mp3 in Resources */,
 				753738DA1FE8FB2000B08292 /* Drip.wav in Resources */,
 				753738DB1FE8FB2000B08292 /* Chomp.wav in Resources */,
