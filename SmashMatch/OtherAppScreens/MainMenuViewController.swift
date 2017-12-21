@@ -36,6 +36,11 @@ class MainMenuViewController: UIViewController, GKGameCenterControllerDelegate {
     var lives = 3;
     var score = 0
     
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
     // IMPORTANT: replace the red string below with your own Leaderboard ID (the one you've set in iTunes Connect)
     let LEADERBOARD_ID = "com.score.smashmatch"
     

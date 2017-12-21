@@ -170,7 +170,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2C739E201FE9E6B40005211D /* LevelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LevelsViewController.swift; path = SmashMatch/Controllers/LevelsViewController.swift; sourceTree = SOURCE_ROOT; };
+		2C739E201FE9E6B40005211D /* LevelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LevelsViewController.swift; path = SmashMatch/OtherAppScreens/LevelsViewController.swift; sourceTree = SOURCE_ROOT; };
 		2C739E241FEA16A70005211D /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		2C739E261FEB005F0005211D /* PauseMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PauseMenuViewController.swift; sourceTree = "<group>"; };
 		542BB719EA50B9834E6C95D3 /* Pods-SmashMatch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmashMatch.release.xcconfig"; path = "Pods/Target Support Files/Pods-SmashMatch/Pods-SmashMatch.release.xcconfig"; sourceTree = "<group>"; };
@@ -295,10 +295,7 @@
 		75197E3F1FE7C8530006EDBA /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				2C739E201FE9E6B40005211D /* LevelsViewController.swift */,
 				75197E2C1FE7C5F00006EDBA /* GameViewController.swift */,
-				2C739E241FEA16A70005211D /* SettingViewController.swift */,
-				2C739E261FEB005F0005211D /* PauseMenuViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -366,6 +363,9 @@
 			isa = PBXGroup;
 			children = (
 				75F00F6A1FE7DA2F00F83F0A /* MainMenuViewController.swift */,
+				2C739E201FE9E6B40005211D /* LevelsViewController.swift */,
+				2C739E241FEA16A70005211D /* SettingViewController.swift */,
+				2C739E261FEB005F0005211D /* PauseMenuViewController.swift */,
 			);
 			path = OtherAppScreens;
 			sourceTree = "<group>";
