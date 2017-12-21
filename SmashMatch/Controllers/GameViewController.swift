@@ -45,6 +45,7 @@ class GameViewController: UIViewController {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.window?.rootViewController = mainMenuViewController
     }
+    
     override var prefersStatusBarHidden: Bool {
         return true
     }

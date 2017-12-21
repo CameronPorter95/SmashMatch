@@ -42,6 +42,13 @@ class Wall: Cookie {
     override var description: String {
         return "Wall square:(\(column),\(row))"
     }
+    
+    func generateWall(column: Int, row: Int) -> Wall? {
+        if(arc4random_uniform(39) <= 1){
+            return Wall(column: column, row: row, wallType: WallType.new)
+        }
+        return nil
+    }
 }
 
 func ==(lhs: Wall, rhs: Wall) -> Bool {
