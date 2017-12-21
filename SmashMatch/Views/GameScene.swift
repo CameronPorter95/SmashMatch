@@ -78,11 +78,18 @@ class GameScene: SKScene {
                 let wall = cookie as! Wall
                 sprite = SKSpriteNode(imageNamed: wall.wallType.spriteName)
                 wallsLayer.addChild(sprite)
+                sprite.size = CGSize(width: TileWidth, height: TileWidth * 0.2666)
+                if wall.horizontal == false {
+                    let rotate = SKAction.rotate(byAngle: CGFloat(-M_PI * 2.0), duration: 5)
+                    let loop = SKAction.repeatForever(rotate)
+                    sprite.run(rotate, withKey: "rotate")
+                }
             } else {
                 sprite = SKSpriteNode(imageNamed: cookie.spriteName)
                 cookiesLayer.addChild(sprite)
+                sprite.size = CGSize(width: TileWidth, height: TileHeight)
             }
-            sprite.size = CGSize(width: TileWidth, height: TileHeight)
+            
             sprite.position = pointFor(column: cookie.column, row: cookie.row)
             cookie.sprite = sprite
             // Give each cookie sprite a small, random delay. Then fade them in.
@@ -267,7 +274,7 @@ class GameScene: SKScene {
     func animateNewCannons(cannons: Set<Cannon>, completion: @escaping () -> ()){
         for cannon in cannons {
             let sprite = SKSpriteNode(imageNamed: cannon.spriteName) //TODO change to cannon image
-            sprite.size = CGSize(width: TileWidth, height: TileHeight)
+            sprite.size = CGSize(width: TileWidth, height: TileWidth)
             sprite.position = pointFor(column: cannon.column, row: cannon.row)
             cookiesLayer.addChild(sprite)
             cannon.sprite = sprite

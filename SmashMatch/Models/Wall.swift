@@ -33,9 +33,11 @@ enum WallType: Int, CustomStringConvertible  {
 
 class Wall: Cookie {
     let wallType: WallType
+    let horizontal: Bool
     
-    init(column: Int, row: Int, wallType: WallType) {
+    init(column: Int, row: Int, wallType: WallType, horizontal: Bool) {
         self.wallType = wallType
+        self.horizontal = horizontal
         super.init(column: column, row: row, cookieType: CookieType(rawValue: 7)!)
     }
     
@@ -45,7 +47,7 @@ class Wall: Cookie {
     
     func generateWall(column: Int, row: Int) -> Wall? {
         if(arc4random_uniform(39) <= 1){
-            return Wall(column: column, row: row, wallType: WallType.new)
+            return Wall(column: column, row: row, wallType: WallType.new, horizontal: horizontal)
         }
         return nil
     }

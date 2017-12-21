@@ -53,7 +53,13 @@ class Level {
                         //Random place walls but only once
                         if walls.count < maxWalls && initialLoad == true {
                             let positionIndex = Int(arc4random_uniform(32))
-                            let wall = Wall(column: possibleWallPositions[positionIndex][0], row: possibleWallPositions[positionIndex][1], wallType: WallType.new)
+                            let wall: Wall
+                            if(row == 0 || row == NumRows-1) {
+                                print(possibleWallPositions[positionIndex][0])
+                                wall = Wall(column: possibleWallPositions[positionIndex][0], row: possibleWallPositions[positionIndex][1], wallType: WallType.broken, horizontal: true)
+                            } else {
+                                wall = Wall(column: possibleWallPositions[positionIndex][0], row: possibleWallPositions[positionIndex][1], wallType: WallType.new, horizontal: false)
+                            }
                             cookies[column, row] = wall
                             set.insert(wall)
                             walls.insert(wall)
@@ -77,6 +83,7 @@ class Level {
                 }
             }
         }
+        print(walls)
         initialLoad = false
         return set
     }
@@ -88,9 +95,15 @@ class Level {
                 if tiles[column, row] != nil {
                     if(row == 0 || row == NumRows-1 || column == 0 || column == NumColumns-1){
                         //Make a wall if underlying tile exists and on border
-                        let wall = Wall(column: column, row: row, wallType: WallType.new)
+                        let wall: Wall
+                        if(row == 0 || row == NumRows-1) {
+                            wall = Wall(column: column, row: row, wallType: WallType.new, horizontal: true)
+                        } else {
+                            wall = Wall(column: column, row: row, wallType: WallType.new, horizontal: false)
+                        }
                         cookies[column, row] = wall
                         set.insert(wall)
+                        walls.insert(wall)
                         continue;
                     } else {
                         let cookieType = cookiesFromFileArray![row][column]
@@ -379,7 +392,7 @@ class Level {
         var columns = [[Cookie]]()
         var cookieType: CookieType = .unknown
         
-        for column in 0..<NumColumns {
+        for column in 1..<NumColumns-1 {
             var array = [Cookie]()
             var row = NumRows - 2
             while row >= 0 && cookies[column, row] == nil {
