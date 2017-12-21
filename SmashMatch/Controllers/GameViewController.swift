@@ -132,6 +132,7 @@ class GameViewController: UIViewController {
                     self.score += chain.score
                     print("~~~~~~~~~~~~~~~~~~~~~~")
                     print("scores:\(self.score)")
+                    print("length:\(chain.length)")
                     print("~~~~~~~~~~~~~~~~~~~~~~")
                 }
                 self.updateLabels()
