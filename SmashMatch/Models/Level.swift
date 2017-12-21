@@ -40,6 +40,13 @@ class Level {
         return set
     }
     
+    private func calculateScores(for chains: Set<Chain>) {
+        // 3-chain is 60 pts, 4-chain is 120, 5-chain is 180, and so on
+        for chain in chains {
+            chain.score = 60 * (chain.length - 2)
+        }
+    }
+    
     private func createInitialCookies() -> Set<Cookie> {
         var set = Set<Cookie>()
         for row in 0..<NumRows {
@@ -109,6 +116,7 @@ class Level {
         }
         targetScore = dictionary["targetScore"] as! Int
         maximumMoves = dictionary["moves"] as! Int
+        
     }
     
     func performSwap(swap: Swap) {
@@ -273,6 +281,11 @@ class Level {
             }
         }
         return horizontalChains.union(verticalChains)
+        
+        
+        //calculate the scorses
+        calculateScores(for: horizontalChains)
+        calculateScores(for: verticalChains)
     }
     
     func createCannons(chains: Set<Chain>, cannons: inout Set<Cannon>) {

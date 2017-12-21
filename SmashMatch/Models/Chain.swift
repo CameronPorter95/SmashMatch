@@ -9,6 +9,8 @@
 class Chain: Hashable, CustomStringConvertible {
     var cookies = [Cookie]() //TODO if any of these cookies exist in another chain as well, then that makes a 4 way cannon.
     
+    var score = 5
+    
     enum ChainType: CustomStringConvertible {
         case horizontal
         case vertical
