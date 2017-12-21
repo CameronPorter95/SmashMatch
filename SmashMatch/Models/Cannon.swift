@@ -9,11 +9,29 @@
 import SpriteKit
 
 enum CannonType: Int, CustomStringConvertible  {
-    case unknown = 0, twoWay, fourWay
+    case unknown = 0, twoWayHorz, twoWayVert, fourWay
     var spriteName: String {
+//        let spriteNames = [
+//            "blueLRcannon",
+//            "blueUDcannon",
+//            "blue4cannon",
+//            "greenLRcannon",
+//            "greenUDcannon",
+//            "green4cannon",
+//            "orangeLRcannon",
+//            "orangeUDcannon",
+//            "orange4cannon",
+//            "pinkLRcannon",
+//            "pinkUDcannon",
+//            "pink4cannon",
+//            "yellowLRcannon",
+//            "yellowUDcannon",
+//            "yellow4cannon"]
+        
         let spriteNames = [
-            "Macaroon",
-            "SugarCookie"]
+            "LRcannon",
+            "UDcannon",
+            "4cannon"]
         
         return spriteNames[rawValue - 1]
     }
@@ -34,13 +52,17 @@ enum CannonType: Int, CustomStringConvertible  {
 class Cannon: Cookie {
     let cannonType: CannonType
     
-    init(column: Int, row: Int, cannonType: CannonType) {
+    init(column: Int, row: Int, cannonType: CannonType, cookieType: CookieType) {
         self.cannonType = cannonType
-        super.init(column: column, row: row, cookieType: CookieType(rawValue: 7)!)
+        super.init(column: column, row: row, cookieType: cookieType)
     }
     
     override var description: String {
         return "Cannon square:(\(column),\(row))"
+    }
+    
+    override var spriteName: String {
+        return cookieType.spriteName + cannonType.spriteName
     }
 }
 
