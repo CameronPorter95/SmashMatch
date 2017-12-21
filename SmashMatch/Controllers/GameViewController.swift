@@ -148,8 +148,6 @@ class GameViewController: UIViewController {
     }
     
     func updateLabels() {
-        targetLabel.text = String(format: "%ld", level.targetScore)
-        movesLabel.text = String(format: "%ld", movesMade)
         scoreLabel.text = String(format: "%ld", score)
     }
     

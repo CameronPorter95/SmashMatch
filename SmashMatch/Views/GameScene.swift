@@ -18,8 +18,8 @@ class GameScene: SKScene {
     
     var swipeHandler: ((Swap) -> ())?
     var level: Level!
-    let TileWidth: CGFloat = 32.0
-    let TileHeight: CGFloat = 32.0
+    var TileWidth: CGFloat = 32.0
+    var TileHeight: CGFloat = 32.0
     var selectionSprite = SKSpriteNode()
     
     let gameLayer = SKNode()
@@ -35,12 +35,19 @@ class GameScene: SKScene {
     
     override init(size: CGSize) {
         super.init(size: size)
-        
+        TileWidth = size.width/10 + ((size.width/100)-(0.2666*(size.width/100)))
+        TileHeight = TileWidth
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
         let background = SKSpriteNode(imageNamed: "Background")
         background.size = size
         addChild(background)
+        let trees = SKSpriteNode(imageNamed: "Trees")
+        trees.size = CGSize(width: size.width, height: size.width*0.32911)
+        trees.anchorPoint = CGPoint(x: 0.5, y: 0)
+        trees.position = CGPoint(x: 0, y: -size.height/2)
+        addChild(trees)
+        
         addChild(gameLayer)
         
         let layerPosition = CGPoint(
@@ -80,20 +87,21 @@ class GameScene: SKScene {
                 wallsLayer.addChild(sprite)
                 sprite.size = CGSize(width: TileWidth, height: TileWidth * 0.2666)
                 var pos = pointFor(column: gem.column, row: gem.row)
+                let offset = (TileWidth/2)-((0.2666*TileWidth)/2)
                 if wall.horizontal == false {
                     sprite.zRotation = .pi/2
                     if(gem.column == 0){
-                        pos.x = pos.x + 11.73344
+                        pos.x = pos.x + offset
                     }
                     else {
-                        pos.x = pos.x - 11.73344
+                        pos.x = pos.x - offset
                     }
                 } else {
                     if(gem.row == 0){
-                        pos.y = pos.y + 11.73344
+                        pos.y = pos.y + offset
                     }
                     else {
-                        pos.y = pos.y - 11.73344
+                        pos.y = pos.y - offset
                     }
                 }
                 sprite.position = pos
