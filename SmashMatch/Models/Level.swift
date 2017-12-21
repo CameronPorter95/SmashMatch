@@ -23,7 +23,7 @@ class Level {
     var maximumMoves = 0
     
     var cookiesFromFileArray: [[Int]]?
-    var isClassicMode = true; //Set this based on the game mode
+    var isClassicMode = false; //Set this based on the game mode
     var initialLoad = true;
     
     func shuffle() -> Set<Cookie> {
@@ -270,15 +270,15 @@ class Level {
         
         var cannons = Set<Cannon>()
         //Get cannon positions from straight chains.
-        createCannons(chains: horizontalChains, cannons: &cannons)
-        createCannons(chains: verticalChains, cannons: &cannons)
+        createCannons(chains: horizontalChains, cannons: &cannons, isHorz: true)
+        createCannons(chains: verticalChains, cannons: &cannons, isHorz: false)
         
         //Check for chain interceptions for L and T chains and create cannons from L and T's.
         for horzChain in horizontalChains {
             for vertChain in verticalChains {
                 for cookie in horzChain.cookies {
                     if vertChain.cookies.contains(cookie) {
-                        let cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.fourWay)
+                        let cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.fourWay, cookieType: cookie.cookieType)
                         if cannons.contains(cannon) {
                             cannons.remove(cannon)
                         }
@@ -303,28 +303,31 @@ class Level {
         return horizontalChains.union(verticalChains)
     }
     
-    func createCannons(chains: Set<Chain>, cannons: inout Set<Cannon>) {
+    func createCannons(chains: Set<Chain>, cannons: inout Set<Cannon>, isHorz: Bool) {
         for chain in chains {
             if(chain.length > 3){
                 for cookie in chain.cookies {
                     if(cookie.moved == true){
                         if(chain.length > 4){
-                            let cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.fourWay)
+                            let cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.fourWay, cookieType: cookie.cookieType)
                             cannons.insert(cannon)
                             print("Forming a 4 Way\(cannon.description) with type \(cannon.cannonType.description)")
                             break;
                         }
-                        let cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.twoWay)
+                        var cannon: Cannon
+                        if isHorz {
+                            cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.twoWayHorz, cookieType: cookie.cookieType)
+                            print("Forming a 2 Way \(cannon.description) with type \(cannon.cannonType.description)")
+                        }
+                        else {
+                            cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.twoWayVert, cookieType: cookie.cookieType)
+                            print("Forming a 2 Way \(cannon.description) with type \(cannon.cannonType.description)")
+                        }
                         cannons.insert(cannon)
-                        print("Forming a 2 Way \(cannon.description) with type \(cannon.cannonType.description)")
                     }
                 }
             }
         }
-    }
-    
-    func createWall(){
-        
     }
     
     func getCannons() -> Set<Cannon>{

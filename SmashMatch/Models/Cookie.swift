@@ -12,13 +12,11 @@ enum CookieType: Int, CustomStringConvertible  {
     case unknown = 0, croissant, cupcake, danish, donut, macaroon, sugarCookie, cannon, wall
     var spriteName: String {
         let spriteNames = [
-            "Croissant",
-            "Cupcake",
-            "Danish",
-            "Donut",
-            "Macaroon",
-            "SugarCookie",
-            "Cannon",
+            "blue",
+            "green",
+            "orange",
+            "pink",
+            "yellow",
             "Wall"]
         
         return spriteNames[rawValue - 1]
@@ -29,7 +27,7 @@ enum CookieType: Int, CustomStringConvertible  {
     }
     
     static func random() -> CookieType {
-        return CookieType(rawValue: Int(arc4random_uniform(6)) + 1)!
+        return CookieType(rawValue: Int(arc4random_uniform(5)) + 1)!
     }
     
     static func predefined(type: Int) -> CookieType {
@@ -60,6 +58,10 @@ class Cookie: CustomStringConvertible, Hashable {
     
     var description: String {
         return "type:\(cookieType) square:(\(column),\(row))"
+    }
+    
+    var spriteName: String {
+        return cookieType.spriteName + "gem"
     }
 }
 

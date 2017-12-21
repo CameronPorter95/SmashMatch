@@ -79,7 +79,7 @@ class GameScene: SKScene {
                 sprite = SKSpriteNode(imageNamed: wall.wallType.spriteName)
                 wallsLayer.addChild(sprite)
             } else {
-                sprite = SKSpriteNode(imageNamed: cookie.cookieType.spriteName)
+                sprite = SKSpriteNode(imageNamed: cookie.spriteName)
                 cookiesLayer.addChild(sprite)
             }
             sprite.size = CGSize(width: TileWidth, height: TileHeight)
@@ -238,7 +238,7 @@ class GameScene: SKScene {
             let startRow = array[0].row + 1
             
             for (idx, cookie) in array.enumerated() {
-                let sprite = SKSpriteNode(imageNamed: cookie.cookieType.spriteName)
+                let sprite = SKSpriteNode(imageNamed: cookie.spriteName)
                 sprite.size = CGSize(width: TileWidth, height: TileHeight)
                 sprite.position = pointFor(column: cookie.column, row: startRow)
                 cookiesLayer.addChild(sprite)
@@ -266,7 +266,7 @@ class GameScene: SKScene {
     //Animates the creation of cannons
     func animateNewCannons(cannons: Set<Cannon>, completion: @escaping () -> ()){
         for cannon in cannons {
-            let sprite = SKSpriteNode(imageNamed: cannon.cannonType.spriteName) //TODO change to cannon image
+            let sprite = SKSpriteNode(imageNamed: cannon.spriteName) //TODO change to cannon image
             sprite.size = CGSize(width: TileWidth, height: TileHeight)
             sprite.position = pointFor(column: cannon.column, row: cannon.row)
             cookiesLayer.addChild(sprite)
@@ -293,7 +293,7 @@ class GameScene: SKScene {
         let (success, column, row) = convertPoint(point: location)
         if success {
             if let cookie = level.cookieAt(column: column, row: row) {
-                showSelectionIndicator(cookie: cookie)
+                //showSelectionIndicator(cookie: cookie)
                 swipeFromColumn = column
                 swipeFromRow = row
             }
@@ -319,7 +319,7 @@ class GameScene: SKScene {
             }
             if horzDelta != 0 || vertDelta != 0 {
                 trySwap(horizontal: horzDelta, vertical: vertDelta)
-                hideSelectionIndicator()
+                //hideSelectionIndicator()
                 swipeFromColumn = nil
             }
         }
@@ -327,7 +327,7 @@ class GameScene: SKScene {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if selectionSprite.parent != nil && swipeFromColumn != nil {
-            hideSelectionIndicator()
+            //hideSelectionIndicator()
         }
         swipeFromColumn = nil
         swipeFromRow = nil
