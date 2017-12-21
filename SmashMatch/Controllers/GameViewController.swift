@@ -1,6 +1,6 @@
 //
 //  GameViewController.swift
-//  CookieCrunch
+//  SmashMatch
 //
 //  Created by Cameron Porter on 18/12/17.
 //  Copyright © 2017 Cameron Porter. All rights reserved.
@@ -96,9 +96,9 @@ class GameViewController: UIViewController {
     }
     
     func shuffle() {
-        scene.removeAllCookieSprites()
-        let newCookies = level.shuffle()
-        scene.addSprites(for: newCookies)
+        scene.removeAllGemSprites()
+        let newGems = level.shuffle()
+        scene.addSprites(for: newGems)
     }
     
     func incrementMoves() {
@@ -125,7 +125,7 @@ class GameViewController: UIViewController {
             beginNextTurn()
             return
         }
-        scene.animateMatchedCookies(for: chains) {
+        scene.animateMatchedGems(for: chains) {
             let cannons = self.level.getCannons()
             self.scene.animateNewCannons(cannons: cannons) {
                 for chain in chains{
@@ -137,9 +137,9 @@ class GameViewController: UIViewController {
                 }
                 self.updateLabels()
                 let columns = self.level.fillHoles()
-                self.scene.animateFallingCookies(columns: columns) {
-                    let columns = self.level.topUpCookies()
-                    self.scene.animateNewCookies(columns) {
+                self.scene.animateFallingGems(columns: columns) {
+                    let columns = self.level.topUpGems()
+                    self.scene.animateNewGems(columns) {
                         self.handleMatches()
                     }
                 }

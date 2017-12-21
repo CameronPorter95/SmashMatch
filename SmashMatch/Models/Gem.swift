@@ -1,6 +1,6 @@
 //
-//  Cookie.swift
-//  CookieCrunch
+//  Gem.swift
+//  SmashMatch
 //
 //  Created by Cameron Porter on 18/12/17.
 //  Copyright © 2017 Cameron Porter. All rights reserved.
@@ -8,8 +8,8 @@
 
 import SpriteKit
 
-enum CookieType: Int, CustomStringConvertible  {
-    case unknown = 0, croissant, cupcake, danish, donut, macaroon, sugarCookie, wall
+enum GemType: Int, CustomStringConvertible  {
+    case unknown = 0, blue, green, orange, pink, yellow, wall
     var spriteName: String {
         let spriteNames = [
             "blue",
@@ -26,12 +26,12 @@ enum CookieType: Int, CustomStringConvertible  {
         return spriteName + "-Highlighted"
     }
     
-    static func random() -> CookieType {
-        return CookieType(rawValue: Int(arc4random_uniform(5)) + 1)!
+    static func random() -> GemType {
+        return GemType(rawValue: Int(arc4random_uniform(5)) + 1)!
     }
     
-    static func predefined(type: Int) -> CookieType {
-        return CookieType(rawValue: type)!
+    static func predefined(type: Int) -> GemType {
+        return GemType(rawValue: type)!
     }
     
     var description: String {
@@ -39,17 +39,17 @@ enum CookieType: Int, CustomStringConvertible  {
     }
 }
 
-class Cookie: CustomStringConvertible, Hashable {
+class Gem: CustomStringConvertible, Hashable {
     var column: Int
     var row: Int
-    let cookieType: CookieType
+    let gemType: GemType
     var sprite: SKSpriteNode?
-    var moved: Bool = false; //Used for flaging possible cookies that could have caused chains (potential future cannons).
+    var moved: Bool = false; //Used for flaging possible gems that could have caused chains (potential future cannons).
     
-    init(column: Int, row: Int, cookieType: CookieType) {
+    init(column: Int, row: Int, gemType: GemType) {
         self.column = column
         self.row = row
-        self.cookieType = cookieType
+        self.gemType = gemType
     }
     
     var hashValue: Int {
@@ -57,14 +57,14 @@ class Cookie: CustomStringConvertible, Hashable {
     }
     
     var description: String {
-        return "type:\(cookieType) square:(\(column),\(row))"
+        return "type:\(gemType) square:(\(column),\(row))"
     }
     
     var spriteName: String {
-        return cookieType.spriteName + "gem"
+        return gemType.spriteName + "gem"
     }
 }
 
-func ==(lhs: Cookie, rhs: Cookie) -> Bool {
+func ==(lhs: Gem, rhs: Gem) -> Bool {
     return lhs.column == rhs.column && lhs.row == rhs.row
 }

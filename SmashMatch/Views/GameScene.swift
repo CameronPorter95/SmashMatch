@@ -1,6 +1,6 @@
 //
 //  GameScene.swift
-//  CookieCrunch
+//  SmashMatch
 //
 //  Created by Cameron Porter on 18/12/17.
 //  Copyright © 2017 Cameron Porter. All rights reserved.
@@ -24,14 +24,14 @@ class GameScene: SKScene {
     
     let gameLayer = SKNode()
     let tilesLayer = SKNode()
-    let cookiesLayer = SKNode()
+    let gemsLayer = SKNode()
     let wallsLayer = SKNode()
     
     let swapSound = SKAction.playSoundFileNamed("Chomp.wav", waitForCompletion: false)
     let invalidSwapSound = SKAction.playSoundFileNamed("Error.wav", waitForCompletion: false)
     let matchSound = SKAction.playSoundFileNamed("Ka-Ching.wav", waitForCompletion: false)
-    let fallingCookieSound = SKAction.playSoundFileNamed("Scrape.wav", waitForCompletion: false)
-    let addCookieSound = SKAction.playSoundFileNamed("Drip.wav", waitForCompletion: false)
+    let fallingGemSound = SKAction.playSoundFileNamed("Scrape.wav", waitForCompletion: false)
+    let addGemSound = SKAction.playSoundFileNamed("Drip.wav", waitForCompletion: false)
     
     override init(size: CGSize) {
         super.init(size: size)
@@ -48,10 +48,10 @@ class GameScene: SKScene {
             y: -TileHeight * CGFloat(NumRows) / 2)
         
         tilesLayer.position = layerPosition
-        cookiesLayer.position = layerPosition
+        gemsLayer.position = layerPosition
         wallsLayer.position = layerPosition
         gameLayer.addChild(tilesLayer)
-        gameLayer.addChild(cookiesLayer)
+        gameLayer.addChild(gemsLayer)
         gameLayer.addChild(wallsLayer)
         
         swipeFromColumn = nil
@@ -71,25 +71,25 @@ class GameScene: SKScene {
         }
     }
     
-    func addSprites(for cookies: Set<Cookie>) {
-        for cookie in cookies {
+    func addSprites(for gems: Set<Gem>) {
+        for gem in gems {
             var sprite: SKSpriteNode
-            if(cookie is Wall){
-                let wall = cookie as! Wall
+            if(gem is Wall){
+                let wall = gem as! Wall
                 sprite = SKSpriteNode(imageNamed: wall.wallType.spriteName)
                 wallsLayer.addChild(sprite)
                 sprite.size = CGSize(width: TileWidth, height: TileWidth * 0.2666)
-                var pos = pointFor(column: cookie.column, row: cookie.row)
+                var pos = pointFor(column: gem.column, row: gem.row)
                 if wall.horizontal == false {
                     sprite.zRotation = .pi/2
-                    if(cookie.column == 0){
+                    if(gem.column == 0){
                         pos.x = pos.x + 11.73344
                     }
                     else {
                         pos.x = pos.x - 11.73344
                     }
                 } else {
-                    if(cookie.row == 0){
+                    if(gem.row == 0){
                         pos.y = pos.y + 11.73344
                     }
                     else {
@@ -98,13 +98,13 @@ class GameScene: SKScene {
                 }
                 sprite.position = pos
             } else {
-                sprite = SKSpriteNode(imageNamed: cookie.spriteName)
-                cookiesLayer.addChild(sprite)
+                sprite = SKSpriteNode(imageNamed: gem.spriteName)
+                gemsLayer.addChild(sprite)
                 sprite.size = CGSize(width: TileWidth, height: TileHeight)
-                sprite.position = pointFor(column: cookie.column, row: cookie.row)
+                sprite.position = pointFor(column: gem.column, row: gem.row)
             }
-            cookie.sprite = sprite
-            // Give each cookie sprite a small, random delay. Then fade them in.
+            gem.sprite = sprite
+            // Give each gem sprite a small, random delay. Then fade them in.
             sprite.alpha = 0
             sprite.xScale = 0.5
             sprite.yScale = 0.5
@@ -120,17 +120,17 @@ class GameScene: SKScene {
         }
     }
     
-    func removeAllCookieSprites() {
-        cookiesLayer.removeAllChildren()
+    func removeAllGemSprites() {
+        gemsLayer.removeAllChildren()
     }
     
-    func showSelectionIndicator(cookie: Cookie) {
+    func showSelectionIndicator(gem: Gem) {
         if selectionSprite.parent != nil {
             selectionSprite.removeFromParent()
         }
         
-        if let sprite = cookie.sprite {
-            let texture = SKTexture(imageNamed: cookie.cookieType.highlightedSpriteName)
+        if let sprite = gem.sprite {
+            let texture = SKTexture(imageNamed: gem.gemType.highlightedSpriteName)
             selectionSprite.size = CGSize(width: TileWidth, height: TileHeight)
             selectionSprite.run(SKAction.setTexture(texture))
             
@@ -165,18 +165,18 @@ class GameScene: SKScene {
         let toRow = swipeFromRow! + vertDelta
         guard toColumn >= 0 && toColumn < NumColumns else { return }
         guard toRow >= 0 && toRow < NumRows else { return }
-        if let toCookie = level.cookieAt(column: toColumn, row: toRow),
-            let fromCookie = level.cookieAt(column: swipeFromColumn!, row: swipeFromRow!) {
+        if let toGem = level.gemAt(column: toColumn, row: toRow),
+            let fromGem = level.gemAt(column: swipeFromColumn!, row: swipeFromRow!) {
             if let handler = swipeHandler {
-                let swap = Swap(cookieA: fromCookie, cookieB: toCookie)
+                let swap = Swap(gemA: fromGem, gemB: toGem)
                 handler(swap)
             }
         }
     }
     
     func animate(_ swap: Swap, completion: @escaping () -> ()) {
-        let spriteA = swap.cookieA.sprite!
-        let spriteB = swap.cookieB.sprite!
+        let spriteA = swap.gemA.sprite!
+        let spriteB = swap.gemB.sprite!
         
         spriteA.zPosition = 100
         spriteB.zPosition = 90
@@ -194,8 +194,8 @@ class GameScene: SKScene {
     }
     
     func animateInvalidSwap(_ swap: Swap, completion: @escaping () -> ()) {
-        let spriteA = swap.cookieA.sprite!
-        let spriteB = swap.cookieB.sprite!
+        let spriteA = swap.gemA.sprite!
+        let spriteB = swap.gemB.sprite!
         
         spriteA.zPosition = 100
         spriteB.zPosition = 90
@@ -213,10 +213,10 @@ class GameScene: SKScene {
         run(invalidSwapSound)
     }
     
-    func animateMatchedCookies(for chains: Set<Chain>, completion: @escaping () -> ()) {
+    func animateMatchedGems(for chains: Set<Chain>, completion: @escaping () -> ()) {
         for chain in chains {
-            for cookie in chain.cookies {
-                if let sprite = cookie.sprite {
+            for gem in chain.gems {
+                if let sprite = gem.sprite {
                     if sprite.action(forKey: "removing") == nil {
                         let scaleAction = SKAction.scale(to: 0.1, duration: 0.3)
                         scaleAction.timingMode = .easeOut
@@ -230,13 +230,13 @@ class GameScene: SKScene {
         run(SKAction.wait(forDuration: 0.3), completion: completion)
     }
     
-    func animateFallingCookies(columns: [[Cookie]], completion: @escaping () -> ()) {
+    func animateFallingGems(columns: [[Gem]], completion: @escaping () -> ()) {
         var longestDuration: TimeInterval = 0
         for array in columns {
-            for (idx, cookie) in array.enumerated() {
-                let newPosition = pointFor(column: cookie.column, row: cookie.row)
+            for (idx, gem) in array.enumerated() {
+                let newPosition = pointFor(column: gem.column, row: gem.row)
                 let delay = 0.05 + 0.15*TimeInterval(idx)
-                let sprite = cookie.sprite!   // sprite always exists at this point
+                let sprite = gem.sprite!   // sprite always exists at this point
                 let duration = TimeInterval(((sprite.position.y - newPosition.y) / TileHeight) * 0.1)
                 longestDuration = max(longestDuration, duration + delay)
                 let moveAction = SKAction.move(to: newPosition, duration: duration)
@@ -244,28 +244,28 @@ class GameScene: SKScene {
                 sprite.run(
                     SKAction.sequence([
                         SKAction.wait(forDuration: delay),
-                        SKAction.group([moveAction, fallingCookieSound])]))
+                        SKAction.group([moveAction, fallingGemSound])]))
             }
         }
         run(SKAction.wait(forDuration: longestDuration), completion: completion)
     }
     
-    func animateNewCookies(_ columns: [[Cookie]], completion: @escaping () -> ()) {
+    func animateNewGems(_ columns: [[Gem]], completion: @escaping () -> ()) {
         var longestDuration: TimeInterval = 0
         
         for array in columns {
             let startRow = array[0].row + 1
             
-            for (idx, cookie) in array.enumerated() {
-                let sprite = SKSpriteNode(imageNamed: cookie.spriteName)
+            for (idx, gem) in array.enumerated() {
+                let sprite = SKSpriteNode(imageNamed: gem.spriteName)
                 sprite.size = CGSize(width: TileWidth, height: TileHeight)
-                sprite.position = pointFor(column: cookie.column, row: startRow)
-                cookiesLayer.addChild(sprite)
-                cookie.sprite = sprite
+                sprite.position = pointFor(column: gem.column, row: startRow)
+                gemsLayer.addChild(sprite)
+                gem.sprite = sprite
                 let delay = 0.1 + 0.2 * TimeInterval(array.count - idx - 1)
-                let duration = TimeInterval(startRow - cookie.row) * 0.1
+                let duration = TimeInterval(startRow - gem.row) * 0.1
                 longestDuration = max(longestDuration, duration + delay)
-                let newPosition = pointFor(column: cookie.column, row: cookie.row)
+                let newPosition = pointFor(column: gem.column, row: gem.row)
                 let moveAction = SKAction.move(to: newPosition, duration: duration)
                 moveAction.timingMode = .easeOut
                 sprite.alpha = 0
@@ -275,7 +275,7 @@ class GameScene: SKScene {
                         SKAction.group([
                             SKAction.fadeIn(withDuration: 0.05),
                             moveAction,
-                            addCookieSound])
+                            addGemSound])
                         ]))
             }
         }
@@ -288,9 +288,9 @@ class GameScene: SKScene {
             let sprite = SKSpriteNode(imageNamed: cannon.spriteName) //TODO change to cannon image
             sprite.size = CGSize(width: TileWidth, height: TileWidth)
             sprite.position = pointFor(column: cannon.column, row: cannon.row)
-            cookiesLayer.addChild(sprite)
+            gemsLayer.addChild(sprite)
             cannon.sprite = sprite
-            // Give each cookie sprite a small, random delay. Then fade them in.
+            // Give each gem sprite a small, random delay. Then fade them in.
             sprite.alpha = 0
             sprite.xScale = 0.5
             sprite.yScale = 0.5
@@ -308,11 +308,11 @@ class GameScene: SKScene {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
-        let location = touch.location(in: cookiesLayer)
+        let location = touch.location(in: gemsLayer)
         let (success, column, row) = convertPoint(point: location)
         if success {
-            if let cookie = level.cookieAt(column: column, row: row) {
-                //showSelectionIndicator(cookie: cookie)
+            if let gem = level.gemAt(column: column, row: row) {
+                //showSelectionIndicator(gem: gem)
                 swipeFromColumn = column
                 swipeFromRow = row
             }
@@ -322,7 +322,7 @@ class GameScene: SKScene {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard swipeFromColumn != nil else { return }
         guard let touch = touches.first else { return }
-        let location = touch.location(in: cookiesLayer)
+        let location = touch.location(in: gemsLayer)
         
         let (success, column, row) = convertPoint(point: location)
         if success {

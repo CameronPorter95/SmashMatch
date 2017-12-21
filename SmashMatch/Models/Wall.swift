@@ -1,6 +1,6 @@
 //
-//  Cookie.swift
-//  CookieCrunch
+//  Wall.swift
+//  SmashMatch
 //
 //  Created by Cameron Porter on 18/12/17.
 //  Copyright © 2017 Cameron Porter. All rights reserved.
@@ -22,8 +22,8 @@ enum WallType: Int, CustomStringConvertible  {
         return spriteName + "-Highlighted"
     }
     
-    static func predefined(type: Int) -> CookieType {
-        return CookieType(rawValue: type)!
+    static func predefined(type: Int) -> GemType {
+        return GemType(rawValue: type)!
     }
     
     var description: String {
@@ -31,14 +31,14 @@ enum WallType: Int, CustomStringConvertible  {
     }
 }
 
-class Wall: Cookie {
+class Wall: Gem {
     let wallType: WallType
     let horizontal: Bool
     
     init(column: Int, row: Int, wallType: WallType, horizontal: Bool) {
         self.wallType = wallType
         self.horizontal = horizontal
-        super.init(column: column, row: row, cookieType: CookieType(rawValue: 7)!)
+        super.init(column: column, row: row, gemType: GemType(rawValue: 6)!)
     }
     
     override var description: String {

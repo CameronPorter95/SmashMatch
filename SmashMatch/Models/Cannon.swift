@@ -1,6 +1,6 @@
 //
-//  Cookie.swift
-//  CookieCrunch
+//  Cannon.swift
+//  SmashMatch
 //
 //  Created by Cameron Porter on 18/12/17.
 //  Copyright © 2017 Cameron Porter. All rights reserved.
@@ -11,23 +11,6 @@ import SpriteKit
 enum CannonType: Int, CustomStringConvertible  {
     case unknown = 0, twoWayHorz, twoWayVert, fourWay
     var spriteName: String {
-//        let spriteNames = [
-//            "blueLRcannon",
-//            "blueUDcannon",
-//            "blue4cannon",
-//            "greenLRcannon",
-//            "greenUDcannon",
-//            "green4cannon",
-//            "orangeLRcannon",
-//            "orangeUDcannon",
-//            "orange4cannon",
-//            "pinkLRcannon",
-//            "pinkUDcannon",
-//            "pink4cannon",
-//            "yellowLRcannon",
-//            "yellowUDcannon",
-//            "yellow4cannon"]
-        
         let spriteNames = [
             "LRcannon",
             "UDcannon",
@@ -40,8 +23,8 @@ enum CannonType: Int, CustomStringConvertible  {
         return spriteName + "-Highlighted"
     }
     
-    static func predefined(type: Int) -> CookieType {
-        return CookieType(rawValue: type)!
+    static func predefined(type: Int) -> GemType {
+        return GemType(rawValue: type)!
     }
     
     var description: String {
@@ -49,12 +32,12 @@ enum CannonType: Int, CustomStringConvertible  {
     }
 }
 
-class Cannon: Cookie {
+class Cannon: Gem {
     let cannonType: CannonType
     
-    init(column: Int, row: Int, cannonType: CannonType, cookieType: CookieType) {
+    init(column: Int, row: Int, cannonType: CannonType, gemType: GemType) {
         self.cannonType = cannonType
-        super.init(column: column, row: row, cookieType: cookieType)
+        super.init(column: column, row: row, gemType: gemType)
     }
     
     override var description: String {
@@ -62,7 +45,7 @@ class Cannon: Cookie {
     }
     
     override var spriteName: String {
-        return cookieType.spriteName + cannonType.spriteName
+        return gemType.spriteName + cannonType.spriteName
     }
 }
 

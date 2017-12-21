@@ -1,30 +1,30 @@
 //
 //  Swap.swift
-//  CookieCrunch
+//  SmashMatch
 //
 //  Created by Cameron Porter on 19/12/17.
 //  Copyright © 2017 Cameron Porter. All rights reserved.
 //
 
 struct Swap: CustomStringConvertible, Hashable  {
-    let cookieA: Cookie
-    let cookieB: Cookie
+    let gemA: Gem
+    let gemB: Gem
     
-    init(cookieA: Cookie, cookieB: Cookie) {
-        self.cookieA = cookieA
-        self.cookieB = cookieB
+    init(gemA: Gem, gemB: Gem) {
+        self.gemA = gemA
+        self.gemB = gemB
     }
     
     var description: String {
-        return "swap \(cookieA) with \(cookieB)"
+        return "swap \(gemA) with \(gemB)"
     }
     
     var hashValue: Int {
-        return cookieA.hashValue ^ cookieB.hashValue
+        return gemA.hashValue ^ gemB.hashValue
     }
 }
 
 func ==(lhs: Swap, rhs: Swap) -> Bool {
-    return (lhs.cookieA == rhs.cookieA && lhs.cookieB == rhs.cookieB) ||
-        (lhs.cookieB == rhs.cookieA && lhs.cookieA == rhs.cookieB)
+    return (lhs.gemA == rhs.gemA && lhs.gemB == rhs.gemB) ||
+        (lhs.gemB == rhs.gemA && lhs.gemA == rhs.gemB)
 }

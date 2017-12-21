@@ -34,7 +34,7 @@
 		757A2A361FE906C4000E98D9 /* Level_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 757A2A311FE906C4000E98D9 /* Level_0.json */; };
 		757A2A371FE906C4000E98D9 /* Level_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 757A2A321FE906C4000E98D9 /* Level_1.json */; };
 		75B62C8F1FE8DBB300D4F88F /* Chain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B62C8E1FE8DBB300D4F88F /* Chain.swift */; };
-		75F00F631FE7CAE400F83F0A /* Cookie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F00F621FE7CAE400F83F0A /* Cookie.swift */; };
+		75F00F631FE7CAE400F83F0A /* Gem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F00F621FE7CAE400F83F0A /* Gem.swift */; };
 		75F00F661FE7CD4300F83F0A /* Array2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F00F651FE7CD4300F83F0A /* Array2D.swift */; };
 		75F00F681FE7CED900F83F0A /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F00F671FE7CED900F83F0A /* Level.swift */; };
 		75F00F6B1FE7DA2F00F83F0A /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F00F6A1FE7DA2F00F83F0A /* MainMenuViewController.swift */; };
@@ -190,7 +190,7 @@
 		75B62C8C1FE8DAB300D4F88F /* Chomp.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chomp.wav; sourceTree = "<group>"; };
 		75B62C8D1FE8DAB300D4F88F /* Error.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Error.wav; sourceTree = "<group>"; };
 		75B62C8E1FE8DBB300D4F88F /* Chain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chain.swift; sourceTree = "<group>"; };
-		75F00F621FE7CAE400F83F0A /* Cookie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cookie.swift; sourceTree = "<group>"; };
+		75F00F621FE7CAE400F83F0A /* Gem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gem.swift; sourceTree = "<group>"; };
 		75F00F651FE7CD4300F83F0A /* Array2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array2D.swift; sourceTree = "<group>"; };
 		75F00F671FE7CED900F83F0A /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		75F00F6A1FE7DA2F00F83F0A /* MainMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
@@ -351,7 +351,7 @@
 		75F00F641FE7CB0B00F83F0A /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				75F00F621FE7CAE400F83F0A /* Cookie.swift */,
+				75F00F621FE7CAE400F83F0A /* Gem.swift */,
 				75F00F651FE7CD4300F83F0A /* Array2D.swift */,
 				75F00F671FE7CED900F83F0A /* Level.swift */,
 				75F00F6C1FE7DF5F00F83F0A /* Tile.swift */,
@@ -670,7 +670,7 @@
 				75197E2B1FE7C5F00006EDBA /* GameScene.swift in Sources */,
 				75B62C8F1FE8DBB300D4F88F /* Chain.swift in Sources */,
 				75238B0B1FEA323400FFF7BA /* Cannon.swift in Sources */,
-				75F00F631FE7CAE400F83F0A /* Cookie.swift in Sources */,
+				75F00F631FE7CAE400F83F0A /* Gem.swift in Sources */,
 				2C739E251FEA16A70005211D /* SettingViewController.swift in Sources */,
 				75F00F7C1FE7E69300F83F0A /* Swap.swift in Sources */,
 				750F13AD1FEA1F3600121507 /* PersistentEntity.swift in Sources */,

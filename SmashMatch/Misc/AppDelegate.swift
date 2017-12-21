@@ -1,6 +1,6 @@
    //
 //  AppDelegate.swift
-//  CookieCrunch
+//  SmashMatch
 //
 //  Created by Cameron Porter on 18/12/17.
 //  Copyright © 2017 Cameron Porter. All rights reserved.

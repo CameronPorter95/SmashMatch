@@ -1,6 +1,6 @@
 //
 //  Level.swift
-//  CookieCrunch
+//  SmashMatch
 //
 //  Created by Cameron Porter on 18/12/17.
 //  Copyright © 2017 Cameron Porter. All rights reserved.
@@ -13,7 +13,7 @@ let NumRows = 10
 let NumLevels = 4 // Excluding level 0
 
 class Level {
-    fileprivate var cookies = Array2D<Cookie>(columns: NumColumns, rows: NumRows)
+    fileprivate var gems = Array2D<Gem>(columns: NumColumns, rows: NumRows)
     private var tiles = Array2D<Tile>(columns: NumColumns, rows: NumRows)
     private var cannons = Set<Cannon>()
     private var walls = Set<Wall>()
@@ -22,20 +22,20 @@ class Level {
     var targetScore = 0
     var maximumMoves = 0
     
-    var cookiesFromFileArray: [[Int]]?
-    var isClassicMode = true; //Set this based on the game mode
+    var gemsFromFileArray: [[Int]]?
+    var isClassicMode = false; //Set this based on the game mode
     var initialLoad = true;
     
-    func shuffle() -> Set<Cookie> {
-        var set: Set<Cookie>
+    func shuffle() -> Set<Gem> {
+        var set: Set<Gem>
         if(isClassicMode){
-            set = createInitialCookiesFromFile()
+            set = createInitialGemsFromFile()
             _ = detectPossibleSwaps()
             isClassicMode = false;
             return set
         }
         repeat {
-            set = createInitialCookies()
+            set = createInitialGems()
             _ = detectPossibleSwaps()
 //            print("possible swaps: \(possibleSwaps)")
         } while possibleSwaps.count == 0
@@ -50,8 +50,8 @@ class Level {
         }
     }
     
-    private func createInitialCookies() -> Set<Cookie> {
-        var set = Set<Cookie>()
+    private func createInitialGems() -> Set<Gem> {
+        var set = Set<Gem>()
         let possibleWallPositions = getPossibleWallPositions()
         for row in 0..<NumRows {
             for column in 0..<NumColumns {
@@ -62,29 +62,29 @@ class Level {
                             let positionIndex = Int(arc4random_uniform(32))
                             let wall: Wall
                             if(possibleWallPositions[positionIndex][0] == 0 || possibleWallPositions[positionIndex][0] == NumRows-1) {
-                                wall = Wall(column: possibleWallPositions[positionIndex][1], row: possibleWallPositions[positionIndex][0], wallType: WallType.broken, horizontal: true)
+                                wall = Wall(column: possibleWallPositions[positionIndex][1], row: possibleWallPositions[positionIndex][0], wallType: WallType.new, horizontal: true)
                             } else {
                                 wall = Wall(column: possibleWallPositions[positionIndex][1], row: possibleWallPositions[positionIndex][0], wallType: WallType.new, horizontal: false)
                             }
-                            cookies[column, row] = wall
+                            gems[column, row] = wall
                             set.insert(wall)
                             walls.insert(wall)
                             continue;
                         }
                     } else {
-                        var cookieType: CookieType
+                        var gemType: GemType
                         repeat {
-                            cookieType = CookieType.random()
+                            gemType = GemType.random()
                         } while (column >= 2 &&
-                            cookies[column - 1, row]?.cookieType == cookieType &&
-                            cookies[column - 2, row]?.cookieType == cookieType)
+                            gems[column - 1, row]?.gemType == gemType &&
+                            gems[column - 2, row]?.gemType == gemType)
                             || (row >= 2 &&
-                                cookies[column, row - 1]?.cookieType == cookieType &&
-                                cookies[column, row - 2]?.cookieType == cookieType)
+                                gems[column, row - 1]?.gemType == gemType &&
+                                gems[column, row - 2]?.gemType == gemType)
                         
-                        let cookie = Cookie(column: column, row: row, cookieType: cookieType)
-                        cookies[column, row] = cookie
-                        set.insert(cookie)
+                        let gem = Gem(column: column, row: row, gemType: gemType)
+                        gems[column, row] = gem
+                        set.insert(gem)
                     }
                 }
             }
@@ -94,8 +94,8 @@ class Level {
         return set
     }
     
-    private func createInitialCookiesFromFile() -> Set<Cookie> {
-        var set = Set<Cookie>()
+    private func createInitialGemsFromFile() -> Set<Gem> {
+        var set = Set<Gem>()
         for row in 0..<NumRows {
             for column in 0..<NumColumns {
                 if tiles[column, row] != nil {
@@ -107,15 +107,15 @@ class Level {
                         } else {
                             wall = Wall(column: column, row: row, wallType: WallType.new, horizontal: false)
                         }
-                        cookies[column, row] = wall
+                        gems[column, row] = wall
                         set.insert(wall)
                         walls.insert(wall)
                         continue;
                     } else {
-                        let cookieType = cookiesFromFileArray![row][column]
-                        let cookie = Cookie(column: column, row: row, cookieType: CookieType(rawValue: cookieType)!)
-                        cookies[column, row] = cookie
-                        set.insert(cookie)
+                        let gemType = gemsFromFileArray![row][column]
+                        let gem = Gem(column: column, row: row, gemType: GemType(rawValue: gemType)!)
+                        gems[column, row] = gem
+                        set.insert(gem)
                     }
                 }
             }
@@ -127,7 +127,7 @@ class Level {
     init(filename: String) {
         guard let dictionary = Dictionary<String, AnyObject>.loadJSONFromBundle(filename: filename) else { return }
         guard let tilesArray = dictionary["tiles"] as? [[Int]] else { return }
-        cookiesFromFileArray = dictionary["cookies"] as? [[Int]]
+        gemsFromFileArray = dictionary["gems"] as? [[Int]]
         for (row, rowArray) in tilesArray.enumerated() {
             let tileRow = NumRows - row - 1
             for (column, value) in rowArray.enumerated() {
@@ -160,26 +160,26 @@ class Level {
     }
     
     func performSwap(swap: Swap) {
-        let columnA = swap.cookieA.column
-        let rowA = swap.cookieA.row
-        let columnB = swap.cookieB.column
-        let rowB = swap.cookieB.row
+        let columnA = swap.gemA.column
+        let rowA = swap.gemA.row
+        let columnB = swap.gemB.column
+        let rowB = swap.gemB.row
         
-        cookies[columnA, rowA] = swap.cookieB
-        swap.cookieB.column = columnA
-        swap.cookieB.row = rowA
+        gems[columnA, rowA] = swap.gemB
+        swap.gemB.column = columnA
+        swap.gemB.row = rowA
         
-        cookies[columnB, rowB] = swap.cookieA
-        swap.cookieA.column = columnB
-        swap.cookieA.row = rowB
-        swap.cookieA.moved = true;
-        swap.cookieB.moved = true;
+        gems[columnB, rowB] = swap.gemA
+        swap.gemA.column = columnB
+        swap.gemA.row = rowB
+        swap.gemA.moved = true;
+        swap.gemB.moved = true;
     }
     
-    func cookieAt(column: Int, row: Int) -> Cookie? {
+    func gemAt(column: Int, row: Int) -> Gem? {
         assert(column >= 0 && column < NumColumns)
         assert(row >= 0 && row < NumRows)
-        return cookies[column, row]
+        return gems[column, row]
     }
     
     func tileAt(column: Int, row: Int) -> Tile? {
@@ -192,33 +192,33 @@ class Level {
         var set = Set<Swap>()
         for row in 0..<NumRows {
             for column in 0..<NumColumns {
-                if let cookie = cookies[column, row] {
+                if let gem = gems[column, row] {
                     if column < NumColumns - 1 {
-                        if let other = cookies[column + 1, row] {
-                            cookies[column, row] = other
-                            cookies[column + 1, row] = cookie
+                        if let other = gems[column + 1, row] {
+                            gems[column, row] = other
+                            gems[column + 1, row] = gem
                             if hasChainAt(column: column + 1, row: row) ||
                                 hasChainAt(column: column, row: row) {
-                                set.insert(Swap(cookieA: cookie, cookieB: other))
+                                set.insert(Swap(gemA: gem, gemB: other))
                             }
-                            cookies[column, row] = cookie
-                            cookies[column + 1, row] = other
+                            gems[column, row] = gem
+                            gems[column + 1, row] = other
                         }
                     }
                     if row < NumRows - 1 {
-                        if let other = cookies[column, row + 1] {
-                            cookies[column, row] = other
-                            cookies[column, row + 1] = cookie
+                        if let other = gems[column, row + 1] {
+                            gems[column, row] = other
+                            gems[column, row + 1] = gem
                             
-                            // Is either cookie now part of a chain?
+                            // Is either gem now part of a chain?
                             if hasChainAt(column: column, row: row + 1) ||
                                 hasChainAt(column: column, row: row) {
-                                set.insert(Swap(cookieA: cookie, cookieB: other))
+                                set.insert(Swap(gemA: gem, gemB: other))
                             }
                             
                             // Swap them back
-                            cookies[column, row] = cookie
-                            cookies[column, row + 1] = other
+                            gems[column, row] = gem
+                            gems[column, row + 1] = other
                         }
                     }
                 }
@@ -237,15 +237,15 @@ class Level {
         for row in 0..<NumRows {
             var column = 0
             while column < NumColumns-2 {
-                if let cookie = cookies[column, row] {
-                    let matchType = cookie.cookieType
-                    if cookies[column + 1, row]?.cookieType == matchType &&
-                        cookies[column + 2, row]?.cookieType == matchType {
+                if let gem = gems[column, row] {
+                    let matchType = gem.gemType
+                    if gems[column + 1, row]?.gemType == matchType &&
+                        gems[column + 2, row]?.gemType == matchType {
                         let chain = Chain(chainType: .horizontal)
                         repeat {
-                            chain.add(cookie: cookies[column, row]!)
+                            chain.add(gem: gems[column, row]!)
                             column += 1
-                        } while column < NumColumns && cookies[column, row]?.cookieType == matchType
+                        } while column < NumColumns && gems[column, row]?.gemType == matchType
                         
                         set.insert(chain)
                         continue
@@ -263,16 +263,16 @@ class Level {
         for column in 0..<NumColumns {
             var row = 0
             while row < NumRows-2 {
-                if let cookie = cookies[column, row] {
-                    let matchType = cookie.cookieType
+                if let gem = gems[column, row] {
+                    let matchType = gem.gemType
                     
-                    if cookies[column, row + 1]?.cookieType == matchType &&
-                        cookies[column, row + 2]?.cookieType == matchType {
+                    if gems[column, row + 1]?.gemType == matchType &&
+                        gems[column, row + 2]?.gemType == matchType {
                         let chain = Chain(chainType: .vertical)
                         repeat {
-                            chain.add(cookie: cookies[column, row]!)
+                            chain.add(gem: gems[column, row]!)
                             row += 1
-                        } while row < NumRows && cookies[column, row]?.cookieType == matchType
+                        } while row < NumRows && gems[column, row]?.gemType == matchType
                         
                         set.insert(chain)
                         continue
@@ -296,9 +296,9 @@ class Level {
         //Check for chain interceptions for L and T chains and create cannons from L and T's.
         for horzChain in horizontalChains {
             for vertChain in verticalChains {
-                for cookie in horzChain.cookies {
-                    if vertChain.cookies.contains(cookie) {
-                        let cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.fourWay, cookieType: cookie.cookieType)
+                for gem in horzChain.gems {
+                    if vertChain.gems.contains(gem) {
+                        let cannon = Cannon(column: gem.column, row: gem.row, cannonType: CannonType.fourWay, gemType: gem.gemType)
                         if cannons.contains(cannon) {
                             cannons.remove(cannon)
                         }
@@ -310,13 +310,13 @@ class Level {
         }
         
         self.cannons = cannons
-        removeCookies(chains: horizontalChains)
-        removeCookies(chains: verticalChains)
+        removeGems(chains: horizontalChains)
+        removeGems(chains: verticalChains)
         
         for row in 0..<NumRows {
             for column in 0..<NumColumns {
                 if tiles[column, row] != nil {
-                    cookies[column, row]?.moved = false;
+                    gems[column, row]?.moved = false;
                 }
             }
         }
@@ -331,46 +331,37 @@ class Level {
     func createCannons(chains: Set<Chain>, cannons: inout Set<Cannon>, isHorz: Bool) {
         for chain in chains {
             if(chain.length > 3){
-                var chainCookies = [Cookie]() //The cookies that moved to create this chain
-                for cookie in chain.cookies {
-                    if(cookie.moved == true){
-                        chainCookies.append(cookie)
+                var chainGems = [Gem]() //The gems that moved to create this chain
+                for gem in chain.gems {
+                    if(gem.moved == true){
+                        chainGems.append(gem)
                     }
                 }
-                var cookie = chainCookies[0]
-                if(chainCookies.count > 1){
-//                    for cookie2 in chainCookies {
-//                        if(isHorz){
-//                            cookie = chainCookies[0]
-//                        } else {
-//                            if(cookie2.row > cookie.row){
-//                                cookie = cookie2
-//                            }
-//                        }
-//                    }
+                var gem = chainGems[0]
+                if(chainGems.count > 1){
                     if(isHorz){
-                        if chainCookies.last!.column < chain.lastCookie().column {
-                            cookie = chainCookies.last!
+                        if chainGems.last!.column < chain.lastGem().column {
+                            gem = chainGems.last!
                         } else {
-                            cookie = chainCookies.first!
+                            gem = chainGems.first!
                         }
                     } else {
-                        cookie = chainCookies.first!
+                        gem = chainGems.first!
                     }
                 }
                 if(chain.length > 4){
-                    let cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.fourWay, cookieType: cookie.cookieType)
+                    let cannon = Cannon(column: gem.column, row: gem.row, cannonType: CannonType.fourWay, gemType: gem.gemType)
                     cannons.insert(cannon)
                     print("Forming a 4 Way\(cannon.description) with type \(cannon.cannonType.description)")
                     break;
                 }
                 var cannon: Cannon
                 if isHorz {
-                    cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.twoWayHorz, cookieType: cookie.cookieType)
+                    cannon = Cannon(column: gem.column, row: gem.row, cannonType: CannonType.twoWayHorz, gemType: gem.gemType)
                     print("Forming a 2 Way \(cannon.description) with type \(cannon.cannonType.description)")
                 }
                 else {
-                    cannon = Cannon(column: cookie.column, row: cookie.row, cannonType: CannonType.twoWayVert, cookieType: cookie.cookieType)
+                    cannon = Cannon(column: gem.column, row: gem.row, cannonType: CannonType.twoWayVert, gemType: gem.gemType)
                     print("Forming a 2 Way \(cannon.description) with type \(cannon.cannonType.description)")
                 }
                 cannons.insert(cannon)
@@ -382,35 +373,35 @@ class Level {
         for cannon in self.cannons {
             let column = cannon.column
             let row = cannon.row
-            cookies[column, row] = cannon
+            gems[column, row] = cannon
         }
         return self.cannons
     }
     
-    private func removeCookies(chains: Set<Chain>) {
+    private func removeGems(chains: Set<Chain>) {
         for chain in chains {
-            for cookie in chain.cookies {
-                cookies[cookie.column, cookie.row] = nil
+            for gem in chain.gems {
+                gems[gem.column, gem.row] = nil
             }
         }
     }
     
-    func fillHoles() -> [[Cookie]] {
-        var columns = [[Cookie]]()
+    func fillHoles() -> [[Gem]] {
+        var columns = [[Gem]]()
         for column in 0..<NumColumns {
-            var array = [Cookie]()
+            var array = [Gem]()
             for row in 0..<NumRows {
-                if tiles[column, row] != nil && cookies[column, row] == nil {
+                if tiles[column, row] != nil && gems[column, row] == nil {
                     for lookup in (row + 1)..<NumRows {
-                        if let cookie = cookies[column, lookup] {
-                            if(cookie is Wall){
+                        if let gem = gems[column, lookup] {
+                            if(gem is Wall){
                                 break
                             }
-                            cookie.moved = true;
-                            cookies[column, lookup] = nil
-                            cookies[column, row] = cookie
-                            cookie.row = row
-                            array.append(cookie)
+                            gem.moved = true;
+                            gems[column, lookup] = nil
+                            gems[column, row] = gem
+                            gem.row = row
+                            array.append(gem)
                             break
                         }
                     }
@@ -423,24 +414,24 @@ class Level {
         return columns
     }
     
-    func topUpCookies() -> [[Cookie]] {
-        var columns = [[Cookie]]()
-        var cookieType: CookieType = .unknown
+    func topUpGems() -> [[Gem]] {
+        var columns = [[Gem]]()
+        var gemType: GemType = .unknown
         
         for column in 1..<NumColumns-1 {
-            var array = [Cookie]()
+            var array = [Gem]()
             var row = NumRows - 2
-            while row >= 0 && cookies[column, row] == nil {
+            while row >= 0 && gems[column, row] == nil {
                 if tiles[column, row] != nil {
-                    var newCookieType: CookieType
+                    var newGemType: GemType
                     repeat {
-                        newCookieType = CookieType.random()
-                    } while newCookieType == cookieType
-                    cookieType = newCookieType
-                    let cookie = Cookie(column: column, row: row, cookieType: cookieType)
-                    cookie.moved = true
-                    cookies[column, row] = cookie
-                    array.append(cookie)
+                        newGemType = GemType.random()
+                    } while newGemType == gemType
+                    gemType = newGemType
+                    let gem = Gem(column: column, row: row, gemType: gemType)
+                    gem.moved = true
+                    gems[column, row] = gem
+                    array.append(gem)
                 }
                 
                 row -= 1
@@ -453,17 +444,17 @@ class Level {
     }
     
     private func hasChainAt(column: Int, row: Int) -> Bool {
-        let cookieType = cookies[column, row]!.cookieType
+        let gemType = gems[column, row]!.gemType
         var horzLength = 1
         // Left
         var i = column - 1
-        while i >= 0 && cookies[i, row]?.cookieType == cookieType {
+        while i >= 0 && gems[i, row]?.gemType == gemType {
             i -= 1
             horzLength += 1
         }
         // Right
         i = column + 1
-        while i < NumColumns && cookies[i, row]?.cookieType == cookieType {
+        while i < NumColumns && gems[i, row]?.gemType == gemType {
             i += 1
             horzLength += 1
         }
@@ -472,13 +463,13 @@ class Level {
         var vertLength = 1
         // Down
         i = row - 1
-        while i >= 0 && cookies[column, i]?.cookieType == cookieType {
+        while i >= 0 && gems[column, i]?.gemType == gemType {
             i -= 1
             vertLength += 1
         }
         // Up
         i = row + 1
-        while i < NumRows && cookies[column, i]?.cookieType == cookieType {
+        while i < NumRows && gems[column, i]?.gemType == gemType {
             i += 1
             vertLength += 1
         }

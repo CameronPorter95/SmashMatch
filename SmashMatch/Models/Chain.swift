@@ -1,13 +1,13 @@
 //
 //  Chain.swift
-//  CookieCrunch
+//  SmashMatch
 //
 //  Created by Cameron Porter on 19/12/17.
 //  Copyright © 2017 Cameron Porter. All rights reserved.
 //
 
 class Chain: Hashable, CustomStringConvertible {
-    var cookies = [Cookie]() //TODO if any of these cookies exist in another chain as well, then that makes a 4 way cannon.
+    var gems = [Gem]() //TODO if any of these gems exist in another chain as well, then that makes a 4 way cannon.
     
     var score = 0
     
@@ -29,31 +29,31 @@ class Chain: Hashable, CustomStringConvertible {
         self.chainType = chainType
     }
     
-    func add(cookie: Cookie) {
-        cookies.append(cookie)
+    func add(gem: Gem) {
+        gems.append(gem)
     }
     
-    func firstCookie() -> Cookie {
-        return cookies[0]
+    func firstGem() -> Gem {
+        return gems[0]
     }
     
-    func lastCookie() -> Cookie {
-        return cookies[cookies.count - 1]
+    func lastGem() -> Gem {
+        return gems[gems.count - 1]
     }
     
     var length: Int {
-        return cookies.count
+        return gems.count
     }
     
     var description: String {
-        return "type:\(chainType) cookies:\(cookies)"
+        return "type:\(chainType) gems:\(gems)"
     }
     
     var hashValue: Int {
-        return cookies.reduce (0) { $0.hashValue ^ $1.hashValue }
+        return gems.reduce (0) { $0.hashValue ^ $1.hashValue }
     }
 }
 
 func ==(lhs: Chain, rhs: Chain) -> Bool {
-    return lhs.cookies == rhs.cookies
+    return lhs.gems == rhs.gems
 }
