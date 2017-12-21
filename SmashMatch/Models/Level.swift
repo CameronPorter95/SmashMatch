@@ -310,6 +310,10 @@ class Level {
         }
         
         self.cannons = cannons
+        //calculate the scorses
+        calculateScores(for: horizontalChains)
+        calculateScores(for: verticalChains)
+        
         removeGems(chains: horizontalChains)
         removeGems(chains: verticalChains)
         
@@ -322,10 +326,7 @@ class Level {
         }
         return horizontalChains.union(verticalChains)
         
-        
-        //calculate the scorses
-        calculateScores(for: horizontalChains)
-        calculateScores(for: verticalChains)
+
     }
     
     func createCannons(chains: Set<Chain>, cannons: inout Set<Cannon>, isHorz: Bool) {
