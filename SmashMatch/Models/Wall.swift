@@ -12,8 +12,8 @@ enum WallType: Int, CustomStringConvertible  {
     case unknown = 0, new, broken
     var spriteName: String {
         let spriteNames = [
-            "Macaroon",
-            "SugarCookie"]
+            "brick",
+            "brickcracked"]
         
         return spriteNames[rawValue - 1]
     }
@@ -36,7 +36,7 @@ class Wall: Cookie {
     
     init(column: Int, row: Int, wallType: WallType) {
         self.wallType = wallType
-        super.init(column: column, row: row, cookieType: CookieType(rawValue: 8)!)
+        super.init(column: column, row: row, cookieType: CookieType(rawValue: 7)!)
     }
     
     override var description: String {
