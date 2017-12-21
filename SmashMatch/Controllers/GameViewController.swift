@@ -20,7 +20,7 @@ class GameViewController: UIViewController {
     var score = 0
 
     lazy var backgroundMusic: AVAudioPlayer? = {
-        guard let url = Bundle.main.url(forResource: "Mining by Moonlight", withExtension: "mp3") else {
+        guard let url = Bundle.main.url(forResource: "The Builder", withExtension: "mp3") else {
             return nil
         }
         do {
@@ -128,6 +128,14 @@ class GameViewController: UIViewController {
         scene.animateMatchedCookies(for: chains) {
             let cannons = self.level.getCannons()
             self.scene.animateNewCannons(cannons: cannons) {
+                for chain in chains{
+                    self.score += chain.score
+                    print("~~~~~~~~~~~~~~~~~~~~~~")
+                    print("scores:\(self.score)")
+                    print("length:\(chain.length)")
+                    print("~~~~~~~~~~~~~~~~~~~~~~")
+                }
+                self.updateLabels()
                 let columns = self.level.fillHoles()
                 self.scene.animateFallingCookies(columns: columns) {
                     let columns = self.level.topUpCookies()
