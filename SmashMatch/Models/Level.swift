@@ -16,19 +16,22 @@ class Level {
     fileprivate var cookies = Array2D<Cookie>(columns: NumColumns, rows: NumRows)
     private var tiles = Array2D<Tile>(columns: NumColumns, rows: NumRows)
     private var cannons = Set<Cannon>()
+    private var walls = Set<Wall>()
+    private var maxWalls = 5
     private var possibleSwaps = Set<Swap>()
     var targetScore = 0
     var maximumMoves = 0
     
     var cookiesFromFileArray: [[Int]]?
-    var isFromFile = true;
+    var isClassicMode = true; //Set this based on the game mode
+    var initialLoad = true;
     
     func shuffle() -> Set<Cookie> {
         var set: Set<Cookie>
-        if(isFromFile){
+        if(isClassicMode){
             set = createInitialCookiesFromFile()
             _ = detectPossibleSwaps()
-            isFromFile = false;
+            isClassicMode = false;
             return set
         }
         repeat {
@@ -42,15 +45,20 @@ class Level {
     
     private func createInitialCookies() -> Set<Cookie> {
         var set = Set<Cookie>()
+        let possibleWallPositions = getPossibleWallPositions()
         for row in 0..<NumRows {
             for column in 0..<NumColumns {
                 if tiles[column, row] != nil {
                     if(row == 0 || row == NumRows-1 || column == 0 || column == NumColumns-1){
-                        //Make a wall if underlying tile exists and on border
-                        let wall = Wall(column: column, row: row, wallType: WallType.new)
-                        cookies[column, row] = wall
-                        set.insert(wall)
-                        continue;
+                        //Random place walls but only once
+                        if walls.count < maxWalls && initialLoad == true {
+                            let positionIndex = Int(arc4random_uniform(32))
+                            let wall = Wall(column: possibleWallPositions[positionIndex][0], row: possibleWallPositions[positionIndex][1], wallType: WallType.new)
+                            cookies[column, row] = wall
+                            set.insert(wall)
+                            walls.insert(wall)
+                            continue;
+                        }
                     } else {
                         var cookieType: CookieType
                         repeat {
@@ -69,6 +77,7 @@ class Level {
                 }
             }
         }
+        initialLoad = false
         return set
     }
     
@@ -92,6 +101,7 @@ class Level {
                 }
             }
         }
+        initialLoad = false
         return set
     }
     
@@ -109,6 +119,24 @@ class Level {
         }
         targetScore = dictionary["targetScore"] as! Int
         maximumMoves = dictionary["moves"] as! Int
+    }
+    
+    func getPossibleWallPositions() -> [[Int]] {
+        var possibleWallPositions: [[Int]] = [[Int]]()
+        for row in 0..<NumRows {
+            for column in 0..<NumColumns {
+                if(row == 0 || row == NumRows-1 || column == 0 || column == NumColumns-1){
+                    if(row == 0 && column == 0 ||
+                        row == NumRows-1 && column == 0 ||
+                        row == 0 && column == NumColumns-1 ||
+                        row == NumRows-1 && column == NumColumns-1){
+                        continue;
+                    }
+                    possibleWallPositions.append([column, row])
+                }
+            }
+        }
+        return possibleWallPositions
     }
     
     func performSwap(swap: Swap) {
@@ -324,6 +352,9 @@ class Level {
                 if tiles[column, row] != nil && cookies[column, row] == nil {
                     for lookup in (row + 1)..<NumRows {
                         if let cookie = cookies[column, lookup] {
+                            if(cookie is Wall){
+                                break
+                            }
                             cookie.moved = true;
                             cookies[column, lookup] = nil
                             cookies[column, row] = cookie
@@ -347,7 +378,7 @@ class Level {
         
         for column in 0..<NumColumns {
             var array = [Cookie]()
-            var row = NumRows - 1
+            var row = NumRows - 2
             while row >= 0 && cookies[column, row] == nil {
                 if tiles[column, row] != nil {
                     var newCookieType: CookieType
