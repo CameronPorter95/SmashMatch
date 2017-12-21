@@ -19,7 +19,7 @@ class GameScene: SKScene {
     var swipeHandler: ((Swap) -> ())?
     var level: Level!
     let TileWidth: CGFloat = 32.0
-    let TileHeight: CGFloat = 36.0
+    let TileHeight: CGFloat = 32.0
     var selectionSprite = SKSpriteNode()
     
     let gameLayer = SKNode()
@@ -79,18 +79,30 @@ class GameScene: SKScene {
                 sprite = SKSpriteNode(imageNamed: wall.wallType.spriteName)
                 wallsLayer.addChild(sprite)
                 sprite.size = CGSize(width: TileWidth, height: TileWidth * 0.2666)
+                var pos = pointFor(column: cookie.column, row: cookie.row)
                 if wall.horizontal == false {
-                    let rotate = SKAction.rotate(byAngle: CGFloat(-M_PI * 2.0), duration: 5)
-                    let loop = SKAction.repeatForever(rotate)
-                    sprite.run(rotate, withKey: "rotate")
+                    sprite.zRotation = .pi/2
+                    if(cookie.column == 0){
+                        pos.x = pos.x + 11.73344
+                    }
+                    else {
+                        pos.x = pos.x - 11.73344
+                    }
+                } else {
+                    if(cookie.row == 0){
+                        pos.y = pos.y + 11.73344
+                    }
+                    else {
+                        pos.y = pos.y - 11.73344
+                    }
                 }
+                sprite.position = pos
             } else {
                 sprite = SKSpriteNode(imageNamed: cookie.spriteName)
                 cookiesLayer.addChild(sprite)
                 sprite.size = CGSize(width: TileWidth, height: TileHeight)
+                sprite.position = pointFor(column: cookie.column, row: cookie.row)
             }
-            
-            sprite.position = pointFor(column: cookie.column, row: cookie.row)
             cookie.sprite = sprite
             // Give each cookie sprite a small, random delay. Then fade them in.
             sprite.alpha = 0

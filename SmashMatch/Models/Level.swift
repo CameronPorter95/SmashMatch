@@ -61,11 +61,10 @@ class Level {
                         if walls.count < maxWalls && initialLoad == true {
                             let positionIndex = Int(arc4random_uniform(32))
                             let wall: Wall
-                            if(row == 0 || row == NumRows-1) {
-                                print(possibleWallPositions[positionIndex][0])
-                                wall = Wall(column: possibleWallPositions[positionIndex][0], row: possibleWallPositions[positionIndex][1], wallType: WallType.broken, horizontal: true)
+                            if(possibleWallPositions[positionIndex][0] == 0 || possibleWallPositions[positionIndex][0] == NumRows-1) {
+                                wall = Wall(column: possibleWallPositions[positionIndex][1], row: possibleWallPositions[positionIndex][0], wallType: WallType.broken, horizontal: true)
                             } else {
-                                wall = Wall(column: possibleWallPositions[positionIndex][0], row: possibleWallPositions[positionIndex][1], wallType: WallType.new, horizontal: false)
+                                wall = Wall(column: possibleWallPositions[positionIndex][1], row: possibleWallPositions[positionIndex][0], wallType: WallType.new, horizontal: false)
                             }
                             cookies[column, row] = wall
                             set.insert(wall)

@@ -83,7 +83,6 @@ class MainMenuViewController: UIViewController, GKGameCenterControllerDelegate {
         }
         else{
             let currTime = mach_absolute_time()
-            print(currTime)
             let timeDiff = Double(((currTime - startTime) * numer) / denom)/1e9
             
             lives = lives + Int(floor(timeDiff)/3600)
@@ -106,7 +105,6 @@ class MainMenuViewController: UIViewController, GKGameCenterControllerDelegate {
     @objc func updateTimer(){
         if(lives < 5){
             let currTime = mach_absolute_time()
-            print(currTime)
             let timeDiff = Double(((currTime - startTime) * numer) / denom)/1e9
         PersistentEntity.shared.updateAt(id: 1, index: 5, value: currTime as AnyObject)
         let timeLeftForNextLife = 3600 - (timeDiff)
