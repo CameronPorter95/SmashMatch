@@ -313,7 +313,6 @@ class Level {
         addedCannons = cannons
         matchedCannons = removeGems(chains: horizontalChains)
         matchedCannons = matchedCannons.union(removeGems(chains: verticalChains))
-        self.cannons = cannons
         //calculate the scorses
         calculateScores(for: horizontalChains)
         calculateScores(for: verticalChains)
