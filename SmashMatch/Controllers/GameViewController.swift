@@ -138,16 +138,14 @@ class GameViewController: UIViewController {
                 self.scene.animateFallingGems(columns: columns) {
                     let columns = self.level.topUpGems()
                     self.scene.animateNewGems(columns) {
-                        let firedCannons = self.level.removeCannons() // This call needs to remove the cannons from the model
-//                        if(firedCannons.count == 0){
-//                             self.handleMatches()
-//                        } else{
-//                            self.scene.animateFiredCannons(cannons: firedCannons){
-//                                self.scene.animateRemoveCannons(cannons: firedCannons){
-//                                    self.handleMatches()
-//                                }
-//                            }
-//                        }
+                        let matchedCannons = self.level.getMatchedCannons()
+                        if(matchedCannons.count == 0){
+                             self.handleMatches()
+                        } else{
+                            self.scene.animateFiredCannons(cannons: matchedCannons){ //TODO Recurse on cannon fire chain
+                                self.handleMatches()
+                            }
+                        }
                        self.handleMatches()
                     }
                 }

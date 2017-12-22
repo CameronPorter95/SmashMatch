@@ -16,8 +16,8 @@ class Level {
     fileprivate var gems = Array2D<Gem>(columns: NumColumns, rows: NumRows)
     private var tiles = Array2D<Tile>(columns: NumColumns, rows: NumRows)
     private var addedCannons = Set<Cannon>() //The cannons added for the current gameloop (gets reset every game loop, gems holds the cannons indefintely)
-    private var matchedCannons = Set<Cannon>() //The cannons that were fired for this game loop
     private var walls = Set<Wall>()
+    private var matchedCannons: Set<Cannon>?
     private var maxWalls = 5
     private var possibleSwaps = Set<Swap>()
     var targetScore = 0
@@ -311,8 +311,8 @@ class Level {
         }
         
         addedCannons = cannons
-        matchedCannons = removeGems(chains: horizontalChains)
-        matchedCannons = matchedCannons.union(removeGems(chains: verticalChains))
+        matchedCannons = removeGems(chains: horizontalChains) //This sets cannons in matched cannons beforethe fillHoles method is called, potentially causing problems when firing the cannons as cannon moves beforehand.
+        matchedCannons = matchedCannons?.union(removeGems(chains: verticalChains))
         //calculate the scorses
         calculateScores(for: horizontalChains)
         calculateScores(for: verticalChains)
@@ -379,60 +379,67 @@ class Level {
         return self.addedCannons
     }
     
-    func fireCannon(cannon: Cannon) -> Set<Cannon> {
+    func fireCannons(cannons: Set<Cannon>) -> Set<Cannon>? { //Returns a set of cannons hit by these cannons
+        if(matchedCannons?.count == 0){
+            return nil
+        }
         var cannons = Set<Cannon>()
-        var curColumn = cannon.column
-        var curRow = cannon.row
-        while(curColumn < NumColumns-1 && cannon.cannonType != CannonType.twoWayVert) {
-            if(gems[curColumn, curRow] is Cannon) {
-                let cannon = gems[curColumn, curRow] as! Cannon
-                //Found a cannon, recurse
-                gems[curColumn, curRow] = nil
-                cannons.insert(cannon)
-                cannons = cannons.union(fireCannon(cannon: cannon))
+        for cannon in cannons {
+            print(cannon.description)
+            var curColumn = cannon.column
+            var curRow = cannon.row
+            while(curColumn < NumColumns-1 && cannon.cannonType != CannonType.twoWayVert) {
+                if(gems[curColumn, curRow] is Cannon) {
+                    let cannon = gems[curColumn, curRow] as! Cannon
+                    //Found a cannon, recurse
+                    gems[curColumn, curRow] = nil //Could be the wrong column and row as cannon has moved after being matched and before firing
+                    cannons.insert(cannon)
+                    //cannons = cannons.union(fireCannon(cannon: cannon))
+                }
+                curColumn += 1
             }
-            curColumn += 1
-        }
-        while(curColumn > 0 && cannon.cannonType != CannonType.twoWayVert) {
-            if(gems[curColumn, curRow] is Cannon) {
-                let cannon = gems[curColumn, curRow] as! Cannon
-                //Found a cannon, recurse
-                gems[curColumn, curRow] = nil
-                cannons.insert(cannon)
-                cannons = cannons.union(fireCannon(cannon: cannon))
+            while(curColumn > 0 && cannon.cannonType != CannonType.twoWayVert) {
+                if(gems[curColumn, curRow] is Cannon) {
+                    let cannon = gems[curColumn, curRow] as! Cannon
+                    //Found a cannon, recurse
+                    gems[curColumn, curRow] = nil
+                    cannons.insert(cannon)
+                    //cannons = cannons.union(fireCannon(cannon: cannon))
+                }
+                curColumn -= 1
             }
-            curColumn -= 1
-        }
-        while(curRow < NumRows-1 && cannon.cannonType != CannonType.twoWayHorz) {
-            if(gems[curColumn, curRow] is Cannon) {
-                let cannon = gems[curColumn, curRow] as! Cannon
-                //Found a cannon, recurse
-                gems[curColumn, curRow] = nil
-                cannons.insert(cannon)
-                cannons = cannons.union(fireCannon(cannon: cannon))
+            while(curRow < NumRows-1 && cannon.cannonType != CannonType.twoWayHorz) {
+                if(gems[curColumn, curRow] is Cannon) {
+                    let cannon = gems[curColumn, curRow] as! Cannon
+                    //Found a cannon, recurse
+                    gems[curColumn, curRow] = nil
+                    cannons.insert(cannon)
+                    //cannons = cannons.union(fireCannon(cannon: cannon))
+                }
+                curRow += 1
             }
-            curRow += 1
-        }
-        while(curRow > 0 && cannon.cannonType != CannonType.twoWayHorz) {
-            if(gems[curColumn, curRow] is Cannon) {
-                let cannon = gems[curColumn, curRow] as! Cannon
-                //Found a cannon, recurse
-                gems[curColumn, curRow] = nil
-                cannons.insert(cannon)
-                cannons = cannons.union(fireCannon(cannon: cannon))
+            while(curRow > 0 && cannon.cannonType != CannonType.twoWayHorz) {
+                if(gems[curColumn, curRow] is Cannon) {
+                    let cannon = gems[curColumn, curRow] as! Cannon
+                    //Found a cannon, recurse
+                    gems[curColumn, curRow] = nil
+                    cannons.insert(cannon)
+                    //cannons = cannons.union(fireCannon(cannon: cannon))
+                }
+                curRow -= 1
             }
-            curRow -= 1
         }
         return cannons
     }
     
-    private func removeGems(chains: Set<Chain>) -> Set<Cannon>{
+    private func removeGems(chains: Set<Chain>) -> Set<Cannon>{ //Returns a set of cannons contained in the matched chains
         var cannons = Set<Cannon>()
         for chain in chains {
             for gem in chain.gems {
                 if gem is Cannon {
                     let cannon = gem as! Cannon
                     cannons.insert(cannon)
+                    gems[gem.column, gem.row] = nil
                     continue;
                 } else {
                     gems[gem.column, gem.row] = nil //Not ready to remvove the cannons from the model yet
@@ -442,15 +449,18 @@ class Level {
         return cannons
     }
     
-    func removeCannons() -> Set<Cannon>{
-        var firedCannons = Set<Cannon>()
-        for cannon in matchedCannons {
-            firedCannons = firedCannons.union(fireCannon(cannon: cannon))
-            gems[cannon.column, cannon.row] = nil
-            continue;
-        }
-        return firedCannons
+    func getMatchedCannons() -> Set<Cannon> {
+        return matchedCannons!
     }
+//    func removeCannons() -> Set<Cannon>{
+//        var firedCannons = Set<Cannon>()
+//        for cannon in matchedCannons {
+//            firedCannons = firedCannons.union(fireCannon(cannon: cannon))
+//            gems[cannon.column, cannon.row] = nil
+//            continue;
+//        }
+//        return firedCannons
+//    }
     
     func fillHoles() -> [[Gem]] {
         var columns = [[Gem]]()
