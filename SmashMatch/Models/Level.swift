@@ -323,10 +323,7 @@ class Level {
         }
         return horizontalChains.union(verticalChains)
         
-        
-        //calculate the scorses
-        calculateScores(for: horizontalChains)
-        calculateScores(for: verticalChains)
+
     }
     
     func createCannons(chains: Set<Chain>, cannons: inout Set<Cannon>, isHorz: Bool) {
