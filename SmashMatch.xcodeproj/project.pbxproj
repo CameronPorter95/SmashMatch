@@ -15,6 +15,14 @@
 		750F13AD1FEA1F3600121507 /* PersistentEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F13AB1FEA1F3600121507 /* PersistentEntity.swift */; };
 		7513834D1FEAEFD600AE0D5A /* Wall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7513834C1FEAEFD600AE0D5A /* Wall.swift */; };
 		75167FF91FEBA88900A623C1 /* Sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 75167FF81FEBA88900A623C1 /* Sprites.atlas */; };
+		75167FFB1FEC912400A623C1 /* iOS Game Theme Medieval Version.wav in Resources */ = {isa = PBXBuildFile; fileRef = 75167FFA1FEC912400A623C1 /* iOS Game Theme Medieval Version.wav */; };
+		751680021FEC913200A623C1 /* cannon.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 75167FFC1FEC912F00A623C1 /* cannon.mp3 */; };
+		751680031FEC913200A623C1 /* wall_crack.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 75167FFD1FEC912F00A623C1 /* wall_crack.mp3 */; };
+		751680041FEC913200A623C1 /* gem_match.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 75167FFE1FEC912F00A623C1 /* gem_match.mp3 */; };
+		751680051FEC913200A623C1 /* time_counter.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 75167FFF1FEC913000A623C1 /* time_counter.mp3 */; };
+		751680061FEC913200A623C1 /* wall_smash.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 751680001FEC913000A623C1 /* wall_smash.mp3 */; };
+		751680071FEC913200A623C1 /* special_match.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 751680011FEC913100A623C1 /* special_match.mp3 */; };
+		751680091FEC938700A623C1 /* gem_swap.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 751680081FEC938700A623C1 /* gem_swap.mp3 */; };
 		75197E251FE7C5F00006EDBA /* (null) in Sources */ = {isa = PBXBuildFile; };
 		75197E2B1FE7C5F00006EDBA /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75197E2A1FE7C5F00006EDBA /* GameScene.swift */; };
 		75197E2D1FE7C5F00006EDBA /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75197E2C1FE7C5F00006EDBA /* GameViewController.swift */; };
@@ -170,6 +178,14 @@
 		750F13AB1FEA1F3600121507 /* PersistentEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentEntity.swift; sourceTree = "<group>"; };
 		7513834C1FEAEFD600AE0D5A /* Wall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wall.swift; sourceTree = "<group>"; };
 		75167FF81FEBA88900A623C1 /* Sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Sprites.atlas; sourceTree = "<group>"; };
+		75167FFA1FEC912400A623C1 /* iOS Game Theme Medieval Version.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "iOS Game Theme Medieval Version.wav"; sourceTree = "<group>"; };
+		75167FFC1FEC912F00A623C1 /* cannon.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = cannon.mp3; sourceTree = "<group>"; };
+		75167FFD1FEC912F00A623C1 /* wall_crack.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = wall_crack.mp3; sourceTree = "<group>"; };
+		75167FFE1FEC912F00A623C1 /* gem_match.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gem_match.mp3; sourceTree = "<group>"; };
+		75167FFF1FEC913000A623C1 /* time_counter.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = time_counter.mp3; sourceTree = "<group>"; };
+		751680001FEC913000A623C1 /* wall_smash.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = wall_smash.mp3; sourceTree = "<group>"; };
+		751680011FEC913100A623C1 /* special_match.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = special_match.mp3; sourceTree = "<group>"; };
+		751680081FEC938700A623C1 /* gem_swap.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gem_swap.mp3; sourceTree = "<group>"; };
 		75197E211FE7C5F00006EDBA /* SmashMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmashMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75197E2A1FE7C5F00006EDBA /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		75197E2C1FE7C5F00006EDBA /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -337,6 +353,14 @@
 		75B62C871FE8DAB300D4F88F /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				75167FFA1FEC912400A623C1 /* iOS Game Theme Medieval Version.wav */,
+				75167FFC1FEC912F00A623C1 /* cannon.mp3 */,
+				75167FFE1FEC912F00A623C1 /* gem_match.mp3 */,
+				751680011FEC913100A623C1 /* special_match.mp3 */,
+				75167FFF1FEC913000A623C1 /* time_counter.mp3 */,
+				75167FFD1FEC912F00A623C1 /* wall_crack.mp3 */,
+				751680001FEC913000A623C1 /* wall_smash.mp3 */,
+				751680081FEC938700A623C1 /* gem_swap.mp3 */,
 				75B62C881FE8DAB300D4F88F /* Scrape.wav */,
 				75B62C891FE8DAB300D4F88F /* Ka-Ching.wav */,
 				B36289F81FEB82C900F432B1 /* The Builder.mp3 */,
@@ -588,15 +612,23 @@
 				757A2A331FE906C4000E98D9 /* Level_2.json in Resources */,
 				753738D71FE8FB2000B08292 /* Scrape.wav in Resources */,
 				757A2A351FE906C4000E98D9 /* Level_4.json in Resources */,
+				751680041FEC913200A623C1 /* gem_match.mp3 in Resources */,
+				751680091FEC938700A623C1 /* gem_swap.mp3 in Resources */,
 				753738D81FE8FB2000B08292 /* Ka-Ching.wav in Resources */,
+				751680021FEC913200A623C1 /* cannon.mp3 in Resources */,
 				B3628A071FEB82CA00F432B1 /* The Builder.mp3 in Resources */,
 				753738D91FE8FB2000B08292 /* Mining by Moonlight.mp3 in Resources */,
+				75167FFB1FEC912400A623C1 /* iOS Game Theme Medieval Version.wav in Resources */,
 				753738DA1FE8FB2000B08292 /* Drip.wav in Resources */,
+				751680031FEC913200A623C1 /* wall_crack.mp3 in Resources */,
+				751680051FEC913200A623C1 /* time_counter.mp3 in Resources */,
 				753738DB1FE8FB2000B08292 /* Chomp.wav in Resources */,
 				753738DC1FE8FB2000B08292 /* Error.wav in Resources */,
 				75167FF91FEBA88900A623C1 /* Sprites.atlas in Resources */,
 				75197E301FE7C5F00006EDBA /* Main.storyboard in Resources */,
+				751680061FEC913200A623C1 /* wall_smash.mp3 in Resources */,
 				757A2A371FE906C4000E98D9 /* Level_1.json in Resources */,
+				751680071FEC913200A623C1 /* special_match.mp3 in Resources */,
 				757A2A341FE906C4000E98D9 /* Level_3.json in Resources */,
 				75197E321FE7C5F00006EDBA /* Assets.xcassets in Resources */,
 				75197E351FE7C5F00006EDBA /* LaunchScreen.storyboard in Resources */,

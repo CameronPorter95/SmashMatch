@@ -20,7 +20,7 @@ class GameViewController: UIViewController {
     var score = 0
 
     lazy var backgroundMusic: AVAudioPlayer? = {
-        guard let url = Bundle.main.url(forResource: "The Builder", withExtension: "mp3") else {
+        guard let url = Bundle.main.url(forResource: "iOS Game Theme Medieval Version", withExtension: "wav") else {
             return nil
         }
         do {

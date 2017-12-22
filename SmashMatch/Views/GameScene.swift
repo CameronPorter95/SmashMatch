@@ -27,11 +27,13 @@ class GameScene: SKScene {
     let gemsLayer = SKNode()
     let wallsLayer = SKNode()
     
-    let swapSound = SKAction.playSoundFileNamed("Chomp.wav", waitForCompletion: false)
+    let swapSound = SKAction.playSoundFileNamed("gem_swap.mp3", waitForCompletion: false)
     let invalidSwapSound = SKAction.playSoundFileNamed("Error.wav", waitForCompletion: false)
-    let matchSound = SKAction.playSoundFileNamed("Ka-Ching.wav", waitForCompletion: false)
+    let matchSound = SKAction.playSoundFileNamed("gem_match.mp3", waitForCompletion: false)
     let fallingGemSound = SKAction.playSoundFileNamed("Scrape.wav", waitForCompletion: false)
     let addGemSound = SKAction.playSoundFileNamed("Drip.wav", waitForCompletion: false)
+    let specialMatchSound = SKAction.playSoundFileNamed("special_match.mp3", waitForCompletion: false)
+    let cannonFireSound = SKAction.playSoundFileNamed("cannon.mp3", waitForCompletion: false)
     
     override init(size: CGSize) {
         super.init(size: size)
@@ -317,6 +319,7 @@ class GameScene: SKScene {
     //Animates the creation of cannons
     func animateFiredCannons(cannons: Set<Cannon>, completion: @escaping () -> ()){
         for cannon in cannons {
+            run(cannonFireSound)
             let f0, f1, f2, f3: SKTexture?
             if cannon.cannonType == CannonType.fourWay {
                 f0 = SKTexture.init(imageNamed: "4cannon1")
