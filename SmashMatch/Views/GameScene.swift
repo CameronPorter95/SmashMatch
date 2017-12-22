@@ -293,7 +293,7 @@ class GameScene: SKScene {
     //Animates the creation of cannons
     func animateNewCannons(cannons: Set<Cannon>, completion: @escaping () -> ()){
         for cannon in cannons {
-            let sprite = SKSpriteNode(imageNamed: cannon.spriteName) //TODO change to cannon image
+            let sprite = SKSpriteNode(imageNamed: cannon.spriteName)
             sprite.size = CGSize(width: TileWidth, height: TileWidth)
             sprite.position = pointFor(column: cannon.column, row: cannon.row)
             gemsLayer.addChild(sprite)
@@ -312,6 +312,63 @@ class GameScene: SKScene {
                     ]))
         }
         run(SKAction.wait(forDuration: 0.25), completion: completion)
+    }
+    
+    //Animates the creation of cannons
+    func animateFiredCannons(cannons: Set<Cannon>, completion: @escaping () -> ()){
+        for cannon in cannons {
+            let f0, f1, f2, f3: SKTexture?
+            if cannon.cannonType == CannonType.fourWay {
+                f0 = SKTexture.init(imageNamed: "4cannon1")
+                f1 = SKTexture.init(imageNamed: "4cannon2")
+                f2 = SKTexture.init(imageNamed: "4cannon3")
+                f3 = SKTexture.init(imageNamed: "4cannon4")
+            } else if cannon.cannonType == CannonType.twoWayHorz {
+                f0 = SKTexture.init(imageNamed: "LRcannon1")
+                f1 = SKTexture.init(imageNamed: "LRcannon2")
+                f2 = SKTexture.init(imageNamed: "LRcannon3")
+                f3 = SKTexture.init(imageNamed: "LRcannon4")
+            } else {
+                f0 = SKTexture.init(imageNamed: "UDcannon1")
+                f1 = SKTexture.init(imageNamed: "UDcannon2")
+                f2 = SKTexture.init(imageNamed: "UDcannon3")
+                f3 = SKTexture.init(imageNamed: "UDcannon4")
+            }
+            // Add frames
+            let frames: [SKTexture] = [f0!, f1!, f2!, f3!]
+            
+            let sprite: SKSpriteNode?
+            // Load the first frame as initialization
+            if cannon.cannonType == CannonType.fourWay {
+                sprite = SKSpriteNode(imageNamed: "4cannon")
+            } else if cannon.cannonType == CannonType.twoWayHorz {
+                sprite = SKSpriteNode(imageNamed: "LRcannon")
+            } else {
+                sprite = SKSpriteNode(imageNamed: "UDcannon")
+            }
+            
+            sprite?.position = pointFor(column: cannon.column, row: cannon.row)
+            sprite?.size = CGSize(width: TileWidth, height: TileWidth)
+            gemsLayer.addChild(sprite!)
+            // Change the frame per 0.2 sec
+            let animation = SKAction.animate(with: frames, timePerFrame: 0.2)
+            sprite?.run(animation)
+        }
+        run(SKAction.wait(forDuration: 0.8), completion: completion)
+    }
+    
+    func animateRemoveCannons(cannons: Set<Cannon>, completion: @escaping () -> ()){
+        for cannon in cannons {
+            if let sprite = cannon.sprite {
+                if sprite.action(forKey: "removing") == nil {
+                    let scaleAction = SKAction.scale(to: 0.1, duration: 0.3)
+                    scaleAction.timingMode = .easeOut
+                    sprite.run(SKAction.sequence([scaleAction, SKAction.removeFromParent()]),
+                               withKey:"removing")
+                }
+            }
+        }
+        run(SKAction.wait(forDuration: 0.3), completion: completion)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

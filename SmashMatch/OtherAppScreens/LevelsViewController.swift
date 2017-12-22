@@ -20,11 +20,6 @@ class LevelsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        backgroundImage.frame = scrollView.bounds
-//        scrollView.contentSize = backgroundImage.frame.size
-//        scrollView.minimumZoomScale = 0.4
-//        scrollView.maximumZoomScale = 4.0
-//        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
         print("this page is alive...")
         
     }

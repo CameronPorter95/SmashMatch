@@ -15,7 +15,8 @@ let NumLevels = 4 // Excluding level 0
 class Level {
     fileprivate var gems = Array2D<Gem>(columns: NumColumns, rows: NumRows)
     private var tiles = Array2D<Tile>(columns: NumColumns, rows: NumRows)
-    private var cannons = Set<Cannon>()
+    private var addedCannons = Set<Cannon>() //The cannons added for the current gameloop (gets reset every game loop, gems holds the cannons indefintely)
+    private var matchedCannons = Set<Cannon>() //The cannons that were fired for this game loop
     private var walls = Set<Wall>()
     private var maxWalls = 5
     private var possibleSwaps = Set<Swap>()
@@ -23,7 +24,7 @@ class Level {
     var maximumMoves = 0
     
     var gemsFromFileArray: [[Int]]?
-    var isClassicMode = false; //Set this based on the game mode
+    var isClassicMode = true; //Set this based on the game mode
     var initialLoad = true;
     
     func shuffle() -> Set<Gem> {
@@ -303,15 +304,15 @@ class Level {
                             cannons.remove(cannon)
                         }
                         cannons.insert(cannon)
-                        print("Forming a 4 way intercept \(cannon.description) with type \(cannon.cannonType.description)")
+                        print("Forming a 4 way intercept \(cannon.description) with type \(cannon.gemType.spriteName)\(cannon.cannonType.description)")
                     }
                 }
             }
         }
         
-        self.cannons = cannons
-        removeGems(chains: horizontalChains)
-        removeGems(chains: verticalChains)
+        addedCannons = cannons
+        matchedCannons = removeGems(chains: horizontalChains)
+        matchedCannons = matchedCannons.union(removeGems(chains: verticalChains))
         
         for row in 0..<NumRows {
             for column in 0..<NumColumns {
@@ -352,17 +353,17 @@ class Level {
                 if(chain.length > 4){
                     let cannon = Cannon(column: gem.column, row: gem.row, cannonType: CannonType.fourWay, gemType: gem.gemType)
                     cannons.insert(cannon)
-                    print("Forming a 4 Way\(cannon.description) with type \(cannon.cannonType.description)")
+                    print("Forming a 4 Way\(cannon.description) with type \(cannon.gemType.spriteName)\(cannon.cannonType.description)")
                     break;
                 }
                 var cannon: Cannon
                 if isHorz {
                     cannon = Cannon(column: gem.column, row: gem.row, cannonType: CannonType.twoWayHorz, gemType: gem.gemType)
-                    print("Forming a 2 Way \(cannon.description) with type \(cannon.cannonType.description)")
+                    print("Forming a 2 Way \(cannon.description) with type \(cannon.gemType.spriteName)\(cannon.cannonType.description)")
                 }
                 else {
                     cannon = Cannon(column: gem.column, row: gem.row, cannonType: CannonType.twoWayVert, gemType: gem.gemType)
-                    print("Forming a 2 Way \(cannon.description) with type \(cannon.cannonType.description)")
+                    print("Forming a 2 Way \(cannon.description) with type \(cannon.gemType.spriteName)\(cannon.cannonType.description)")
                 }
                 cannons.insert(cannon)
             }
@@ -370,20 +371,85 @@ class Level {
     }
     
     func getCannons() -> Set<Cannon>{
-        for cannon in self.cannons {
+        for cannon in self.addedCannons {
             let column = cannon.column
             let row = cannon.row
             gems[column, row] = cannon
         }
-        return self.cannons
+        return self.addedCannons
     }
     
-    private func removeGems(chains: Set<Chain>) {
+    func fireCannon(cannon: Cannon) -> Set<Cannon> {
+        var cannons = Set<Cannon>()
+        var curColumn = cannon.column
+        var curRow = cannon.row
+        while(curColumn < NumColumns-1 && cannon.cannonType != CannonType.twoWayVert) {
+            if(gems[curColumn, curRow] is Cannon) {
+                let cannon = gems[curColumn, curRow] as! Cannon
+                //Found a cannon, recurse
+                gems[curColumn, curRow] = nil
+                cannons.insert(cannon)
+                cannons = cannons.union(fireCannon(cannon: cannon))
+            }
+            curColumn += 1
+        }
+        while(curColumn > 0 && cannon.cannonType != CannonType.twoWayVert) {
+            if(gems[curColumn, curRow] is Cannon) {
+                let cannon = gems[curColumn, curRow] as! Cannon
+                //Found a cannon, recurse
+                gems[curColumn, curRow] = nil
+                cannons.insert(cannon)
+                cannons = cannons.union(fireCannon(cannon: cannon))
+            }
+            curColumn -= 1
+        }
+        while(curRow < NumRows-1 && cannon.cannonType != CannonType.twoWayHorz) {
+            if(gems[curColumn, curRow] is Cannon) {
+                let cannon = gems[curColumn, curRow] as! Cannon
+                //Found a cannon, recurse
+                gems[curColumn, curRow] = nil
+                cannons.insert(cannon)
+                cannons = cannons.union(fireCannon(cannon: cannon))
+            }
+            curRow += 1
+        }
+        while(curRow > 0 && cannon.cannonType != CannonType.twoWayHorz) {
+            if(gems[curColumn, curRow] is Cannon) {
+                let cannon = gems[curColumn, curRow] as! Cannon
+                //Found a cannon, recurse
+                gems[curColumn, curRow] = nil
+                cannons.insert(cannon)
+                cannons = cannons.union(fireCannon(cannon: cannon))
+            }
+            curRow -= 1
+        }
+        return cannons
+    }
+    
+    private func removeGems(chains: Set<Chain>) -> Set<Cannon>{
+        var cannons = Set<Cannon>()
         for chain in chains {
             for gem in chain.gems {
-                gems[gem.column, gem.row] = nil
+                if gem is Cannon {
+                    let cannon = gem as! Cannon
+                    cannons.insert(cannon)
+                    continue;
+                } else {
+                    gems[gem.column, gem.row] = nil //Not ready to remvove the cannons from the model yet
+                }
             }
         }
+        return cannons
+    }
+    
+    func removeCannons() -> Set<Cannon>{
+        var firedCannons = Set<Cannon>()
+        for cannon in matchedCannons {
+            firedCannons = firedCannons.union(fireCannon(cannon: cannon))
+            gems[cannon.column, cannon.row] = nil
+            continue;
+        }
+        return firedCannons
     }
     
     func fillHoles() -> [[Gem]] {

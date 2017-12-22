@@ -32,8 +32,6 @@ class GameViewController: UIViewController {
         }
     }()
     
-    @IBOutlet weak var targetLabel: UILabel!
-    @IBOutlet weak var movesLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
     @IBAction func shuffleBoard(_ sender: Any) {
         shuffle()
@@ -140,7 +138,17 @@ class GameViewController: UIViewController {
                 self.scene.animateFallingGems(columns: columns) {
                     let columns = self.level.topUpGems()
                     self.scene.animateNewGems(columns) {
-                        self.handleMatches()
+                        let firedCannons = self.level.removeCannons() // This call needs to remove the cannons from the model
+//                        if(firedCannons.count == 0){
+//                             self.handleMatches()
+//                        } else{
+//                            self.scene.animateFiredCannons(cannons: firedCannons){
+//                                self.scene.animateRemoveCannons(cannons: firedCannons){
+//                                    self.handleMatches()
+//                                }
+//                            }
+//                        }
+                       self.handleMatches()
                     }
                 }
             }
