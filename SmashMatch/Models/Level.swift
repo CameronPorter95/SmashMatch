@@ -439,7 +439,7 @@ class Level {
                 if gem is Cannon {
                     let cannon = gem as! Cannon
                     cannons.insert(cannon)
-                    gems[gem.column, gem.row] = nil
+                    gems[gem.column, gem.row] = nil  //Shouldnt be removing it here
                     continue;
                 } else {
                     gems[gem.column, gem.row] = nil //Not ready to remvove the cannons from the model yet
@@ -450,6 +450,9 @@ class Level {
     }
     
     func getMatchedCannons() -> Set<Cannon> {
+        for cannon in matchedCannons! {
+            //gems[cannon.column, cannon.row] = nil Should be removing here but doesnt work
+        }
         return matchedCannons!
     }
 //    func removeCannons() -> Set<Cannon>{
