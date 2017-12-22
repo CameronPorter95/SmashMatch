@@ -313,6 +313,13 @@ class Level {
         addedCannons = cannons
         matchedCannons = removeGems(chains: horizontalChains)
         matchedCannons = matchedCannons.union(removeGems(chains: verticalChains))
+        self.cannons = cannons
+        //calculate the scorses
+        calculateScores(for: horizontalChains)
+        calculateScores(for: verticalChains)
+        
+        removeGems(chains: horizontalChains)
+        removeGems(chains: verticalChains)
         
         for row in 0..<NumRows {
             for column in 0..<NumColumns {
