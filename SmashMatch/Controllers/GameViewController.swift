@@ -124,23 +124,25 @@ class GameViewController: UIViewController {
             return
         }
         let matchedCannons = getCannonsFromChains(chains: chains)
-        self.scene.animateFiredCannons(cannons: matchedCannons){ //TODO Recurse on cannon fire chain
-            self.scene.animateMatchedGems(for: chains) {
-                let cannons = self.level.getCannons() //TODO refactor
-                self.scene.animateNewCannons(cannons: cannons) {
-                    for chain in chains{
-                        self.score += chain.score
-                        print("~~~~~~~~~~~~~~~~~~~~~~")
-                        print("scores:\(self.score)")
-                        print("length:\(chain.length)")
-                        print("~~~~~~~~~~~~~~~~~~~~~~")
-                    }
-                    self.updateLabels()
-                    let columns = self.level.fillHoles()
-                    self.scene.animateFallingGems(columns: columns) {
-                        let columns = self.level.topUpGems()
-                        self.scene.animateNewGems(columns) {
-                            self.handleMatches()
+        self.scene.animateMatchedCannons(cannons: matchedCannons){
+            self.fireMatchedCannons(cannons: matchedCannons){ //TODO should this go before or after animate matched cannons?
+                self.scene.animateMatchedGems(for: chains) { //TODO do this same time as fire cannon animation?
+                    let cannons = self.level.getCannons() //TODO refactor
+                    self.scene.animateNewCannons(cannons: cannons) {
+                        for chain in chains{
+                            self.score += chain.score
+                            print("~~~~~~~~~~~~~~~~~~~~~~")
+                            print("scores:\(self.score)")
+                            print("length:\(chain.length)")
+                            print("~~~~~~~~~~~~~~~~~~~~~~")
+                        }
+                        self.updateLabels()
+                        let columns = self.level.fillHoles()
+                        self.scene.animateFallingGems(columns: columns) {
+                            let columns = self.level.topUpGems()
+                            self.scene.animateNewGems(columns) {
+                                self.handleMatches()
+                            }
                         }
                     }
                 }
@@ -162,6 +164,21 @@ class GameViewController: UIViewController {
             }
         }
         return cannons
+    }
+    
+    //TODO Recurse on cannon fire chain, create a new thread for each cannon that fires in the chain. Wait until all threads are finished before moving on
+    func fireMatchedCannons(cannons: Set<Cannon>, completion: @escaping () -> ()){
+        for cannon in cannons {
+            //TODO call these three methods inside another thread and repeat until no more hit cannons
+            let hitCannon = self.level.fireCannon(cannon: cannon)
+            if(hitCannon == nil){
+                continue
+            }
+            self.scene.animateHitCannon(cannon: hitCannon!) {
+                self.scene.animateRemoveCannon(cannon: hitCannon!)
+            }
+        }
+        completion()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

@@ -379,57 +379,43 @@ class Level {
         return self.addedCannons
     }
     
-    func fireCannons(cannons: Set<Cannon>) -> Set<Cannon>? { //Returns a set of cannons hit by these cannons
-        if(matchedCannons?.count == 0){
-            return nil
+    func fireCannon(cannon: Cannon) -> Cannon? { //Returns a cannon hit by this cannon
+        print(cannon.description)
+        var curColumn = cannon.column
+        var curRow = cannon.row
+        while(curColumn < NumColumns-1 && cannon.cannonType != CannonType.twoWayVert) {
+            if(gems[curColumn, curRow] is Cannon) {
+                let cannon = gems[curColumn, curRow] as! Cannon
+                gems[curColumn, curRow] = nil
+                return cannon
+            }
+            curColumn += 1
         }
-        var cannons = Set<Cannon>()
-        for cannon in cannons {
-            print(cannon.description)
-            var curColumn = cannon.column
-            var curRow = cannon.row
-            while(curColumn < NumColumns-1 && cannon.cannonType != CannonType.twoWayVert) {
-                if(gems[curColumn, curRow] is Cannon) {
-                    let cannon = gems[curColumn, curRow] as! Cannon
-                    //Found a cannon, recurse
-                    gems[curColumn, curRow] = nil //Could be the wrong column and row as cannon has moved after being matched and before firing
-                    cannons.insert(cannon)
-                    //cannons = cannons.union(fireCannon(cannon: cannon))
-                }
-                curColumn += 1
+        while(curColumn > 0 && cannon.cannonType != CannonType.twoWayVert) {
+            if(gems[curColumn, curRow] is Cannon) {
+                let cannon = gems[curColumn, curRow] as! Cannon
+                gems[curColumn, curRow] = nil
+                return cannon
             }
-            while(curColumn > 0 && cannon.cannonType != CannonType.twoWayVert) {
-                if(gems[curColumn, curRow] is Cannon) {
-                    let cannon = gems[curColumn, curRow] as! Cannon
-                    //Found a cannon, recurse
-                    gems[curColumn, curRow] = nil
-                    cannons.insert(cannon)
-                    //cannons = cannons.union(fireCannon(cannon: cannon))
-                }
-                curColumn -= 1
-            }
-            while(curRow < NumRows-1 && cannon.cannonType != CannonType.twoWayHorz) {
-                if(gems[curColumn, curRow] is Cannon) {
-                    let cannon = gems[curColumn, curRow] as! Cannon
-                    //Found a cannon, recurse
-                    gems[curColumn, curRow] = nil
-                    cannons.insert(cannon)
-                    //cannons = cannons.union(fireCannon(cannon: cannon))
-                }
-                curRow += 1
-            }
-            while(curRow > 0 && cannon.cannonType != CannonType.twoWayHorz) {
-                if(gems[curColumn, curRow] is Cannon) {
-                    let cannon = gems[curColumn, curRow] as! Cannon
-                    //Found a cannon, recurse
-                    gems[curColumn, curRow] = nil
-                    cannons.insert(cannon)
-                    //cannons = cannons.union(fireCannon(cannon: cannon))
-                }
-                curRow -= 1
-            }
+            curColumn -= 1
         }
-        return cannons
+        while(curRow < NumRows-1 && cannon.cannonType != CannonType.twoWayHorz) {
+            if(gems[curColumn, curRow] is Cannon) {
+                let cannon = gems[curColumn, curRow] as! Cannon
+                gems[curColumn, curRow] = nil
+                return cannon
+            }
+            curRow += 1
+        }
+        while(curRow > 0 && cannon.cannonType != CannonType.twoWayHorz) {
+            if(gems[curColumn, curRow] is Cannon) {
+                let cannon = gems[curColumn, curRow] as! Cannon
+                gems[curColumn, curRow] = nil
+                return cannon
+            }
+            curRow -= 1
+        }
+        return nil
     }
     
     private func removeGems(chains: Set<Chain>) {
