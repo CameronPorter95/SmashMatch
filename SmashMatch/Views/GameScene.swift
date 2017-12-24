@@ -318,6 +318,10 @@ class GameScene: SKScene {
     
     //Animates the creation of cannons
     func animateFiredCannons(cannons: Set<Cannon>, completion: @escaping () -> ()){
+        if cannons.count == 0 {
+            completion()
+            return
+        }
         for cannon in cannons {
             run(cannonFireSound)
             let f0, f1, f2, f3: SKTexture?

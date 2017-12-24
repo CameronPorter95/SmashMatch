@@ -311,8 +311,8 @@ class Level {
         }
         
         addedCannons = cannons
-        matchedCannons = removeGems(chains: horizontalChains) //This sets cannons in matched cannons beforethe fillHoles method is called, potentially causing problems when firing the cannons as cannon moves beforehand.
-        matchedCannons = matchedCannons?.union(removeGems(chains: verticalChains))
+        removeGems(chains: horizontalChains)
+        removeGems(chains: verticalChains)
         //calculate the scorses
         calculateScores(for: horizontalChains)
         calculateScores(for: verticalChains)
@@ -432,38 +432,13 @@ class Level {
         return cannons
     }
     
-    private func removeGems(chains: Set<Chain>) -> Set<Cannon>{ //Returns a set of cannons contained in the matched chains
-        var cannons = Set<Cannon>()
+    private func removeGems(chains: Set<Chain>) {
         for chain in chains {
             for gem in chain.gems {
-                if gem is Cannon {
-                    let cannon = gem as! Cannon
-                    cannons.insert(cannon)
-                    gems[gem.column, gem.row] = nil  //Shouldnt be removing it here
-                    continue;
-                } else {
-                    gems[gem.column, gem.row] = nil //Not ready to remvove the cannons from the model yet
-                }
+                gems[gem.column, gem.row] = nil
             }
         }
-        return cannons
     }
-    
-    func getMatchedCannons() -> Set<Cannon> {
-        for cannon in matchedCannons! {
-            //gems[cannon.column, cannon.row] = nil Should be removing here but doesnt work
-        }
-        return matchedCannons!
-    }
-//    func removeCannons() -> Set<Cannon>{
-//        var firedCannons = Set<Cannon>()
-//        for cannon in matchedCannons {
-//            firedCannons = firedCannons.union(fireCannon(cannon: cannon))
-//            gems[cannon.column, cannon.row] = nil
-//            continue;
-//        }
-//        return firedCannons
-//    }
     
     func fillHoles() -> [[Gem]] {
         var columns = [[Gem]]()

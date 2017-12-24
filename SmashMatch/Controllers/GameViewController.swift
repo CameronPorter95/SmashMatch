@@ -123,30 +123,25 @@ class GameViewController: UIViewController {
             beginNextTurn()
             return
         }
-        scene.animateMatchedGems(for: chains) {
-            let cannons = self.level.getCannons()
-            self.scene.animateNewCannons(cannons: cannons) {
-                for chain in chains{
-                    self.score += chain.score
-                    print("~~~~~~~~~~~~~~~~~~~~~~")
-                    print("scores:\(self.score)")
-                    print("length:\(chain.length)")
-                    print("~~~~~~~~~~~~~~~~~~~~~~")
-                }
-                self.updateLabels()
-                let columns = self.level.fillHoles()
-                self.scene.animateFallingGems(columns: columns) {
-                    let columns = self.level.topUpGems()
-                    self.scene.animateNewGems(columns) {
-                        let matchedCannons = self.level.getMatchedCannons()
-                        if(matchedCannons.count == 0){
-                             self.handleMatches()
-                        } else{
-                            self.scene.animateFiredCannons(cannons: matchedCannons){ //TODO Recurse on cannon fire chain
-                                self.handleMatches()
-                            }
+        let matchedCannons = getCannonsFromChains(chains: chains)
+        self.scene.animateFiredCannons(cannons: matchedCannons){ //TODO Recurse on cannon fire chain
+            self.scene.animateMatchedGems(for: chains) {
+                let cannons = self.level.getCannons() //TODO refactor
+                self.scene.animateNewCannons(cannons: cannons) {
+                    for chain in chains{
+                        self.score += chain.score
+                        print("~~~~~~~~~~~~~~~~~~~~~~")
+                        print("scores:\(self.score)")
+                        print("length:\(chain.length)")
+                        print("~~~~~~~~~~~~~~~~~~~~~~")
+                    }
+                    self.updateLabels()
+                    let columns = self.level.fillHoles()
+                    self.scene.animateFallingGems(columns: columns) {
+                        let columns = self.level.topUpGems()
+                        self.scene.animateNewGems(columns) {
+                            self.handleMatches()
                         }
-                       self.handleMatches()
                     }
                 }
             }
@@ -155,6 +150,18 @@ class GameViewController: UIViewController {
     
     func updateLabels() {
         scoreLabel.text = String(format: "%ld", score)
+    }
+    
+    func getCannonsFromChains(chains: Set<Chain>) -> Set<Cannon>{
+        var cannons = Set<Cannon>()
+        for chain in chains {
+            for gem in chain.gems {
+                if gem is Cannon {
+                    cannons.insert(gem as! Cannon)
+                }
+            }
+        }
+        return cannons
     }
     
     override func viewWillDisappear(_ animated: Bool) {
