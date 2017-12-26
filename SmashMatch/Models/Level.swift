@@ -24,7 +24,7 @@ class Level {
     var maximumMoves = 0
     
     var gemsFromFileArray: [[Int]]?
-    var isClassicMode = true; //Set this based on the game mode
+    var isClassicMode = false; //Set this based on the game mode
     var initialLoad = true;
     
     func shuffle() -> Set<Gem> {

@@ -128,7 +128,7 @@ class GameViewController: UIViewController {
         let matchedCannons = getCannonsFromChains(chains: chains)
         self.scene.animateMatchedCannons(cannons: matchedCannons){
             self.fireMatchedCannons(cannons: matchedCannons){
-                self.scene.animateMatchedGems(for: chains) { //TODO do this same time as fire cannon animation? //TODO fix bug where this is called twice
+                self.scene.animateMatchedGems(for: chains) { //TODO do this same time as fire cannon animation?
                     let cannons = self.level.getCannons() //TODO refactor
                     self.scene.animateNewCannons(cannons: cannons) {
                         for chain in chains{
@@ -164,24 +164,19 @@ class GameViewController: UIViewController {
         return cannons
     }
     
-    //TODO Recurse on cannon fire chain, create a new thread for each cannon that fires in the chain. Wait until all threads are finished before moving on
     func fireMatchedCannons(cannons: [Cannon], completion: @escaping () -> ()){
-        if cannons.count == 0 {
-            completion()
-        }
-        
         for i in (0..<cannons.count) {
-            //TODO call these three methods inside another thread and repeat until no more hit cannons
             runCannonFireThreads(cannon: cannons[i]){}
         }
-        
         group.notify(queue: queue) {
             completion()
         }
     }
     
-    //TODO Replace these with threads
-    func runCannonFireThreads(cannon: Cannon, completion: @escaping () -> ()){ //Takes a cannon tile and spins up one new thread for each cannon on that tile
+    /**
+     Takes a cannon tile and spins up one new thread for each cannon on that tile
+     */
+    func runCannonFireThreads(cannon: Cannon, completion: @escaping () -> ()){
         if cannon.cannonType == CannonType.twoWayHorz {
             queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "East"){completion()}}
             queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "West"){completion()}}
@@ -199,7 +194,7 @@ class GameViewController: UIViewController {
     }
     
     func fireCannon(cannon: Cannon, direction: String, completion: @escaping () -> ()) {
-        let hitCannonTile = self.level.fireCannon(cannon: cannon, direction: direction) //need to call this two or four times with direction
+        let hitCannonTile = self.level.fireCannon(cannon: cannon, direction: direction)
         if(hitCannonTile == nil){
             //self.scene.animateRemoveCannon(cannon: cannon)
             completion()
