@@ -166,7 +166,7 @@ class GameViewController: UIViewController {
     
     func fireMatchedCannons(cannons: [Cannon], completion: @escaping () -> ()){
         for i in (0..<cannons.count) {
-            runCannonFireThreads(cannon: cannons[i]){}
+            runCannonFireThreads(cannon: cannons[i])
         }
         group.notify(queue: queue) {
             completion()
@@ -176,20 +176,20 @@ class GameViewController: UIViewController {
     /**
      Takes a cannon tile and spins up one new thread for each cannon on that tile
      */
-    func runCannonFireThreads(cannon: Cannon, completion: @escaping () -> ()){
+    func runCannonFireThreads(cannon: Cannon){
         if cannon.cannonType == CannonType.twoWayHorz {
-            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "East"){completion()}}
-            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "West"){completion()}}
+            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "East"){}}
+            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "West"){}}
         }
         else if cannon.cannonType == CannonType.twoWayVert {
-            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "North"){completion()}}
-            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "South"){completion()}}
+            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "North"){}}
+            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "South"){}}
         }
         else {
-            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "East"){completion()}}
-            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "West"){completion()}}
-            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "North"){completion()}}
-            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "South"){completion()}}
+            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "East"){}}
+            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "West"){}}
+            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "North"){}}
+            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "South"){}}
         }
     }
     
@@ -202,9 +202,7 @@ class GameViewController: UIViewController {
         }
         self.scene.animateHitCannon(cannon: hitCannonTile) {
             self.queue.async(group: self.group) {self.scene.animateRemoveCannon(cannon: hitCannonTile!)}
-            self.runCannonFireThreads(cannon: hitCannonTile!){
-                 completion()
-            }
+            self.runCannonFireThreads(cannon: hitCannonTile!)
         }
     }
     
