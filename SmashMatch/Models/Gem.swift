@@ -9,7 +9,7 @@
 import SpriteKit
 
 enum GemType: Int, CustomStringConvertible  {
-    case unknown = 0, blue, green, orange, pink, yellow, wall
+    case unknown = 0, blue, green, orange, pink, yellow, wall, cannon
     var spriteName: String {
         let spriteNames = [
             "blue",
@@ -17,7 +17,8 @@ enum GemType: Int, CustomStringConvertible  {
             "orange",
             "pink",
             "yellow",
-            "Wall"]
+            "Wall",
+            "Cannon"]
         
         return spriteNames[rawValue - 1]
     }

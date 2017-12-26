@@ -24,7 +24,7 @@ class Level {
     var maximumMoves = 0
     
     var gemsFromFileArray: [[Int]]?
-    var isClassicMode = false; //Set this based on the game mode
+    var isClassicMode = true; //Set this based on the game mode
     var initialLoad = true;
     
     func shuffle() -> Set<Gem> {
@@ -114,7 +114,11 @@ class Level {
                         continue;
                     } else {
                         let gemType = gemsFromFileArray![row][column]
-                        let gem = Gem(column: column, row: row, gemType: GemType(rawValue: gemType)!)
+                        var gem = Gem(column: column, row: row, gemType: GemType(rawValue: gemType)!)
+                        if gem.gemType.spriteName == "Cannon" {
+                            gem = Cannon(column: column, row: row, cannonType: CannonType.fourWay, gemType: GemType.blue)
+                            
+                        }
                         gems[column, row] = gem
                         set.insert(gem)
                     }

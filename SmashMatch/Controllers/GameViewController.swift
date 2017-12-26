@@ -15,7 +15,7 @@ class GameViewController: UIViewController {
     var scene: GameScene!
     var level: Level!
     
-    var currentLevelNum = 0
+    var currentLevelNum = 1
     var movesMade = 0
     var score = 0
     let queue = DispatchQueue(label: "com.siso.smashmatch.cannonqueue", attributes: .concurrent)
@@ -201,7 +201,7 @@ class GameViewController: UIViewController {
             return
         }
         self.scene.animateHitCannon(cannon: hitCannonTile) {
-            self.scene.animateRemoveCannon(cannon: hitCannonTile!)
+            self.queue.async(group: self.group) {self.scene.animateRemoveCannon(cannon: hitCannonTile!)}
             self.runCannonFireThreads(cannon: hitCannonTile!){
                  completion()
             }
