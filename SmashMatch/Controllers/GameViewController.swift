@@ -18,7 +18,9 @@ class GameViewController: UIViewController {
     var currentLevelNum = 0
     var movesMade = 0
     var score = 0
-
+    let queue = DispatchQueue(label: "com.siso.smashmatch.cannonqueue", attributes: .concurrent)
+    let group = DispatchGroup()
+    
     lazy var backgroundMusic: AVAudioPlayer? = {
         guard let url = Bundle.main.url(forResource: "iOS Game Theme Medieval Version", withExtension: "wav") else {
             return nil
@@ -126,14 +128,14 @@ class GameViewController: UIViewController {
         let matchedCannons = getCannonsFromChains(chains: chains)
         self.scene.animateMatchedCannons(cannons: matchedCannons){
             self.fireMatchedCannons(cannons: matchedCannons){
-                self.scene.animateMatchedGems(for: chains) { //TODO do this same time as fire cannon animation?
+                self.scene.animateMatchedGems(for: chains) { //TODO do this same time as fire cannon animation? //TODO fix bug where this is called twice
                     let cannons = self.level.getCannons() //TODO refactor
                     self.scene.animateNewCannons(cannons: cannons) {
                         for chain in chains{
                             self.score += chain.score
                         }
                         self.updateLabels()
-                        let columns = self.level.fillHoles()
+                        let columns = self.level.fillHoles() //TODO fix bug where this doesn't wait on cannon fire
                         self.scene.animateFallingGems(columns: columns) {
                             let columns = self.level.topUpGems()
                             self.scene.animateNewGems(columns) {
@@ -167,36 +169,39 @@ class GameViewController: UIViewController {
         if cannons.count == 0 {
             completion()
         }
+        
         for i in (0..<cannons.count) {
             //TODO call these three methods inside another thread and repeat until no more hit cannons
-            runCannonFireThreads(cannon: cannons[i]){
-                completion()
-            }
+            runCannonFireThreads(cannon: cannons[i]){}
+        }
+        
+        group.notify(queue: queue) {
+            completion()
         }
     }
     
     //TODO Replace these with threads
     func runCannonFireThreads(cannon: Cannon, completion: @escaping () -> ()){ //Takes a cannon tile and spins up one new thread for each cannon on that tile
         if cannon.cannonType == CannonType.twoWayHorz {
-            fireCannon(cannon: cannon, direction: "East"){completion()}
-            fireCannon(cannon: cannon, direction: "West"){completion()}
+            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "East"){completion()}}
+            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "West"){completion()}}
         }
         else if cannon.cannonType == CannonType.twoWayVert {
-            fireCannon(cannon: cannon, direction: "South"){completion()}
-            fireCannon(cannon: cannon, direction: "North"){completion()}
+            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "North"){completion()}}
+            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "South"){completion()}}
         }
         else {
-            fireCannon(cannon: cannon, direction: "East"){completion()}
-            fireCannon(cannon: cannon, direction: "West"){completion()}
-            fireCannon(cannon: cannon, direction: "South"){completion()}
-            fireCannon(cannon: cannon, direction: "North"){completion()}
+            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "East"){completion()}}
+            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "West"){completion()}}
+            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "North"){completion()}}
+            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "South"){completion()}}
         }
     }
     
     func fireCannon(cannon: Cannon, direction: String, completion: @escaping () -> ()) {
         let hitCannonTile = self.level.fireCannon(cannon: cannon, direction: direction) //need to call this two or four times with direction
         if(hitCannonTile == nil){
-            self.scene.animateRemoveCannon(cannon: cannon)
+            //self.scene.animateRemoveCannon(cannon: cannon)
             completion()
             return
         }

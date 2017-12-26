@@ -325,8 +325,6 @@ class Level {
             }
         }
         return horizontalChains.union(verticalChains)
-        
-
     }
     
     func createCannons(chains: Set<Chain>, cannons: inout Set<Cannon>, isHorz: Bool) {
@@ -382,7 +380,7 @@ class Level {
     //Returns a cannon tile hit by this cannon, this is a singular cannon not a cannon tile
     func fireCannon(cannon: Cannon, direction: String) -> Cannon? {
         print(cannon.description)
-        var curColumn = cannon.column
+        var curColumn = cannon.column+1
         var curRow = cannon.row
         while(curColumn < NumColumns-1 && direction == "East") {
             if(gems[curColumn, curRow] is Cannon) {
@@ -392,6 +390,8 @@ class Level {
             }
             curColumn += 1
         }
+        curColumn = cannon.column-1
+        curRow = cannon.row
         while(curColumn > 0 && direction == "West") {
             if(gems[curColumn, curRow] is Cannon) {
                 let cannon = gems[curColumn, curRow] as! Cannon
@@ -400,7 +400,9 @@ class Level {
             }
             curColumn -= 1
         }
-        while(curRow < NumRows-1 && direction == "South") {
+        curColumn = cannon.column
+        curRow = cannon.row+1
+        while(curRow < NumRows-1 && direction == "North") {
             if(gems[curColumn, curRow] is Cannon) {
                 let cannon = gems[curColumn, curRow] as! Cannon
                 gems[curColumn, curRow] = nil
@@ -408,7 +410,9 @@ class Level {
             }
             curRow += 1
         }
-        while(curRow > 0 && direction == "North") {
+        curColumn = cannon.column
+        curRow = cannon.row-1
+        while(curRow > 0 && direction == "South") {
             if(gems[curColumn, curRow] is Cannon) {
                 let cannon = gems[curColumn, curRow] as! Cannon
                 gems[curColumn, curRow] = nil

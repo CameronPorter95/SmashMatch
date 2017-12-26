@@ -394,11 +394,11 @@ class GameScene: SKScene {
         let sprite: SKSpriteNode?
         // Load the first frame as initialization
         if cannon?.cannonType == CannonType.fourWay {
-            sprite = SKSpriteNode(imageNamed: "\(cannon?.gemType)4cannon")
+            sprite = SKSpriteNode(imageNamed: "\(cannon!.gemType)4cannon")
         } else if cannon?.cannonType == CannonType.twoWayHorz {
-            sprite = SKSpriteNode(imageNamed: "\(cannon?.gemType)LRcannon")
+            sprite = SKSpriteNode(imageNamed: "\(cannon!.gemType)LRcannon")
         } else {
-            sprite = SKSpriteNode(imageNamed: "\(cannon?.gemType)UDcannon")
+            sprite = SKSpriteNode(imageNamed: "\(cannon!.gemType)UDcannon")
         }
         
         sprite?.position = pointFor(column: (cannon?.column)!, row: (cannon?.row)!)
