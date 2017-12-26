@@ -379,11 +379,12 @@ class Level {
         return self.addedCannons
     }
     
-    func fireCannon(cannon: Cannon) -> Cannon? { //Returns a cannon hit by this cannon
+    //Returns a cannon tile hit by this cannon, this is a singular cannon not a cannon tile
+    func fireCannon(cannon: Cannon, direction: String) -> Cannon? {
         print(cannon.description)
         var curColumn = cannon.column
         var curRow = cannon.row
-        while(curColumn < NumColumns-1 && cannon.cannonType != CannonType.twoWayVert) {
+        while(curColumn < NumColumns-1 && direction == "East") {
             if(gems[curColumn, curRow] is Cannon) {
                 let cannon = gems[curColumn, curRow] as! Cannon
                 gems[curColumn, curRow] = nil
@@ -391,7 +392,7 @@ class Level {
             }
             curColumn += 1
         }
-        while(curColumn > 0 && cannon.cannonType != CannonType.twoWayVert) {
+        while(curColumn > 0 && direction == "West") {
             if(gems[curColumn, curRow] is Cannon) {
                 let cannon = gems[curColumn, curRow] as! Cannon
                 gems[curColumn, curRow] = nil
@@ -399,7 +400,7 @@ class Level {
             }
             curColumn -= 1
         }
-        while(curRow < NumRows-1 && cannon.cannonType != CannonType.twoWayHorz) {
+        while(curRow < NumRows-1 && direction == "South") {
             if(gems[curColumn, curRow] is Cannon) {
                 let cannon = gems[curColumn, curRow] as! Cannon
                 gems[curColumn, curRow] = nil
@@ -407,7 +408,7 @@ class Level {
             }
             curRow += 1
         }
-        while(curRow > 0 && cannon.cannonType != CannonType.twoWayHorz) {
+        while(curRow > 0 && direction == "North") {
             if(gems[curColumn, curRow] is Cannon) {
                 let cannon = gems[curColumn, curRow] as! Cannon
                 gems[curColumn, curRow] = nil

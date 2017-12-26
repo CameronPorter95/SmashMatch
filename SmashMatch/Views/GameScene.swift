@@ -317,7 +317,7 @@ class GameScene: SKScene {
     }
     
     //Animates the creation of cannons
-    func animateMatchedCannons(cannons: Set<Cannon>, completion: @escaping () -> ()){
+    func animateMatchedCannons(cannons: [Cannon], completion: @escaping () -> ()){
         if cannons.count == 0 {
             completion()
             return
@@ -365,15 +365,19 @@ class GameScene: SKScene {
     }
     
     //Animates the creation of cannons
-    func animateHitCannon(cannon: Cannon, completion: @escaping () -> ()){
+    func animateHitCannon(cannon: Cannon?, completion: @escaping () -> ()){
+        if cannon == nil {
+            completion()
+            return
+        }
         run(cannonFireSound)
         let f0, f1, f2, f3: SKTexture?
-        if cannon.cannonType == CannonType.fourWay {
+        if cannon?.cannonType == CannonType.fourWay {
             f0 = SKTexture.init(imageNamed: "4cannon1")
             f1 = SKTexture.init(imageNamed: "4cannon2")
             f2 = SKTexture.init(imageNamed: "4cannon3")
             f3 = SKTexture.init(imageNamed: "4cannon4")
-        } else if cannon.cannonType == CannonType.twoWayHorz {
+        } else if cannon?.cannonType == CannonType.twoWayHorz {
             f0 = SKTexture.init(imageNamed: "LRcannon1")
             f1 = SKTexture.init(imageNamed: "LRcannon2")
             f2 = SKTexture.init(imageNamed: "LRcannon3")
@@ -389,15 +393,15 @@ class GameScene: SKScene {
         
         let sprite: SKSpriteNode?
         // Load the first frame as initialization
-        if cannon.cannonType == CannonType.fourWay {
-            sprite = SKSpriteNode(imageNamed: "\(cannon.gemType)4cannon")
-        } else if cannon.cannonType == CannonType.twoWayHorz {
-            sprite = SKSpriteNode(imageNamed: "\(cannon.gemType)LRcannon")
+        if cannon?.cannonType == CannonType.fourWay {
+            sprite = SKSpriteNode(imageNamed: "\(cannon?.gemType)4cannon")
+        } else if cannon?.cannonType == CannonType.twoWayHorz {
+            sprite = SKSpriteNode(imageNamed: "\(cannon?.gemType)LRcannon")
         } else {
-            sprite = SKSpriteNode(imageNamed: "\(cannon.gemType)UDcannon")
+            sprite = SKSpriteNode(imageNamed: "\(cannon?.gemType)UDcannon")
         }
         
-        sprite?.position = pointFor(column: cannon.column, row: cannon.row)
+        sprite?.position = pointFor(column: (cannon?.column)!, row: (cannon?.row)!)
         sprite?.size = CGSize(width: TileWidth, height: TileWidth)
         gemsLayer.addChild(sprite!)
         // Change the frame per 0.2 sec

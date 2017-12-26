@@ -125,7 +125,7 @@ class GameViewController: UIViewController {
         }
         let matchedCannons = getCannonsFromChains(chains: chains)
         self.scene.animateMatchedCannons(cannons: matchedCannons){
-            self.fireMatchedCannons(cannons: matchedCannons){ //TODO should this go before or after animate matched cannons?
+            self.fireMatchedCannons(cannons: matchedCannons){
                 self.scene.animateMatchedGems(for: chains) { //TODO do this same time as fire cannon animation?
                     let cannons = self.level.getCannons() //TODO refactor
                     self.scene.animateNewCannons(cannons: cannons) {
@@ -154,12 +154,12 @@ class GameViewController: UIViewController {
         scoreLabel.text = String(format: "%ld", score)
     }
     
-    func getCannonsFromChains(chains: Set<Chain>) -> Set<Cannon>{
-        var cannons = Set<Cannon>()
+    func getCannonsFromChains(chains: Set<Chain>) -> [Cannon]{
+        var cannons = [Cannon]()
         for chain in chains {
             for gem in chain.gems {
                 if gem is Cannon {
-                    cannons.insert(gem as! Cannon)
+                    cannons.append(gem as! Cannon)
                 }
             }
         }
@@ -167,18 +167,26 @@ class GameViewController: UIViewController {
     }
     
     //TODO Recurse on cannon fire chain, create a new thread for each cannon that fires in the chain. Wait until all threads are finished before moving on
-    func fireMatchedCannons(cannons: Set<Cannon>, completion: @escaping () -> ()){
-        for cannon in cannons {
+    func fireMatchedCannons(cannons: [Cannon], completion: @escaping () -> ()){
+        if cannons.count == 0 {
+            completion()
+        }
+        for i in (0..<cannons.count) {
             //TODO call these three methods inside another thread and repeat until no more hit cannons
-            let hitCannon = self.level.fireCannon(cannon: cannon)
+            let hitCannon = self.level.fireCannon(cannon: cannons[i], direction: "East") //need to call this two or four times with direction
             if(hitCannon == nil){
+                if i == cannons.count-1 {
+                    completion()
+                }
                 continue
             }
-            self.scene.animateHitCannon(cannon: hitCannon!) {
+            self.scene.animateHitCannon(cannon: hitCannon) {
                 self.scene.animateRemoveCannon(cannon: hitCannon!)
+                if i == cannons.count-1 {
+                    completion()
+                }
             }
         }
-        completion()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
