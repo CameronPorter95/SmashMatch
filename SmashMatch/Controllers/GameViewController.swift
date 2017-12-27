@@ -15,7 +15,7 @@ class GameViewController: UIViewController {
     var scene: GameScene!
     var level: Level!
     
-    var currentLevelNum = 1
+    var currentLevelNum = 2
     var movesMade = 0
     var score = 0
     let queue = DispatchQueue(label: "com.siso.smashmatch.cannonqueue", attributes: .concurrent)
@@ -166,7 +166,7 @@ class GameViewController: UIViewController {
     
     func fireMatchedCannons(cannons: [Cannon], completion: @escaping () -> ()){
         for i in (0..<cannons.count) {
-            runCannonFireThreads(cannon: cannons[i])
+            createCannonFireTasks(cannon: cannons[i])
         }
         group.notify(queue: queue) {
             completion()
@@ -176,7 +176,7 @@ class GameViewController: UIViewController {
     /**
      Takes a cannon tile and spins up one new thread for each cannon on that tile
      */
-    func runCannonFireThreads(cannon: Cannon){
+    func createCannonFireTasks(cannon: Cannon){
         if cannon.cannonType == CannonType.twoWayHorz {
             group.enter();self.fireCannon(cannon: cannon, direction: "East"){}
             group.enter();self.fireCannon(cannon: cannon, direction: "West"){}
@@ -202,9 +202,8 @@ class GameViewController: UIViewController {
             return
         }
         self.scene.animateHitCannon(cannon: hitCannonTile) {
-            //self.queue.async(group: self.group) {self.scene.animateRemoveCannon(cannon: hitCannonTile!)}
             self.scene.animateRemoveCannon(cannon: hitCannonTile!)
-            self.runCannonFireThreads(cannon: hitCannonTile!)
+            self.createCannonFireTasks(cannon: hitCannonTile!)
             self.group.leave()
         }
     }
