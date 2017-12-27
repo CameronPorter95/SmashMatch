@@ -13,6 +13,7 @@ class GameScene: SKScene {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
     }
+    
     private var swipeFromColumn: Int?
     private var swipeFromRow: Int?
     

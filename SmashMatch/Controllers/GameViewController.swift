@@ -12,6 +12,7 @@ import GameplayKit
 import AVFoundation
 
 class GameViewController: UIViewController {
+    weak var skView: SKView?
     var scene: GameScene!
     var level: Level!
     
@@ -39,13 +40,6 @@ class GameViewController: UIViewController {
         shuffle()
     }
     
-    @IBAction func backPressed(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let mainMenuViewController = storyboard.instantiateViewController(withIdentifier: "MainMenu")
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.window?.rootViewController = mainMenuViewController
-    }
-    
     override var prefersStatusBarHidden: Bool {
         return true
     }
@@ -66,9 +60,9 @@ class GameViewController: UIViewController {
     }
     
     func setupLevel(levelNum: Int) {
-        let skView = view as! SKView
-        skView.isMultipleTouchEnabled = false
-        scene = GameScene(size: skView.bounds.size)
+        skView = view as? SKView
+        skView?.isMultipleTouchEnabled = false
+        scene = GameScene(size: (skView?.bounds.size)!)
         scene.scaleMode = .aspectFill
         level = Level(filename: "Level_\(levelNum)")
         scene.level = level
@@ -76,7 +70,7 @@ class GameViewController: UIViewController {
         scene.addTiles()
         scene.swipeHandler = handleSwipe
         
-        skView.presentScene(scene)
+        skView?.presentScene(scene)
         beginGame()
     }
     
@@ -174,7 +168,7 @@ class GameViewController: UIViewController {
     }
     
     /**
-     Takes a cannon tile and spins up one new thread for each cannon on that tile
+     Takes a cannon tile and adds a new task to the dispatch queue for each cannon on the tile
      */
     func createCannonFireTasks(cannon: Cannon){
         if cannon.cannonType == CannonType.twoWayHorz {
@@ -210,5 +204,12 @@ class GameViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         backgroundMusic?.stop()
+        scene.removeAllGemSprites()
+        scene.gameLayer.removeAllActions()
+        scene.gameLayer.removeAllChildren()
+//        skView?.removeFromSuperview()
+//        skView = nil
+//        self.scene.removeFromParent()
+//        self.scene = nil
     }
 }

@@ -23,7 +23,7 @@
 		751680061FEC913200A623C1 /* wall_smash.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 751680001FEC913000A623C1 /* wall_smash.mp3 */; };
 		751680071FEC913200A623C1 /* special_match.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 751680011FEC913100A623C1 /* special_match.mp3 */; };
 		751680091FEC938700A623C1 /* gem_swap.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 751680081FEC938700A623C1 /* gem_swap.mp3 */; };
-		75197E251FE7C5F00006EDBA /* BuildFile in Sources */ = {isa = PBXBuildFile; };
+		75197E251FE7C5F00006EDBA /* (null) in Sources */ = {isa = PBXBuildFile; };
 		75197E2B1FE7C5F00006EDBA /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75197E2A1FE7C5F00006EDBA /* GameScene.swift */; };
 		75197E2D1FE7C5F00006EDBA /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75197E2C1FE7C5F00006EDBA /* GameViewController.swift */; };
 		75197E301FE7C5F00006EDBA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75197E2E1FE7C5F00006EDBA /* Main.storyboard */; };
@@ -713,7 +713,7 @@
 				75197E2D1FE7C5F00006EDBA /* GameViewController.swift in Sources */,
 				750F139D1FE9DC7500121507 /* AppDelegate.swift in Sources */,
 				75F00F6B1FE7DA2F00F83F0A /* MainMenuViewController.swift in Sources */,
-				75197E251FE7C5F00006EDBA /* BuildFile in Sources */,
+				75197E251FE7C5F00006EDBA /* (null) in Sources */,
 				2C739E211FE9E6B40005211D /* LevelsViewController.swift in Sources */,
 				750F13AC1FEA1F3600121507 /* Database.swift in Sources */,
 				75F00F661FE7CD4300F83F0A /* Array2D.swift in Sources */,

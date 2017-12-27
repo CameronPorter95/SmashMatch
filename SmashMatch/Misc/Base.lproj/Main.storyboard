@@ -49,7 +49,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fZc-y0-cth" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="140" y="-639.13043478260875"/>
+            <point key="canvasLocation" x="1190" y="-611"/>
         </scene>
         <!--Main Menu View Controller-->
         <scene sceneID="tXr-a1-R10">
@@ -238,11 +238,12 @@
                         <outlet property="heart4" destination="UIJ-6d-ItU" id="TKz-A0-NPU"/>
                         <outlet property="heart5" destination="aEA-zN-Mp2" id="QtF-M4-atW"/>
                         <outlet property="livesCounter" destination="9oM-SA-ucD" id="vIb-fy-8MD"/>
+                        <segue destination="e1s-3O-59S" kind="showDetail" identifier="toGame" id="OQ6-yG-Jg2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="140" y="132.68365817091455"/>
+            <point key="canvasLocation" x="140" y="132"/>
         </scene>
         <!--Levels View Controller-->
         <scene sceneID="REc-AH-lC6">
@@ -285,7 +286,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZo-ah-CiM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="140" y="1979"/>
+            <point key="canvasLocation" x="140" y="2208"/>
         </scene>
         <!--Game View Controller-->
         <scene sceneID="Gy2-51-ja0">
@@ -303,7 +304,7 @@
                                 </constraints>
                                 <state key="normal" title="Back"/>
                                 <connections>
-                                    <segue destination="BV1-FR-VrT" kind="showDetail" action="showViewController:sender:" id="eKR-EF-brD"/>
+                                    <segue destination="wu7-8f-tzE" kind="unwind" unwindAction="backFromGameViewWithSegue:" id="2ub-Jh-QXu"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bz2-aP-LLI">
@@ -407,6 +408,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZM0-Lg-9pw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="wu7-8f-tzE" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1189.5999999999999" y="132.68365817091455"/>
         </scene>
@@ -466,21 +468,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G16-h1-3Wk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2151.1999999999998" y="131.78410794602701"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="Wwt-nC-7MQ">
-            <objects>
-                <viewController id="6uX-Nw-rUF" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="gBJ-sT-LPd">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="aes-Jn-iPh"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Ela-96-pbj" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2847" y="775"/>
         </scene>
     </scenes>
     <resources>
