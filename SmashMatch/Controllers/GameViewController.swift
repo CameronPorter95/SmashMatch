@@ -135,7 +135,7 @@ class GameViewController: UIViewController {
                             self.score += chain.score
                         }
                         self.updateLabels()
-                        let columns = self.level.fillHoles() //TODO fix bug where this doesn't wait on cannon fire
+                        let columns = self.level.fillHoles()
                         self.scene.animateFallingGems(columns: columns) {
                             let columns = self.level.topUpGems()
                             self.scene.animateNewGems(columns) {
@@ -178,18 +178,18 @@ class GameViewController: UIViewController {
      */
     func runCannonFireThreads(cannon: Cannon){
         if cannon.cannonType == CannonType.twoWayHorz {
-            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "East"){}}
-            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "West"){}}
+            group.enter();self.fireCannon(cannon: cannon, direction: "East"){}
+            group.enter();self.fireCannon(cannon: cannon, direction: "West"){}
         }
         else if cannon.cannonType == CannonType.twoWayVert {
-            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "North"){}}
-            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "South"){}}
+            group.enter();self.fireCannon(cannon: cannon, direction: "North"){}
+            group.enter();self.fireCannon(cannon: cannon, direction: "South"){}
         }
         else {
-            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "East"){}}
-            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "West"){}}
-            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "North"){}}
-            queue.async(group: group) {self.fireCannon(cannon: cannon, direction: "South"){}}
+            group.enter();self.fireCannon(cannon: cannon, direction: "East"){}
+            group.enter();self.fireCannon(cannon: cannon, direction: "West"){}
+            group.enter();self.fireCannon(cannon: cannon, direction: "North"){}
+            group.enter();self.fireCannon(cannon: cannon, direction: "South"){}
         }
     }
     
@@ -197,12 +197,15 @@ class GameViewController: UIViewController {
         let hitCannonTile = self.level.fireCannon(cannon: cannon, direction: direction)
         if(hitCannonTile == nil){
             //self.scene.animateRemoveCannon(cannon: cannon)
+            self.group.leave()
             completion()
             return
         }
         self.scene.animateHitCannon(cannon: hitCannonTile) {
-            self.queue.async(group: self.group) {self.scene.animateRemoveCannon(cannon: hitCannonTile!)}
+            //self.queue.async(group: self.group) {self.scene.animateRemoveCannon(cannon: hitCannonTile!)}
+            self.scene.animateRemoveCannon(cannon: hitCannonTile!)
             self.runCannonFireThreads(cannon: hitCannonTile!)
+            self.group.leave()
         }
     }
     
