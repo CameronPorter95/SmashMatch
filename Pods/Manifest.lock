@@ -2,13 +2,16 @@ PODS:
   - SQLite.swift (0.11.4):
     - SQLite.swift/standard (= 0.11.4)
   - SQLite.swift/standard (0.11.4)
+  - SwiftySKScrollView (2.1.0)
 
 DEPENDENCIES:
   - SQLite.swift (~> 0.11.4)
+  - SwiftySKScrollView
 
 SPEC CHECKSUMS:
   SQLite.swift: 3e3bee21da701b5b9f87c4a672cb54f233505692
+  SwiftySKScrollView: 4b6c324216ed1d155a91589e32a672dc9308b993
 
-PODFILE CHECKSUM: 154ad2095a91798b197cb0794e6539a6fd49708b
+PODFILE CHECKSUM: a7f7afac0c9c97c0df05e721bc2e6ed368257a86
 
 COCOAPODS: 1.3.1

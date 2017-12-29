@@ -48,6 +48,8 @@
 		7E275DA61FF5CBE5009A00C9 /* MainMenu.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7E275DA51FF5CBE5009A00C9 /* MainMenu.sks */; };
 		7E275DAF1FF5CE5E009A00C9 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E275DAE1FF5CE5E009A00C9 /* GameViewController.swift */; };
 		7E275DB11FF5D909009A00C9 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E275DB01FF5D909009A00C9 /* MainMenu.swift */; };
+		7EB9CA9E1FF65627002C5F04 /* LevelSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB9CA9D1FF65627002C5F04 /* LevelSelection.swift */; };
+		7EB9CAA71FF65FF7002C5F04 /* LevelSelection.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7EB9CAA61FF65FF7002C5F04 /* LevelSelection.sks */; };
 		B3628A071FEB82CA00F432B1 /* The Builder.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B36289F81FEB82C900F432B1 /* The Builder.mp3 */; };
 		B3C2058E1FE9FA4400308B65 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3C2058D1FE9FA4400308B65 /* GameKit.framework */; };
 		F3032E38A93ED5D3AA773FE9 /* Pods_SmashMatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85B07C5B5E55A3462749B0A1 /* Pods_SmashMatch.framework */; };
@@ -212,6 +214,8 @@
 		7E275DA51FF5CBE5009A00C9 /* MainMenu.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenu.sks; sourceTree = "<group>"; };
 		7E275DAE1FF5CE5E009A00C9 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		7E275DB01FF5D909009A00C9 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
+		7EB9CA9D1FF65627002C5F04 /* LevelSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelSelection.swift; sourceTree = "<group>"; };
+		7EB9CAA61FF65FF7002C5F04 /* LevelSelection.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = LevelSelection.sks; sourceTree = "<group>"; };
 		85B07C5B5E55A3462749B0A1 /* Pods_SmashMatch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmashMatch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAE41AE1E837F049E845EA54 /* Pods-SmashMatch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmashMatch.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SmashMatch/Pods-SmashMatch.debug.xcconfig"; sourceTree = "<group>"; };
 		B36289F81FEB82C900F432B1 /* The Builder.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "The Builder.mp3"; sourceTree = "<group>"; };
@@ -393,6 +397,8 @@
 			children = (
 				7E275DA51FF5CBE5009A00C9 /* MainMenu.sks */,
 				7E275DB01FF5D909009A00C9 /* MainMenu.swift */,
+				7EB9CAA61FF65FF7002C5F04 /* LevelSelection.sks */,
+				7EB9CA9D1FF65627002C5F04 /* LevelSelection.swift */,
 			);
 			path = OtherAppScreens;
 			sourceTree = "<group>";
@@ -628,6 +634,7 @@
 				751680061FEC913200A623C1 /* wall_smash.mp3 in Resources */,
 				757A2A371FE906C4000E98D9 /* Level_1.json in Resources */,
 				751680071FEC913200A623C1 /* special_match.mp3 in Resources */,
+				7EB9CAA71FF65FF7002C5F04 /* LevelSelection.sks in Resources */,
 				757A2A341FE906C4000E98D9 /* Level_3.json in Resources */,
 				75197E321FE7C5F00006EDBA /* Assets.xcassets in Resources */,
 				7E275DA61FF5CBE5009A00C9 /* MainMenu.sks in Resources */,
@@ -661,10 +668,12 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-SmashMatch/Pods-SmashMatch-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/SQLite.swift/SQLite.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftySKScrollView/SwiftySKScrollView.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SQLite.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftySKScrollView.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -705,6 +714,7 @@
 				75238B0B1FEA323400FFF7BA /* Cannon.swift in Sources */,
 				75F00F631FE7CAE400F83F0A /* Gem.swift in Sources */,
 				75F00F7C1FE7E69300F83F0A /* Swap.swift in Sources */,
+				7EB9CA9E1FF65627002C5F04 /* LevelSelection.swift in Sources */,
 				750F13AD1FEA1F3600121507 /* PersistentEntity.swift in Sources */,
 				75F00F6D1FE7DF5F00F83F0A /* Tile.swift in Sources */,
 				75197E2D1FE7C5F00006EDBA /* GameController.swift in Sources */,

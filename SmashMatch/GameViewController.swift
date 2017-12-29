@@ -17,6 +17,7 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
     
     let gameController = GameController()
     var mainMenu: MainMenu?
+    var levelSelection: LevelSelection?
     
     var gcEnabled = Bool() // Check if the user has Game Center enabled
     var gcDefaultLeaderBoard = String() // Check the default leaderboardID
@@ -32,6 +33,8 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
         super.viewDidLoad()
         initializeDatabase()
         NotificationCenter.default.addObserver(self, selector: #selector(self.showGameScene(_:)), name: Notification.Name.arcadeButtonPressed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.showLevelSelection(_:)), name: Notification.Name.classicButtonPressed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.showGameScene(_:)), name: Notification.Name.arcadeButtonPressed, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.showMainMenu(_:)), name: Notification.Name.gameSceneBackButtonPressed, object: nil)
         
         // Call the GC authentication controller
@@ -39,7 +42,7 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
         
         if let view = self.view as! SKView? {
             mainMenu = MainMenu(fileNamed: "MainMenu")
-            mainMenu?.scaleMode = .aspectFill
+            mainMenu?.scaleMode = .fill
             view.presentScene(mainMenu)
         }
     }
@@ -47,6 +50,14 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
     @objc func showGameScene(_ notification: Notification) {
         if let view = self.view as! SKView? {
             gameController.setupLevel(view: view)
+        }
+    }
+    
+    @objc func showLevelSelection(_ notification: Notification) {
+        if let view = self.view as! SKView? {
+            levelSelection = LevelSelection(fileNamed: "LevelSelection")
+            levelSelection?.scaleMode = .aspectFill
+            view.presentScene(levelSelection)
         }
     }
     

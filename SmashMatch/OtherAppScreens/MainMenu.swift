@@ -50,6 +50,10 @@ class MainMenu: SKScene {
         if let name = touchedNode.name {
             if name == "Arcade" {
                 NotificationCenter.default.post(name: .arcadeButtonPressed, object: nil)
+            } else if name == "Classic" {
+                NotificationCenter.default.post(name: .classicButtonPressed, object: nil)
+            } else if name == "Demolition" {
+                NotificationCenter.default.post(name: .demolitionButtonPressed, object: nil)
             }
         }
     }
