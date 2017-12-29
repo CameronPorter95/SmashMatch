@@ -2,10 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "greyheart.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "greyheart@2x.png",
       "scale" : "2x"
     },
     {

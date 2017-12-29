@@ -33,3 +33,9 @@ extension Dictionary {
         return dictionaryOK as? Dictionary<String, AnyObject>
     }
 }
+
+extension Notification.Name {
+    public static let arcadeButtonPressed = Notification.Name(rawValue: "arcadeButtonPressed")
+    public static let gameSceneBackButtonPressed = Notification.Name(rawValue: "gameSceneBackButtonPressed")
+    public static let shuffleButtonPressed = Notification.Name(rawValue: "shuffleButtonPressed")
+}

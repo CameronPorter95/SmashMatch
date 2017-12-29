@@ -28,6 +28,11 @@ class GameScene: SKScene {
     let gemsLayer = SKNode()
     let wallsLayer = SKNode()
     
+    var scoreLabelTitle: SKLabelNode!
+    var timeLabelTitle: SKLabelNode!
+    var scoreLabel: SKLabelNode!
+    var timeLabel: SKLabelNode!
+    
     let swapSound = SKAction.playSoundFileNamed("gem_swap.mp3", waitForCompletion: false)
     let invalidSwapSound = SKAction.playSoundFileNamed("Error.wav", waitForCompletion: false)
     let matchSound = SKAction.playSoundFileNamed("gem_match.mp3", waitForCompletion: false)
@@ -42,7 +47,7 @@ class GameScene: SKScene {
         TileHeight = TileWidth
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
-        let background = SKSpriteNode(imageNamed: "Background")
+        let background = SKSpriteNode(imageNamed: "GameBackground")
         background.size = size
         addChild(background)
         let trees = SKSpriteNode(imageNamed: "Trees")
@@ -50,6 +55,53 @@ class GameScene: SKScene {
         trees.anchorPoint = CGPoint(x: 0.5, y: 0)
         trees.position = CGPoint(x: 0, y: -size.height/2)
         addChild(trees)
+        let bannerHeight = size.height/12
+        let banner = SKSpriteNode(color: UIColor.white, size: CGSize(width: size.width, height: bannerHeight))
+        banner.anchorPoint = CGPoint(x: 0.5, y: 1.0)
+        banner.position = CGPoint(x: 0.0, y: (size.height/2)-(bannerHeight*0.685))
+        addChild(banner)
+        let badge = SKSpriteNode(imageNamed: "Badge")
+        badge.size = CGSize(width: size.width/3.8, height: size.width/3.8)
+        badge.position = CGPoint(x: 0.0, y: 0.0-(size.height/20))
+        banner.addChild(badge)
+        let pause = SKSpriteNode(imageNamed: "Pause")
+        pause.size = CGSize(width: bannerHeight*0.5, height: bannerHeight*0.5)
+        pause.position = CGPoint(x: (size.width/2)*0.85, y: -bannerHeight*0.5)
+        banner.addChild(pause)
+        scoreLabelTitle = SKLabelNode(fontNamed: "System")
+        scoreLabelTitle.text = "Score"
+        scoreLabelTitle.fontColor = UIColor.black
+        scoreLabelTitle.fontSize = 13
+        scoreLabelTitle.position = CGPoint(x: (-size.width/3.2), y: -bannerHeight*0.40)
+        banner.addChild(scoreLabelTitle)
+        timeLabelTitle = SKLabelNode(fontNamed: "System")
+        timeLabelTitle.text = "Time"
+        timeLabelTitle.fontColor = UIColor.black
+        timeLabelTitle.fontSize = 13
+        timeLabelTitle.position = CGPoint(x: (size.width/3.9), y: -bannerHeight*0.40)
+        banner.addChild(timeLabelTitle)
+        scoreLabel = SKLabelNode(fontNamed: "Helvetica Neue")
+        scoreLabel.text = "999999"
+        scoreLabel.fontColor = UIColor.black
+        scoreLabel.fontSize = 21
+        scoreLabel.position = CGPoint(x: (-size.width/3.2), y: -bannerHeight*0.85)
+        banner.addChild(scoreLabel)
+        timeLabel = SKLabelNode(fontNamed: "Helvetica Neue")
+        timeLabel.text = "01:23"
+        timeLabel.fontColor = UIColor.black
+        timeLabel.fontSize = 21
+        timeLabel.position = CGPoint(x: (size.width/3.9), y: -bannerHeight*0.85)
+        banner.addChild(timeLabel)
+        
+        let back = SKSpriteNode(color: UIColor.black, size: CGSize(width: 20, height: 20))
+        back.position = CGPoint(x: -50, y: ((size.height/2)-33)-77)
+        back.name = "Back"
+        addChild(back)
+        
+        let shuffle = SKSpriteNode(color: UIColor.red, size: CGSize(width: 20, height: 20))
+        shuffle.position = CGPoint(x: +50, y: ((size.height/2)-33)-77)
+        shuffle.name = "Shuffle"
+        addChild(shuffle)
         
         addChild(gameLayer)
         
@@ -432,6 +484,20 @@ class GameScene: SKScene {
                 //showSelectionIndicator(gem: gem)
                 swipeFromColumn = column
                 swipeFromRow = row
+                return
+            }
+        } else {
+            let positionInScene = touch.location(in: self)
+            let touchedNode = self.atPoint(positionInScene)
+            
+            if let name = touchedNode.name {
+                if name == "Back" {
+                    removeAllGemSprites()
+                    NotificationCenter.default.post(name: .gameSceneBackButtonPressed, object: nil)
+                } else if name == "Shuffle" {
+                    print("Shuffle button pressed")
+                    NotificationCenter.default.post(name: .shuffleButtonPressed, object: nil)
+                }
             }
         }
     }

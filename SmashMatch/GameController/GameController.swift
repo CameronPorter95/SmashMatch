@@ -11,12 +11,12 @@ import SpriteKit
 import GameplayKit
 import AVFoundation
 
-class GameViewController: UIViewController {
-    weak var skView: SKView?
+class GameController {
+    weak var view: SKView?
     var scene: GameScene!
     var level: Level!
     
-    var currentLevelNum = 2
+    var currentLevelNum = 2 //TODO increase current level upon level completion and call setupLevel again to go to next level
     var movesMade = 0
     var score = 0
     let queue = DispatchQueue(label: "com.siso.smashmatch.cannonqueue", attributes: .concurrent)
@@ -35,42 +35,26 @@ class GameViewController: UIViewController {
         }
     }()
     
-    @IBOutlet weak var scoreLabel: UILabel!
-    @IBAction func shuffleBoard(_ sender: Any) {
-        shuffle()
+    init(){
+        NotificationCenter.default.addObserver(self, selector: #selector(self.shuffleNotification(_:)), name: Notification.Name.shuffleButtonPressed, object: nil)
+        print("create notification")
     }
     
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
+//    @IBOutlet weak var scoreLabel: UILabel!
     
-    override var shouldAutorotate: Bool {
-        return true
-    }
-    
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return [.portrait, .portraitUpsideDown]
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupLevel(levelNum: currentLevelNum)
-        backgroundMusic?.play()
-        //TODO increase current level upon level completion and call setupLevel again to go to next level
-    }
-    
-    func setupLevel(levelNum: Int) {
-        skView = view as? SKView
-        skView?.isMultipleTouchEnabled = false
-        scene = GameScene(size: (skView?.bounds.size)!)
+    func setupLevel(view: SKView) {
+        self.view = view
+        view.isMultipleTouchEnabled = false
+        scene = GameScene(size: (view.bounds.size))
         scene.scaleMode = .aspectFill
-        level = Level(filename: "Level_\(levelNum)")
+        level = Level(filename: "Level_\(currentLevelNum)")
         scene.level = level
         
         scene.addTiles()
         scene.swipeHandler = handleSwipe
         
-        skView?.presentScene(scene)
+        view.presentScene(scene)
+        //backgroundMusic?.play()
         beginGame()
     }
     
@@ -85,7 +69,7 @@ class GameViewController: UIViewController {
         if(level.detectPossibleSwaps().capacity == 0) {
             shuffle()
         }
-        view.isUserInteractionEnabled = true
+        view?.isUserInteractionEnabled = true
         incrementMoves();
     }
     
@@ -101,14 +85,14 @@ class GameViewController: UIViewController {
     }
     
     func handleSwipe(_ swap: Swap) {
-        view.isUserInteractionEnabled = false
+        view?.isUserInteractionEnabled = false
         
         if level.isPossibleSwap(swap) {
             level.performSwap(swap: swap)
             scene.animate(swap, completion: handleMatches)
         } else {
             scene.animateInvalidSwap(swap) {
-                self.view.isUserInteractionEnabled = true
+                self.view?.isUserInteractionEnabled = true
             }
         }
     }
@@ -143,7 +127,7 @@ class GameViewController: UIViewController {
     }
     
     func updateLabels() {
-        scoreLabel.text = String(format: "%ld", score)
+        //scoreLabel.text = String(format: "%ld", score)
     }
     
     func getCannonsFromChains(chains: Set<Chain>) -> [Cannon]{
@@ -202,14 +186,7 @@ class GameViewController: UIViewController {
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        backgroundMusic?.stop()
-        scene.removeAllGemSprites()
-        scene.gameLayer.removeAllActions()
-        scene.gameLayer.removeAllChildren()
-//        skView?.removeFromSuperview()
-//        skView = nil
-//        self.scene.removeFromParent()
-//        self.scene = nil
+    @objc func shuffleNotification(_ notification: Notification) {
+        shuffle()
     }
 }

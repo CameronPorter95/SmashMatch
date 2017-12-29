@@ -2,10 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "Arcade.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "Arcade@2x.png",
       "scale" : "2x"
     },
     {
