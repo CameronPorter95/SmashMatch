@@ -34,7 +34,7 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
         initializeDatabase()
         NotificationCenter.default.addObserver(self, selector: #selector(self.showGameScene(_:)), name: Notification.Name.arcadeButtonPressed, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.showLevelSelection(_:)), name: Notification.Name.classicButtonPressed, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.showGameScene(_:)), name: Notification.Name.arcadeButtonPressed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.showGameScene(_:)), name: Notification.Name.demolitionButtonPressed, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.showMainMenu(_:)), name: Notification.Name.gameSceneBackButtonPressed, object: nil)
         
         // Call the GC authentication controller

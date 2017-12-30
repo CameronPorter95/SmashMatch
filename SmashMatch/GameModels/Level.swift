@@ -338,8 +338,8 @@ class Level {
     
     private func calculateScores(for chains: Set<Chain>) {
         // 3-chain is 60 pts, 4-chain is 120, 5-chain is 180, and so on
-        for chain in chains { //TODO If chain is L or T, double the score, need to add L and T's as a new chain type
-            chain.score = 60 * (chain.length - 2) * comboMultiplier
+        for chain in chains { //TODO get points for setting off cannon and increase score multiplier based on cannon fire chain length
+            chain.score = 60 * (chain.length - 2) * comboMultiplier //TODO always calculate either big or small chains first
             if chain.chainType == .intercept {
                 chain.score = chain.score*2
             }

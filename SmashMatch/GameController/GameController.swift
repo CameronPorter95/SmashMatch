@@ -19,6 +19,7 @@ class GameController {
     var currentLevelNum = 0 //TODO increase current level upon level completion and call setupLevel again to go to next level
     var movesMade = 0
     var score = 0
+    var timeLeft = 120
     let queue = DispatchQueue(label: "com.siso.smashmatch.cannonqueue", attributes: .concurrent)
     let group = DispatchGroup()
     
@@ -37,7 +38,8 @@ class GameController {
     
     init(){
         NotificationCenter.default.addObserver(self, selector: #selector(self.shuffleNotification(_:)), name: Notification.Name.shuffleButtonPressed, object: nil)
-        print("create notification")
+        
+        var _ = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
     }
     
     func setupLevel(view: SKView) {
@@ -52,7 +54,8 @@ class GameController {
         scene.swipeHandler = handleSwipe
         
         view.presentScene(scene)
-        //backgroundMusic?.play()
+        backgroundMusic?.play()
+        timeLeft = 120
         beginGame()
     }
     
@@ -128,6 +131,21 @@ class GameController {
     
     func updateLabels() {
         scene.scoreLabel.text = String(format: "%ld", score)
+    }
+    
+    @objc func updateTimer() {
+        if(scene != nil){
+            if(timeLeft > 0) {
+                let formatter = DateComponentsFormatter()
+                formatter.allowedUnits = [.minute, .second]
+                formatter.unitsStyle = .positional
+                
+                let formattedString = formatter.string(from: TimeInterval(timeLeft))!
+                print(formattedString)
+                scene.timeLabel.text = formattedString
+                timeLeft -= 1
+            }
+        }
     }
     
     func getCannonsFromChains(chains: Set<Chain>) -> [Cannon]{

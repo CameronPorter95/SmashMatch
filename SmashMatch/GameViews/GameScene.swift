@@ -87,7 +87,7 @@ class GameScene: SKScene {
         scoreLabel.position = CGPoint(x: (-size.width/3.2), y: -bannerHeight*0.85)
         banner.addChild(scoreLabel)
         timeLabel = SKLabelNode(fontNamed: "Helvetica Neue")
-        timeLabel.text = "01:23"
+        timeLabel.text = "2:00" //Set initial based on level data
         timeLabel.fontColor = UIColor.black
         timeLabel.fontSize = 21
         timeLabel.position = CGPoint(x: (size.width/3.9), y: -bannerHeight*0.85)
