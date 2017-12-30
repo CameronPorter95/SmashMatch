@@ -19,7 +19,7 @@ class GameController {
     var currentLevelNum = 0 //TODO increase current level upon level completion and call setupLevel again to go to next level
     var movesMade = 0
     var score = 0
-    var timeLeft = 120
+    var timeLeft = Int()
     let queue = DispatchQueue(label: "com.siso.smashmatch.cannonqueue", attributes: .concurrent)
     let group = DispatchGroup()
     
@@ -135,13 +135,12 @@ class GameController {
     
     @objc func updateTimer() {
         if(scene != nil){
-            if(timeLeft > 0) {
+            if(timeLeft >= 0) {
                 let formatter = DateComponentsFormatter()
                 formatter.allowedUnits = [.minute, .second]
+                formatter.zeroFormattingBehavior = .pad
                 formatter.unitsStyle = .positional
-                
                 let formattedString = formatter.string(from: TimeInterval(timeLeft))!
-                print(formattedString)
                 scene.timeLabel.text = formattedString
                 timeLeft -= 1
             }
