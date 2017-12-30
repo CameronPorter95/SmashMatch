@@ -22,7 +22,7 @@ class PersistentEntity {
     private let displayAds = Expression<Bool>("displayAds")
     private let highscoreArcade = Expression<Int64>("highscoreArcade")
     private let highscoreDemolition = Expression<Int64>("highscoreDemolition")
-    private let highestLevelAchieved = Expression<Int64>("ihighestLevelAchievedd")
+    private let highestLevelAchieved = Expression<Int64>("highestLevelAchievedd")
     
     private init() {
         //Create table if not exist
@@ -189,7 +189,7 @@ class PersistentEntity {
     
     func toString(persistent: Row) {
         let tableDescription = """
-            Persistent details. id = \(persistent[self.id]), \
+            id = \(persistent[self.id]),
             soundEffectsEnabled = \(persistent[self.soundEffectsEnabled]),
             musicEnabled = \(persistent[self.musicEnabled]),
             numberOfLives = \(persistent[self.numberOfLives]),

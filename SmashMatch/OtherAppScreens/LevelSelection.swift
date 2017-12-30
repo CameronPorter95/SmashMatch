@@ -42,6 +42,8 @@ class LevelSelection: SKScene {
         let background4 = SKSpriteNode(texture: backgroundImage4, size: backgroundImageSectionSize)
         background4.position = CGPoint(x: frame.midX, y: midY - (backgroundImageSectionSize.height * 3))
         moveableNode.addChild(background4)
+        
+        //moveableNode.position.y = -contentSize.height
     }
     
     override func willMove(from view: SKView) {

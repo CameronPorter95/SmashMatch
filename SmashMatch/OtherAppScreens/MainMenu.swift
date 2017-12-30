@@ -27,12 +27,6 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
     weak var settings: SKSpriteNode?
     weak var westWall: SKSpriteNode?
     weak var settingsScroll: SKSpriteNode?
-//    weak var sfx: SKSpriteNode?
-//    weak var music: SKSpriteNode?
-//    weak var highScores: SKSpriteNode?
-//    weak var appPurchases: SKSpriteNode?
-//    weak var credits: SKSpriteNode?
-//    weak var gameCenter: SKSpriteNode?
     weak var settingsExit: SKSpriteNode?
     
     let noCategory:UInt32 = 0
@@ -63,12 +57,6 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
         settings = self.childNode(withName: "//Settings") as? SKSpriteNode
         westWall = self.childNode(withName: "WestWall") as? SKSpriteNode
         settingsScroll = self.childNode(withName: "SettingsScroll") as? SKSpriteNode
-//        sfx = self.childNode(withName: "//SFX") as? SKSpriteNode
-//        music = self.childNode(withName: "//Music") as? SKSpriteNode
-//        highScores = self.childNode(withName: "//HighScores") as? SKSpriteNode
-//        appPurchases = self.childNode(withName: "//AppPurchases") as? SKSpriteNode
-//        credits = self.childNode(withName: "//Credits") as? SKSpriteNode
-//        gameCenter = self.childNode(withName: "//GameCenter") as? SKSpriteNode
         settingsExit = self.childNode(withName: "//SettingsExit") as? SKSpriteNode
         settingsExit?.isHidden = true
         
@@ -83,15 +71,6 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
         setupLifeTimer()
         addLife()
         runTimer()
-    }
-    
-    func didBegin(_ contact: SKPhysicsContact) {
-        let cA:UInt32 = contact.bodyA.categoryBitMask
-        let cB:UInt32 = contact.bodyB.categoryBitMask
-        
-        if cA == settingsCategory || cB == settingsCategory {
-            print("Responding to scroll collision")
-        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -148,11 +127,6 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
                 
             }
         }
-    }
-    
-    func disableInteractionForDuration(duration: TimeInterval, completion: @escaping () -> ()){
-        isUserInteractionEnabled = false
-        run(SKAction.wait(forDuration: duration), completion: completion)
     }
     
     func setupLifeTimer(){
