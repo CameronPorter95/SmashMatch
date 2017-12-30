@@ -13,6 +13,10 @@ import SQLite3
 
 class MainMenu: SKScene, SKPhysicsContactDelegate {
     
+    weak var background: SKSpriteNode?
+    weak var arcade: SKSpriteNode?
+    weak var classic: SKSpriteNode?
+    weak var demolition: SKSpriteNode?
     weak var heart1: SKSpriteNode?
     weak var heart2: SKSpriteNode?
     weak var heart3: SKSpriteNode?
@@ -20,8 +24,10 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
     weak var heart5: SKSpriteNode?
     weak var plus: SKSpriteNode?
     weak var countDownLabel: SKLabelNode?
+    weak var settings: SKSpriteNode?
     weak var westWall: SKSpriteNode?
     weak var settingsScroll: SKSpriteNode?
+    weak var settingsExit: SKSpriteNode?
     
     let noCategory:UInt32 = 0
     let westWallCategory:UInt32 = 0b1
@@ -37,6 +43,10 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
     override func didMove(to view: SKView) {
         self.physicsWorld.contactDelegate = self
         
+        background = self.childNode(withName: "Background") as? SKSpriteNode
+        arcade = self.childNode(withName: "//Arcade") as? SKSpriteNode
+        classic = self.childNode(withName: "//Classic") as? SKSpriteNode
+        demolition = self.childNode(withName: "//Demolition") as? SKSpriteNode
         heart1 = self.childNode(withName: "//Heart1") as? SKSpriteNode
         heart2 = self.childNode(withName: "//Heart2") as? SKSpriteNode
         heart3 = self.childNode(withName: "//Heart3") as? SKSpriteNode
@@ -44,8 +54,11 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
         heart5 = self.childNode(withName: "//Heart5") as? SKSpriteNode
         plus = self.childNode(withName: "//Plus") as? SKSpriteNode
         countDownLabel = self.childNode(withName: "//Countdown") as? SKLabelNode
+        settings = self.childNode(withName: "//Settings") as? SKSpriteNode
         westWall = self.childNode(withName: "WestWall") as? SKSpriteNode
         settingsScroll = self.childNode(withName: "SettingsScroll") as? SKSpriteNode
+        settingsExit = self.childNode(withName: "//SettingsExit") as? SKSpriteNode
+        settingsExit?.isHidden = true
         
         westWall?.physicsBody?.categoryBitMask = westWallCategory
         westWall?.physicsBody?.collisionBitMask = noCategory
@@ -81,8 +94,39 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
                 NotificationCenter.default.post(name: .classicButtonPressed, object: nil)
             } else if name == "Demolition" {
                 NotificationCenter.default.post(name: .demolitionButtonPressed, object: nil)
+            } else if name == "Settings" {
+                settingsScroll?.physicsBody?.isDynamic = true
+                self.physicsWorld.gravity = CGVector(dx: -9.8, dy: 0)
+                let duration = TimeInterval(0.5)
+                let colorAction = SKAction.colorize(withColorBlendFactor: 0.4, duration: duration)
+                let fadeOutAction = SKAction.fadeOut(withDuration: duration)
+                background?.run(colorAction)
+                arcade?.run(fadeOutAction)
+                classic?.run(fadeOutAction)
+                demolition?.run(fadeOutAction)
+                settingsExit?.isHidden = false
+                settings?.isHidden = true
+            } else if name == "SettingsExit" {
+                settingsScroll?.physicsBody?.isDynamic = false
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: 0) //TODO Why does scroll go back when canceling part way through motion?
+                let duration = TimeInterval(0.5)
+                let moveAction = SKAction.move(to: CGPoint(x: 322, y: -76) , duration: duration)
+                let colorAction = SKAction.colorize(withColorBlendFactor: 0.0, duration: duration)
+                let fadeInAction = SKAction.fadeIn(withDuration: duration)
+                settingsScroll?.run(moveAction)
+                background?.run(colorAction)
+                arcade?.run(fadeInAction)
+                classic?.run(fadeInAction)
+                demolition?.run(fadeInAction)
+                settingsExit?.isHidden = true
+                settings?.isHidden = false
             }
         }
+    }
+    
+    func disableInteractionForDuration(duration: TimeInterval, completion: @escaping () -> ()){
+        isUserInteractionEnabled = false
+        run(SKAction.wait(forDuration: duration), completion: completion)
     }
     
     func setupLifeTimer(){

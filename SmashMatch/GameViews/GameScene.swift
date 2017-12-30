@@ -302,7 +302,7 @@ class GameScene: SKScene {
                 let newPosition = pointFor(column: gem.column, row: gem.row)
                 let delay = 0.05 + 0.15*TimeInterval(idx)
                 let sprite = gem.sprite!   // sprite always exists at this point
-                let duration = TimeInterval(((sprite.position.y - newPosition.y) / TileHeight) * 0.1)
+                let duration = TimeInterval(((sprite.position.y - newPosition.y) / TileHeight) * 0.1) //TODO use this logic for cannonball animation
                 longestDuration = max(longestDuration, duration + delay)
                 let moveAction = SKAction.move(to: newPosition, duration: duration)
                 moveAction.timingMode = .easeOut
