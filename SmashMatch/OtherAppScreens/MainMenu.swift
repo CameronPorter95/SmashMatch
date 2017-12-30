@@ -11,7 +11,7 @@ import GameplayKit
 import SQLite
 import SQLite3
 
-class MainMenu: SKScene {
+class MainMenu: SKScene, SKPhysicsContactDelegate {
     
     weak var heart1: SKSpriteNode?
     weak var heart2: SKSpriteNode?
@@ -20,15 +20,23 @@ class MainMenu: SKScene {
     weak var heart5: SKSpriteNode?
     weak var plus: SKSpriteNode?
     weak var countDownLabel: SKLabelNode?
+    weak var westWall: SKSpriteNode?
+    weak var settingsScroll: SKSpriteNode?
+    
+    let noCategory:UInt32 = 0
+    let westWallCategory:UInt32 = 0b1
+    let settingsCategory:UInt32 = 0b1 << 1
     
     var startTime = UInt64()
     var numer: UInt64 = 0
     var denom: UInt64 = 0
     var timer = Timer()
     var lives = 3;
-    var score = 0
+    var score = 0 //Why is this here?
     
     override func didMove(to view: SKView) {
+        self.physicsWorld.contactDelegate = self
+        
         heart1 = self.childNode(withName: "//Heart1") as? SKSpriteNode
         heart2 = self.childNode(withName: "//Heart2") as? SKSpriteNode
         heart3 = self.childNode(withName: "//Heart3") as? SKSpriteNode
@@ -36,10 +44,29 @@ class MainMenu: SKScene {
         heart5 = self.childNode(withName: "//Heart5") as? SKSpriteNode
         plus = self.childNode(withName: "//Plus") as? SKSpriteNode
         countDownLabel = self.childNode(withName: "//Countdown") as? SKLabelNode
+        westWall = self.childNode(withName: "WestWall") as? SKSpriteNode
+        settingsScroll = self.childNode(withName: "SettingsScroll") as? SKSpriteNode
+        
+        westWall?.physicsBody?.categoryBitMask = westWallCategory
+        westWall?.physicsBody?.collisionBitMask = noCategory
+        westWall?.physicsBody?.contactTestBitMask = noCategory
+        
+        settingsScroll?.physicsBody?.categoryBitMask = settingsCategory
+        settingsScroll?.physicsBody?.collisionBitMask = westWallCategory
+        settingsScroll?.physicsBody?.contactTestBitMask = westWallCategory
         
         setupLifeTimer()
         addLife()
         runTimer()
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        let cA:UInt32 = contact.bodyA.categoryBitMask
+        let cB:UInt32 = contact.bodyB.categoryBitMask
+        
+        if cA == settingsCategory || cB == settingsCategory {
+            print("Responding to scroll collision")
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -94,7 +121,7 @@ class MainMenu: SKScene {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(updateTimer)), userInfo: nil, repeats: true)
     }
 
-    @objc func updateTimer(){
+    @objc func updateTimer(){ //TODO rewrite this to use a DateComponentsFormatter
         if(lives < 5){
                 let currTime = mach_absolute_time()
                 let timeDiff = Double(((currTime - startTime) * numer) / denom)/1e9

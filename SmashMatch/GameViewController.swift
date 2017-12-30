@@ -8,8 +8,6 @@
 
 import UIKit
 import GameKit
-import SpriteKit
-import GameplayKit
 import SQLite
 import SQLite3
 
