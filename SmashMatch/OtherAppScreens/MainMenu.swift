@@ -27,6 +27,12 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
     weak var settings: SKSpriteNode?
     weak var westWall: SKSpriteNode?
     weak var settingsScroll: SKSpriteNode?
+//    weak var sfx: SKSpriteNode?
+//    weak var music: SKSpriteNode?
+//    weak var highScores: SKSpriteNode?
+//    weak var appPurchases: SKSpriteNode?
+//    weak var credits: SKSpriteNode?
+//    weak var gameCenter: SKSpriteNode?
     weak var settingsExit: SKSpriteNode?
     
     let noCategory:UInt32 = 0
@@ -57,6 +63,12 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
         settings = self.childNode(withName: "//Settings") as? SKSpriteNode
         westWall = self.childNode(withName: "WestWall") as? SKSpriteNode
         settingsScroll = self.childNode(withName: "SettingsScroll") as? SKSpriteNode
+//        sfx = self.childNode(withName: "//SFX") as? SKSpriteNode
+//        music = self.childNode(withName: "//Music") as? SKSpriteNode
+//        highScores = self.childNode(withName: "//HighScores") as? SKSpriteNode
+//        appPurchases = self.childNode(withName: "//AppPurchases") as? SKSpriteNode
+//        credits = self.childNode(withName: "//Credits") as? SKSpriteNode
+//        gameCenter = self.childNode(withName: "//GameCenter") as? SKSpriteNode
         settingsExit = self.childNode(withName: "//SettingsExit") as? SKSpriteNode
         settingsExit?.isHidden = true
         
@@ -108,7 +120,7 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
                 settings?.isHidden = true
             } else if name == "SettingsExit" {
                 settingsScroll?.physicsBody?.isDynamic = false
-                self.physicsWorld.gravity = CGVector(dx: 0, dy: 0) //TODO Why does scroll go back when canceling part way through motion?
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
                 let duration = TimeInterval(0.5)
                 let moveAction = SKAction.move(to: CGPoint(x: 322, y: -76) , duration: duration)
                 let colorAction = SKAction.colorize(withColorBlendFactor: 0.0, duration: duration)
@@ -120,6 +132,20 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
                 demolition?.run(fadeInAction)
                 settingsExit?.isHidden = true
                 settings?.isHidden = false
+            } else if name == "SFX" {
+                
+            } else if name == "Music" {
+                
+            } else if name == "HighScores" {
+                
+            } else if name == "AppPurchases" {
+                
+            } else if name == "Credits" {
+                
+            } else if name == "GameCenter" {
+                
+            } else if name == "Plus" {
+                
             }
         }
     }
