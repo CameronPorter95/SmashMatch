@@ -16,7 +16,7 @@ class GameController {
     var scene: GameScene!
     var level: Level!
     
-    var currentLevelNum = 2 //TODO increase current level upon level completion and call setupLevel again to go to next level
+    var currentLevelNum = 0 //TODO increase current level upon level completion and call setupLevel again to go to next level
     var movesMade = 0
     var score = 0
     let queue = DispatchQueue(label: "com.siso.smashmatch.cannonqueue", attributes: .concurrent)
@@ -40,8 +40,6 @@ class GameController {
         print("create notification")
     }
     
-//    @IBOutlet weak var scoreLabel: UILabel!
-    
     func setupLevel(view: SKView) {
         self.view = view
         view.isMultipleTouchEnabled = false
@@ -62,10 +60,12 @@ class GameController {
         movesMade = 0
         score = 0
         updateLabels()
+        level.resetComboMultiplier()
         shuffle()
     }
     
     func beginNextTurn() {
+        level.resetComboMultiplier()
         if(level.detectPossibleSwaps().capacity == 0) {
             shuffle()
         }
@@ -105,7 +105,7 @@ class GameController {
         }
         let matchedCannons = getCannonsFromChains(chains: chains)
         self.scene.animateMatchedCannons(cannons: matchedCannons){
-            self.fireMatchedCannons(cannons: matchedCannons){
+            self.fireMatchedCannons(cannons: matchedCannons){ //TODO mysterious cannon not falling all the way bug (only on top of other cannons?)
                 self.scene.animateMatchedGems(for: chains) { //TODO do this same time as fire cannon animation?
                     let cannons = self.level.getCannons() //TODO refactor
                     self.scene.animateNewCannons(cannons: cannons) {
@@ -127,7 +127,7 @@ class GameController {
     }
     
     func updateLabels() {
-        //scoreLabel.text = String(format: "%ld", score)
+        scene.scoreLabel.text = String(format: "%ld", score)
     }
     
     func getCannonsFromChains(chains: Set<Chain>) -> [Cannon]{

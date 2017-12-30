@@ -20,6 +20,7 @@ class Level {
     private var matchedCannons: Set<Cannon>?
     private var maxWalls = 5
     private var possibleSwaps = Set<Swap>()
+    private var comboMultiplier = 0
     var targetScore = 0
     var maximumMoves = 0
     
@@ -42,13 +43,6 @@ class Level {
         } while possibleSwaps.count == 0
         
         return set
-    }
-    
-    private func calculateScores(for chains: Set<Chain>) {
-        // 3-chain is 60 pts, 4-chain is 120, 5-chain is 180, and so on
-        for chain in chains {
-            chain.score = 60 * (chain.length - 2)
-        }
     }
     
     private func createInitialGems() -> Set<Gem> {
@@ -290,8 +284,9 @@ class Level {
     }
     
     func removeMatches() -> Set<Chain> {
-        let horizontalChains = detectHorizontalMatches()
-        let verticalChains = detectVerticalMatches()
+        var horizontalChains = detectHorizontalMatches()
+        var verticalChains = detectVerticalMatches()
+        var interceptChains = Set<Chain>()
         
         var cannons = Set<Cannon>()
         //Get cannon positions from straight chains.
@@ -309,6 +304,15 @@ class Level {
                         }
                         cannons.insert(cannon)
                         print("Forming a 4 way intercept \(cannon.description) with type \(cannon.gemType.spriteName)\(cannon.cannonType.description)")
+                        
+                        let chain = Chain(chainType: .intercept)
+                        horizontalChains.remove(horzChain)
+                        verticalChains.remove(vertChain)
+                        vertChain.remove(element: gem)
+                        chain.add(chain: horzChain)
+                        chain.add(chain: vertChain)
+                        interceptChains.insert(chain)
+                        continue
                     }
                 }
             }
@@ -317,9 +321,10 @@ class Level {
         addedCannons = cannons
         removeGems(chains: horizontalChains)
         removeGems(chains: verticalChains)
-        //calculate the scorses
+        removeGems(chains: interceptChains)
         calculateScores(for: horizontalChains)
         calculateScores(for: verticalChains)
+        calculateScores(for: interceptChains)
         
         for row in 0..<NumRows {
             for column in 0..<NumColumns {
@@ -328,7 +333,22 @@ class Level {
                 }
             }
         }
-        return horizontalChains.union(verticalChains)
+        return horizontalChains.union(verticalChains).union(interceptChains)
+    }
+    
+    private func calculateScores(for chains: Set<Chain>) {
+        // 3-chain is 60 pts, 4-chain is 120, 5-chain is 180, and so on
+        for chain in chains { //TODO If chain is L or T, double the score, need to add L and T's as a new chain type
+            chain.score = 60 * (chain.length - 2) * comboMultiplier
+            if chain.chainType == .intercept {
+                chain.score = chain.score*2
+            }
+            comboMultiplier += 1
+        }
+    }
+    
+    func resetComboMultiplier() {
+        comboMultiplier = 1
     }
     
     func createCannons(chains: Set<Chain>, cannons: inout Set<Cannon>, isHorz: Bool) {

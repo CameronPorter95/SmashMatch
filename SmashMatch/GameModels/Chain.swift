@@ -8,17 +8,18 @@
 
 class Chain: Hashable, CustomStringConvertible {
     var gems = [Gem]() //TODO if any of these gems exist in another chain as well, then that makes a 4 way cannon.
-    
     var score = 0
     
     enum ChainType: CustomStringConvertible {
         case horizontal
         case vertical
+        case intercept
         
         var description: String {
             switch self {
             case .horizontal: return "Horizontal"
             case .vertical: return "Vertical"
+            case .intercept: return "Intercept"
             }
         }
     }
@@ -31,6 +32,14 @@ class Chain: Hashable, CustomStringConvertible {
     
     func add(gem: Gem) {
         gems.append(gem)
+    }
+    
+    func add(chain: Chain) {
+        gems += chain.gems
+    }
+    
+    func remove(element: Gem) {
+        gems = gems.filter() { $0 !== element }
     }
     
     func firstGem() -> Gem {

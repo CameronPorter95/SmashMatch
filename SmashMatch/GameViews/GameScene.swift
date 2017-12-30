@@ -118,6 +118,7 @@ class GameScene: SKScene {
         
         swipeFromColumn = nil
         swipeFromRow = nil
+        let _ = SKLabelNode(fontNamed: "GillSans-BoldItalic")
     }
     
     func addTiles() {
@@ -278,6 +279,7 @@ class GameScene: SKScene {
     
     func animateMatchedGems(for chains: Set<Chain>, completion: @escaping () -> ()) {
         for chain in chains {
+            animateScore(for: chain)
             for gem in chain.gems {
                 if let sprite = gem.sprite {
                     if sprite.action(forKey: "removing") == nil {
@@ -473,6 +475,25 @@ class GameScene: SKScene {
             }
         }
         run(SKAction.wait(forDuration: 0.3))
+    }
+    
+    func animateScore(for chain: Chain) { //TODO Move label position to intercept gem for intercept chains
+        let firstSprite = chain.firstGem().sprite!
+        let lastSprite = chain.lastGem().sprite!
+        let centerPosition = CGPoint(
+            x: (firstSprite.position.x + lastSprite.position.x)/2,
+            y: (firstSprite.position.y + lastSprite.position.y)/2 - 10)
+        
+        let scoreLabel = SKLabelNode(fontNamed: "GillSans-BoldItalic")
+        scoreLabel.fontSize = 16
+        scoreLabel.text = String(format: "%ld", chain.score)
+        scoreLabel.position = centerPosition
+        scoreLabel.zPosition = 300
+        gemsLayer.addChild(scoreLabel)
+        
+        let moveAction = SKAction.move(by: CGVector(dx: 0, dy: 3), duration: 0.7)
+        moveAction.timingMode = .easeOut
+        scoreLabel.run(SKAction.sequence([moveAction, SKAction.removeFromParent()]))
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
