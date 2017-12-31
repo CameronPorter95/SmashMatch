@@ -28,11 +28,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let gemsLayer = SKNode()
     let wallsLayer = SKNode()
     
+    var background: SKSpriteNode!
+    var trees: SKSpriteNode!
+    var pause: SKSpriteNode!
     var scoreLabelTitle: SKLabelNode!
     var timeLabelTitle: SKLabelNode!
     var scoreLabel: SKLabelNode!
     var timeLabel: SKLabelNode!
     weak var pauseScroll: SKSpriteNode?
+    weak var resume: SKSpriteNode?
     
     let noCategory:UInt32 = 0
     let southWallCategory:UInt32 = 0b1
@@ -46,6 +50,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let specialMatchSound = SKAction.playSoundFileNamed("special_match.mp3", waitForCompletion: false)
     let cannonFireSound = SKAction.playSoundFileNamed("cannon.mp3", waitForCompletion: false)
     
+    var isGamePaused = false
+    
     override init(size: CGSize) {
         super.init(size: size)
         self.physicsWorld.contactDelegate = self
@@ -55,10 +61,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         TileHeight = TileWidth
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
-        let background = SKSpriteNode(imageNamed: "GameBackground")
+        background = SKSpriteNode(imageNamed: "GameBackground")
         background.size = size
         addChild(background)
-        let trees = SKSpriteNode(imageNamed: "Trees")
+        trees = SKSpriteNode(imageNamed: "Trees")
         trees.size = CGSize(width: size.width, height: size.width*0.32911)
         trees.anchorPoint = CGPoint(x: 0.5, y: 0)
         trees.position = CGPoint(x: 0, y: -size.height/2)
@@ -72,7 +78,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         badge.size = CGSize(width: size.width/3.8, height: size.width/3.8)
         badge.position = CGPoint(x: 0.0, y: 0.0-(size.height/20))
         banner.addChild(badge)
-        let pause = SKSpriteNode(imageNamed: "Pause")
+        pause = SKSpriteNode(imageNamed: "Pause")
         pause.size = CGSize(width: bannerHeight*0.5, height: bannerHeight*0.5)
         pause.position = CGPoint(x: (size.width/2)*0.85, y: -bannerHeight*0.5)
         pause.name = "Pause"
@@ -101,11 +107,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         timeLabel.fontSize = 21
         timeLabel.position = CGPoint(x: (size.width/3.9), y: -bannerHeight*0.85)
         banner.addChild(timeLabel)
-        
-        let pauseScene:SKScene = SKScene(fileNamed: "PauseMenu")!
+        let pauseScene = SKScene(fileNamed: "PauseMenu")!
         pauseScroll = pauseScene.childNode(withName: "PauseScroll") as? SKSpriteNode
-        pauseScroll?.position = CGPoint(x: 0, y: 503)
+        pauseScroll?.position = CGPoint(x: 0, y: 495)
+        pauseScroll?.zPosition = 1000
         pauseScroll?.move(toParent: self)
+        resume = pauseScene.childNode(withName: "Resume") as? SKSpriteNode
+        resume?.move(toParent: pauseScroll!)
         let southWall = pauseScene.childNode(withName: "SouthWall")
         southWall?.position = CGPoint(x: 0, y: -244)
         southWall?.move(toParent: self)
@@ -525,7 +533,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         guard let touch = touches.first else { return }
         let location = touch.location(in: gemsLayer)
         let (success, column, row) = convertPoint(point: location)
-        if success {
+        if success && !isGamePaused {
             if let gem = level.gemAt(column: column, row: row) {
                 //showSelectionIndicator(gem: gem)
                 swipeFromColumn = column
@@ -537,15 +545,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let touchedNode = self.atPoint(positionInScene)
             
             if let name = touchedNode.name {
+                print("touched node is: \(name)")
                 if name == "Back" {
                     removeAllGemSprites()
                     NotificationCenter.default.post(name: .gameSceneBackButtonPressed, object: nil)
                 } else if name == "Shuffle" {
                     NotificationCenter.default.post(name: .shuffleButtonPressed, object: nil)
                 } else if name == "Pause" {
-                    print("Responding to pause press")
                     pauseScroll?.physicsBody?.isDynamic = true
-                    self.physicsWorld.gravity = CGVector(dx: 0, dy: -13)
+                    self.physicsWorld.gravity = CGVector(dx: 0, dy: -20)
+                    pause.texture = SKTexture(imageNamed: "pausered")
+                    let duration = TimeInterval(0.5)
+                    let colorAction = SKAction.colorize(withColorBlendFactor: 0.4, duration: duration)
+                    let fadeOutAction = SKAction.fadeOut(withDuration: duration)
+                    background?.run(colorAction)
+                    trees.run(fadeOutAction)
+                    gameLayer.run(fadeOutAction)
+                    isGamePaused = true
+                } else if name == "Resume" {
+                    print("Responding to resume press1")
+                    pauseScroll?.physicsBody?.isDynamic = false
+                    self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+                    pause.texture = SKTexture(imageNamed: "Pause")
+                    let duration = TimeInterval(0.5)
+                    let moveAction = SKAction.move(to: CGPoint(x: 0, y: 495) , duration: duration)
+                    let colorAction = SKAction.colorize(withColorBlendFactor: 0.0, duration: duration)
+                    let fadeInAction = SKAction.fadeIn(withDuration: duration)
+                    pauseScroll?.run(moveAction)
+                    background?.run(colorAction)
+                    trees.run(fadeInAction)
+                    gameLayer.run(fadeInAction)
+                    isGamePaused = false
                 }
             }
         }
