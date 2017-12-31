@@ -545,7 +545,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 } else if name == "Pause" {
                     print("Responding to pause press")
                     pauseScroll?.physicsBody?.isDynamic = true
-                    self.physicsWorld.gravity = CGVector(dx: 0, dy: -9.8)
+                    self.physicsWorld.gravity = CGVector(dx: 0, dy: -20)
                 }
             }
         }
