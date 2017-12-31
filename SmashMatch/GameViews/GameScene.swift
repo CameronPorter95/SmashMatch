@@ -9,7 +9,7 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
     }
@@ -32,6 +32,11 @@ class GameScene: SKScene {
     var timeLabelTitle: SKLabelNode!
     var scoreLabel: SKLabelNode!
     var timeLabel: SKLabelNode!
+    weak var pauseScroll: SKSpriteNode?
+    
+    let noCategory:UInt32 = 0
+    let southWallCategory:UInt32 = 0b1
+    let pauseMenuCategory:UInt32 = 0b1 << 1
     
     let swapSound = SKAction.playSoundFileNamed("gem_swap.mp3", waitForCompletion: false)
     let invalidSwapSound = SKAction.playSoundFileNamed("Error.wav", waitForCompletion: false)
@@ -43,6 +48,9 @@ class GameScene: SKScene {
     
     override init(size: CGSize) {
         super.init(size: size)
+        self.physicsWorld.contactDelegate = self
+        self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+        
         TileWidth = size.width/10 + ((size.width/100)-(0.2666*(size.width/100)))
         TileHeight = TileWidth
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
@@ -67,6 +75,7 @@ class GameScene: SKScene {
         let pause = SKSpriteNode(imageNamed: "Pause")
         pause.size = CGSize(width: bannerHeight*0.5, height: bannerHeight*0.5)
         pause.position = CGPoint(x: (size.width/2)*0.85, y: -bannerHeight*0.5)
+        pause.name = "Pause"
         banner.addChild(pause)
         scoreLabelTitle = SKLabelNode(fontNamed: "System")
         scoreLabelTitle.text = "Score"
@@ -87,11 +96,27 @@ class GameScene: SKScene {
         scoreLabel.position = CGPoint(x: (-size.width/3.2), y: -bannerHeight*0.85)
         banner.addChild(scoreLabel)
         timeLabel = SKLabelNode(fontNamed: "Helvetica Neue")
-        timeLabel.text = "2:00" //Set initial based on level data
+        timeLabel.text = "2:00" //TODO Set initial based on level data
         timeLabel.fontColor = UIColor.black
         timeLabel.fontSize = 21
         timeLabel.position = CGPoint(x: (size.width/3.9), y: -bannerHeight*0.85)
         banner.addChild(timeLabel)
+        
+        let pauseScene:SKScene = SKScene(fileNamed: "PauseMenu")!
+        pauseScroll = pauseScene.childNode(withName: "PauseScroll") as? SKSpriteNode
+        pauseScroll?.position = CGPoint(x: 0, y: 503)
+        pauseScroll?.move(toParent: self)
+        let southWall = pauseScene.childNode(withName: "SouthWall")
+        southWall?.position = CGPoint(x: 0, y: -244)
+        southWall?.move(toParent: self)
+        
+        southWall?.physicsBody?.categoryBitMask = southWallCategory
+        southWall?.physicsBody?.collisionBitMask = noCategory
+        southWall?.physicsBody?.contactTestBitMask = noCategory
+        
+        pauseScroll?.physicsBody?.categoryBitMask = pauseMenuCategory
+        pauseScroll?.physicsBody?.collisionBitMask = southWallCategory
+        pauseScroll?.physicsBody?.contactTestBitMask = southWallCategory
         
         let back = SKSpriteNode(color: UIColor.black, size: CGSize(width: 20, height: 20))
         back.position = CGPoint(x: -50, y: ((size.height/2)-33)-77)
@@ -516,8 +541,11 @@ class GameScene: SKScene {
                     removeAllGemSprites()
                     NotificationCenter.default.post(name: .gameSceneBackButtonPressed, object: nil)
                 } else if name == "Shuffle" {
-                    print("Shuffle button pressed")
                     NotificationCenter.default.post(name: .shuffleButtonPressed, object: nil)
+                } else if name == "Pause" {
+                    print("Responding to pause press")
+                    pauseScroll?.physicsBody?.isDynamic = true
+                    self.physicsWorld.gravity = CGVector(dx: 0, dy: -9.8)
                 }
             }
         }
