@@ -98,7 +98,7 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
                 settingsExit?.isHidden = false
                 settings?.isHidden = true
             } else if name == "SettingsExit" {
-                settingsScroll?.physicsBody?.isDynamic = false
+                settingsScroll?.physicsBody?.isDynamic = false //TODO Optimise this the same way as GameScene
                 self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
                 let duration = TimeInterval(0.5)
                 let moveAction = SKAction.move(to: CGPoint(x: 322, y: -76) , duration: duration)
