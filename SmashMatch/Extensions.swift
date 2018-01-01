@@ -38,6 +38,7 @@ extension Notification.Name {
     public static let arcadeButtonPressed = Notification.Name(rawValue: "arcadeButtonPressed")
     public static let classicButtonPressed = Notification.Name(rawValue: "classicButtonPressed")
     public static let demolitionButtonPressed = Notification.Name(rawValue: "demolitionButtonPressed")
-    public static let gameSceneBackButtonPressed = Notification.Name(rawValue: "gameSceneBackButtonPressed")
+    public static let creditsButtonPressed = Notification.Name(rawValue: "creditsButtonPressed")
+    public static let backToMainMenu = Notification.Name(rawValue: "backToMainMenu")
     public static let shuffleButtonPressed = Notification.Name(rawValue: "shuffleButtonPressed")
 }

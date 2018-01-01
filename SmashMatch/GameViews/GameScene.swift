@@ -599,7 +599,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if let name = touchedNode.name {
                 if name == "Back" {
                     removeAllGemSprites()
-                    NotificationCenter.default.post(name: .gameSceneBackButtonPressed, object: nil)
+                    NotificationCenter.default.post(name: .backToMainMenu, object: nil)
                 } else if name == "Shuffle" {
                     NotificationCenter.default.post(name: .shuffleButtonPressed, object: nil)
                 } else if name == "Pause" { //TODO disable physics after scroll has fallen in place
@@ -632,6 +632,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         pauseScroll?.run(moveAction)
                         isGamePaused = false
                     }
+                } else if name == "Quit" {
+                    removeAllGemSprites()
+                    NotificationCenter.default.post(name: .backToMainMenu, object: nil)
                 }
             }
         }

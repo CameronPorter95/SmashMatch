@@ -16,6 +16,7 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
     let gameController = GameController()
     var mainMenu: MainMenu?
     var levelSelection: LevelSelection?
+    var credits: Credits?
     
     var gcEnabled = Bool() // Check if the user has Game Center enabled
     var gcDefaultLeaderBoard = String() // Check the default leaderboardID
@@ -33,7 +34,8 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(self.showGameScene(_:)), name: Notification.Name.arcadeButtonPressed, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.showLevelSelection(_:)), name: Notification.Name.classicButtonPressed, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.showGameScene(_:)), name: Notification.Name.demolitionButtonPressed, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.showMainMenu(_:)), name: Notification.Name.gameSceneBackButtonPressed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.showCredits(_:)), name: Notification.Name.creditsButtonPressed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.showMainMenu(_:)), name: Notification.Name.backToMainMenu, object: nil)
         
         // Call the GC authentication controller
         authenticateLocalPlayer()
@@ -42,6 +44,16 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
             mainMenu = MainMenu(fileNamed: "MainMenu")
             mainMenu?.scaleMode = .fill
             view.presentScene(mainMenu)
+        }
+    }
+    
+    @objc func showMainMenu(_ notification: Notification) {
+        if let view = self.view as! SKView? {
+            mainMenu = MainMenu(fileNamed: "MainMenu")
+            mainMenu?.scaleMode = .fill
+            view.presentScene(mainMenu)
+            gameController.backgroundMusic?.stop()
+            gameController.backgroundMusic?.currentTime = 0
         }
     }
     
@@ -59,13 +71,11 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
         }
     }
     
-    @objc func showMainMenu(_ notification: Notification) {
+    @objc func showCredits(_ notification: Notification) {
         if let view = self.view as! SKView? {
-            mainMenu = MainMenu(fileNamed: "MainMenu")
-            mainMenu?.scaleMode = .aspectFill
-            view.presentScene(mainMenu)
-            gameController.backgroundMusic?.stop()
-            gameController.backgroundMusic?.currentTime = 0
+            credits = Credits(fileNamed: "Credits")
+            credits?.scaleMode = .fill
+            view.presentScene(credits)
         }
     }
     

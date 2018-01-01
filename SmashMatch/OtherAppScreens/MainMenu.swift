@@ -142,7 +142,7 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
             } else if name == "AppPurchases" {
                 
             } else if name == "Credits" {
-                
+                NotificationCenter.default.post(name: .creditsButtonPressed, object: nil)
             } else if name == "GameCenter" {
                 
             } else if name == "Plus" {

@@ -45,9 +45,11 @@
 		75F00F6D1FE7DF5F00F83F0A /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F00F6C1FE7DF5F00F83F0A /* Tile.swift */; };
 		75F00F6F1FE7DFDB00F83F0A /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F00F6E1FE7DFDB00F83F0A /* Extensions.swift */; };
 		75F00F7C1FE7E69300F83F0A /* Swap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F00F7B1FE7E69300F83F0A /* Swap.swift */; };
+		7E262D001FFA1C7E00341CEB /* Credits.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7E262CFF1FFA1C7E00341CEB /* Credits.sks */; };
 		7E275DA61FF5CBE5009A00C9 /* MainMenu.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7E275DA51FF5CBE5009A00C9 /* MainMenu.sks */; };
 		7E275DAF1FF5CE5E009A00C9 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E275DAE1FF5CE5E009A00C9 /* GameViewController.swift */; };
 		7E275DB11FF5D909009A00C9 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E275DB01FF5D909009A00C9 /* MainMenu.swift */; };
+		7E78C37B1FFA1EB200DD2924 /* Credits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E78C37A1FFA1EB200DD2924 /* Credits.swift */; };
 		7EB9CA9E1FF65627002C5F04 /* LevelSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB9CA9D1FF65627002C5F04 /* LevelSelection.swift */; };
 		7EB9CAA71FF65FF7002C5F04 /* LevelSelection.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7EB9CAA61FF65FF7002C5F04 /* LevelSelection.sks */; };
 		B3628A071FEB82CA00F432B1 /* The Builder.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B36289F81FEB82C900F432B1 /* The Builder.mp3 */; };
@@ -211,9 +213,11 @@
 		75F00F6C1FE7DF5F00F83F0A /* Tile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
 		75F00F6E1FE7DFDB00F83F0A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		75F00F7B1FE7E69300F83F0A /* Swap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swap.swift; sourceTree = "<group>"; };
+		7E262CFF1FFA1C7E00341CEB /* Credits.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Credits.sks; sourceTree = "<group>"; };
 		7E275DA51FF5CBE5009A00C9 /* MainMenu.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenu.sks; sourceTree = "<group>"; };
 		7E275DAE1FF5CE5E009A00C9 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		7E275DB01FF5D909009A00C9 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
+		7E78C37A1FFA1EB200DD2924 /* Credits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credits.swift; sourceTree = "<group>"; };
 		7EB9CA9D1FF65627002C5F04 /* LevelSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelSelection.swift; sourceTree = "<group>"; };
 		7EB9CAA61FF65FF7002C5F04 /* LevelSelection.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = LevelSelection.sks; sourceTree = "<group>"; };
 		85B07C5B5E55A3462749B0A1 /* Pods_SmashMatch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmashMatch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -399,6 +403,8 @@
 				7E275DB01FF5D909009A00C9 /* MainMenu.swift */,
 				7EB9CAA61FF65FF7002C5F04 /* LevelSelection.sks */,
 				7EB9CA9D1FF65627002C5F04 /* LevelSelection.swift */,
+				7E262CFF1FFA1C7E00341CEB /* Credits.sks */,
+				7E78C37A1FFA1EB200DD2924 /* Credits.swift */,
 			);
 			path = OtherAppScreens;
 			sourceTree = "<group>";
@@ -626,6 +632,7 @@
 				75167FFB1FEC912400A623C1 /* iOS Game Theme Medieval Version.wav in Resources */,
 				753738DA1FE8FB2000B08292 /* Drip.wav in Resources */,
 				751680031FEC913200A623C1 /* wall_crack.mp3 in Resources */,
+				7E262D001FFA1C7E00341CEB /* Credits.sks in Resources */,
 				751680051FEC913200A623C1 /* time_counter.mp3 in Resources */,
 				753738DB1FE8FB2000B08292 /* Chomp.wav in Resources */,
 				753738DC1FE8FB2000B08292 /* Error.wav in Resources */,
@@ -705,6 +712,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E78C37B1FFA1EB200DD2924 /* Credits.swift in Sources */,
 				7E275DAF1FF5CE5E009A00C9 /* GameViewController.swift in Sources */,
 				75F00F681FE7CED900F83F0A /* Level.swift in Sources */,
 				7513834D1FEAEFD600AE0D5A /* Wall.swift in Sources */,
