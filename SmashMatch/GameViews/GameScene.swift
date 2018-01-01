@@ -162,6 +162,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         pauseScrollPhysics = SKPhysicsBody(rectangleOf: pauseScroll.size)
         pauseScrollPhysics?.isDynamic = true
         pauseScrollPhysics?.affectedByGravity = true
+        pauseScrollPhysics?.allowsRotation = false
         pauseScrollPhysics?.mass = 1.0
         pauseScrollPhysics?.restitution = 0.0
         pauseScrollPhysics?.friction = 0.0
@@ -602,20 +603,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 } else if name == "Shuffle" {
                     NotificationCenter.default.post(name: .shuffleButtonPressed, object: nil)
                 } else if name == "Pause" { //TODO disable physics after scroll has fallen in place
-                    pauseScroll.physicsBody = pauseScrollPhysics
-                    southWall.physicsBody = southWallPhysics
-                    self.physicsWorld.gravity = CGVector(dx: 0, dy: -20)
-                    pause.texture = SKTexture(imageNamed: "pausered")
-                    let duration = TimeInterval(0.5)
-                    let colorAction = SKAction.colorize(withColorBlendFactor: 0.4, duration: duration)
-                    let fadeOutAction = SKAction.fadeOut(withDuration: duration)
-                    background?.run(colorAction)
-                    trees.run(fadeOutAction)
-                    gameLayer.run(fadeOutAction)
-                    if !isGamePaused {DispatchQueue.global().async { self.disablePhysicsAfterBounce(sprite1: self.pauseScroll, sprite2: self.southWall) }}
-                    isGamePaused = true
+                    if !isGamePaused {
+                        pauseScroll.physicsBody = pauseScrollPhysics
+                        southWall.physicsBody = southWallPhysics
+                        self.physicsWorld.gravity = CGVector(dx: 0, dy: -20)
+                        pause.texture = SKTexture(imageNamed: "pausered")
+                        let duration = TimeInterval(0.5)
+                        let colorAction = SKAction.colorize(withColorBlendFactor: 0.4, duration: duration)
+                        let fadeOutAction = SKAction.fadeOut(withDuration: duration)
+                        background?.run(colorAction)
+                        trees.run(fadeOutAction)
+                        gameLayer.run(fadeOutAction)
+                        isGamePaused = true
+                        DispatchQueue.global().async { self.disablePhysicsAfterBounce(sprite1: self.pauseScroll, sprite2: self.southWall) }
+                    }
                 } else if name == "Resume" {
-                    if collisionCount == 0 { //Can only resume if pauseScroll has finished transition
+                    if collisionCount == 0 && isGamePaused { //Can only resume if pauseScroll has finished transition
                         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
                         pause.texture = SKTexture(imageNamed: "Pause")
                         let duration = TimeInterval(0.5)

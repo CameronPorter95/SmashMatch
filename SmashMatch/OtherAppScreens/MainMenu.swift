@@ -29,16 +29,18 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
     weak var settingsScroll: SKSpriteNode?
     weak var settingsExit: SKSpriteNode?
     
+    var settingsScrollPhysics: SKPhysicsBody?
+    var westWallPhysics: SKPhysicsBody?
     let noCategory:UInt32 = 0
     let westWallCategory:UInt32 = 0b1
     let settingsCategory:UInt32 = 0b1 << 1
+    var collisionCount = 0
     
     var startTime = UInt64()
     var numer: UInt64 = 0
     var denom: UInt64 = 0
     var timer = Timer()
     var lives = 3;
-    var score = 0 //Why is this here?
     
     override func didMove(to view: SKView) {
         self.physicsWorld.contactDelegate = self
@@ -60,13 +62,26 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
         settingsExit = self.childNode(withName: "//SettingsExit") as? SKSpriteNode
         settingsExit?.isHidden = true
         
-        westWall?.physicsBody?.categoryBitMask = westWallCategory
-        westWall?.physicsBody?.collisionBitMask = noCategory
-        westWall?.physicsBody?.contactTestBitMask = noCategory
+        settingsScrollPhysics = SKPhysicsBody(rectangleOf: (settingsScroll?.size)!)
+        settingsScrollPhysics?.isDynamic = true
+        settingsScrollPhysics?.affectedByGravity = true
+        settingsScrollPhysics?.allowsRotation = false
+        settingsScrollPhysics?.mass = 4.0
+        settingsScrollPhysics?.restitution = 0.2
+        settingsScrollPhysics?.friction = 0.2
+        settingsScrollPhysics?.categoryBitMask = settingsCategory
+        settingsScrollPhysics?.collisionBitMask = westWallCategory
+        settingsScrollPhysics?.contactTestBitMask = westWallCategory
+        settingsScroll?.physicsBody = nil
         
-        settingsScroll?.physicsBody?.categoryBitMask = settingsCategory
-        settingsScroll?.physicsBody?.collisionBitMask = westWallCategory
-        settingsScroll?.physicsBody?.contactTestBitMask = westWallCategory
+        westWallPhysics = SKPhysicsBody(rectangleOf: (westWall?.size)!)
+        westWallPhysics?.isDynamic = true
+        westWallPhysics?.affectedByGravity = false
+        westWallPhysics?.restitution = 0.0
+        westWallPhysics?.categoryBitMask = westWallCategory
+        westWallPhysics?.collisionBitMask = noCategory
+        westWallPhysics?.contactTestBitMask = noCategory
+        westWall?.physicsBody = nil
         
         setupLifeTimer()
         addLife()
@@ -86,31 +101,38 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
             } else if name == "Demolition" {
                 NotificationCenter.default.post(name: .demolitionButtonPressed, object: nil)
             } else if name == "Settings" {
-                settingsScroll?.physicsBody?.isDynamic = true
-                self.physicsWorld.gravity = CGVector(dx: -9.8, dy: 0)
-                let duration = TimeInterval(0.5)
-                let colorAction = SKAction.colorize(withColorBlendFactor: 0.4, duration: duration)
-                let fadeOutAction = SKAction.fadeOut(withDuration: duration)
-                background?.run(colorAction)
-                arcade?.run(fadeOutAction)
-                classic?.run(fadeOutAction)
-                demolition?.run(fadeOutAction)
-                settingsExit?.isHidden = false
-                settings?.isHidden = true
+                if (settingsExit?.isHidden)! {
+                    settingsScroll?.physicsBody = settingsScrollPhysics
+                    westWall?.physicsBody = westWallPhysics
+                    self.physicsWorld.gravity = CGVector(dx: -9.8, dy: 0)
+                    let duration = TimeInterval(0.5)
+                    let colorAction = SKAction.colorize(withColorBlendFactor: 0.4, duration: duration)
+                    let fadeOutAction = SKAction.fadeOut(withDuration: duration)
+                    background?.run(colorAction)
+                    arcade?.run(fadeOutAction)
+                    classic?.run(fadeOutAction)
+                    demolition?.run(fadeOutAction)
+                    DispatchQueue.global().async { self.disablePhysicsAfterBounce(sprite1: self.settingsScroll!, sprite2: self.westWall!) }
+                    settingsExit?.isHidden = false
+                    settings?.isHidden = true
+                }
             } else if name == "SettingsExit" {
-                settingsScroll?.physicsBody?.isDynamic = false //TODO Optimise this the same way as GameScene
-                self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
-                let duration = TimeInterval(0.5)
-                let moveAction = SKAction.move(to: CGPoint(x: 322, y: -76) , duration: duration)
-                let colorAction = SKAction.colorize(withColorBlendFactor: 0.0, duration: duration)
-                let fadeInAction = SKAction.fadeIn(withDuration: duration)
-                settingsScroll?.run(moveAction)
-                background?.run(colorAction)
-                arcade?.run(fadeInAction)
-                classic?.run(fadeInAction)
-                demolition?.run(fadeInAction)
-                settingsExit?.isHidden = true
-                settings?.isHidden = false
+                if collisionCount == -1 && (settings?.isHidden)! {
+                    settingsScroll?.physicsBody?.isDynamic = false //TODO Optimise this the same way as GameScene
+                    self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+                    let duration = TimeInterval(0.5)
+                    let moveAction = SKAction.move(to: CGPoint(x: 322, y: -76) , duration: duration)
+                    let colorAction = SKAction.colorize(withColorBlendFactor: 0.0, duration: duration)
+                    let fadeInAction = SKAction.fadeIn(withDuration: duration)
+                    settingsScroll?.run(moveAction)
+                    background?.run(colorAction)
+                    arcade?.run(fadeInAction)
+                    classic?.run(fadeInAction)
+                    demolition?.run(fadeInAction)
+                    settingsExit?.isHidden = true
+                    settings?.isHidden = false
+                    collisionCount = 0
+                }
             } else if name == "SFX" {
                 
             } else if name == "Music" {
@@ -125,6 +147,28 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
                 
             } else if name == "Plus" {
                 
+            }
+        }
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        let cA:UInt32 = contact.bodyA.categoryBitMask
+        let cB:UInt32 = contact.bodyB.categoryBitMask
+        
+        if cA == settingsCategory || cB == settingsCategory {
+            collisionCount += 1
+        }
+    }
+    
+    func disablePhysicsAfterBounce(sprite1: SKSpriteNode, sprite2: SKSpriteNode){
+        while true {
+            if collisionCount > 2 {
+                sprite1.physicsBody = nil
+                sprite2.physicsBody = nil
+                DispatchQueue.main.async {
+                    self.collisionCount = -1
+                }
+                break
             }
         }
     }
