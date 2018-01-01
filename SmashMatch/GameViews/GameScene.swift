@@ -703,4 +703,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
+    
+    override func willMove(from view: SKView) {
+        removeAllChildren()
+    }
+    
+    deinit {
+        print("Deinit Game Scene")
+    }
 }

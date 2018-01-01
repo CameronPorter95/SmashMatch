@@ -142,7 +142,9 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
             } else if name == "AppPurchases" {
                 
             } else if name == "Credits" {
-                NotificationCenter.default.post(name: .creditsButtonPressed, object: nil)
+                if collisionCount == -1 && (settings?.isHidden)! {
+                    NotificationCenter.default.post(name: .creditsButtonPressed, object: nil)
+                }
             } else if name == "GameCenter" {
                 
             } else if name == "Plus" {
@@ -268,5 +270,13 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
 
     func secondsToMinutesSeconds (seconds : Double) -> (Int, Int) {
         return (Int((seconds.truncatingRemainder(dividingBy:3600) / 60)), Int((seconds.truncatingRemainder(dividingBy:3600)).truncatingRemainder(dividingBy: 60)))
+    }
+    
+    override func willMove(from view: SKView) {
+        removeAllChildren()
+    }
+    
+    deinit {
+        print("Deinit MainMenu Scene")
     }
 }

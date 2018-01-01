@@ -14,6 +14,7 @@ import SQLite3
 class GameViewController: UIViewController, GKGameCenterControllerDelegate {
     
     let gameController = GameController()
+    var skView: SKView?
     var mainMenu: MainMenu?
     var levelSelection: LevelSelection?
     var credits: Credits?
@@ -40,43 +41,40 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
         // Call the GC authentication controller
         authenticateLocalPlayer()
         
-        if let view = self.view as! SKView? {
+        skView = self.view as! SKView?
+        if skView != nil {
             mainMenu = MainMenu(fileNamed: "MainMenu")
             mainMenu?.scaleMode = .fill
-            view.presentScene(mainMenu)
+            skView?.presentScene(mainMenu)
         }
     }
     
     @objc func showMainMenu(_ notification: Notification) {
-        if let view = self.view as! SKView? {
-            mainMenu = MainMenu(fileNamed: "MainMenu")
-            mainMenu?.scaleMode = .fill
-            view.presentScene(mainMenu)
-            gameController.backgroundMusic?.stop()
-            gameController.backgroundMusic?.currentTime = 0
-        }
+        deallocScenes()
+        mainMenu = MainMenu(fileNamed: "MainMenu")
+        mainMenu?.scaleMode = .fill
+        skView!.presentScene(mainMenu)
+        gameController.backgroundMusic?.stop()
+        gameController.backgroundMusic?.currentTime = 0
     }
     
     @objc func showGameScene(_ notification: Notification) {
-        if let view = self.view as! SKView? {
-            gameController.setupLevel(view: view)
-        }
+        deallocScenes()
+        gameController.setupLevel(view: skView!)
     }
     
     @objc func showLevelSelection(_ notification: Notification) {
-        if let view = self.view as! SKView? {
-            levelSelection = LevelSelection(fileNamed: "LevelSelection")
-            levelSelection?.scaleMode = .aspectFill
-            view.presentScene(levelSelection)
-        }
+        deallocScenes()
+        levelSelection = LevelSelection(fileNamed: "LevelSelection")
+        levelSelection?.scaleMode = .aspectFill
+        skView!.presentScene(levelSelection)
     }
     
     @objc func showCredits(_ notification: Notification) {
-        if let view = self.view as! SKView? {
-            credits = Credits(fileNamed: "Credits")
-            credits?.scaleMode = .fill
-            view.presentScene(credits)
-        }
+        deallocScenes()
+        credits = Credits(fileNamed: "Credits")
+        credits?.scaleMode = .fill
+        skView!.presentScene(credits)
     }
     
     // IMPORTANT: replace the red string below with your own Leaderboard ID (the one you've set in iTunes Connect)
@@ -136,6 +134,12 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
                 PersistentEntity.shared.toString(persistent: eachPersistent)
             }
         }
+    }
+    
+    func deallocScenes(){
+        mainMenu = nil
+        levelSelection = nil
+        credits = nil
     }
     
     //    How to update and query all tables in database (for later).

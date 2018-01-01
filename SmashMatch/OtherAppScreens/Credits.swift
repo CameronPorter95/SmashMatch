@@ -25,4 +25,12 @@ class Credits: SKScene {
             }
         }
     }
+    
+    override func willMove(from view: SKView) {
+        removeAllChildren()
+    }
+    
+    deinit {
+        print("Deinit Credits Scene")
+    }
 }

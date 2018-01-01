@@ -50,4 +50,8 @@ class LevelSelection: SKScene {
         scrollView?.removeFromSuperview()
         scrollView = nil // nil out reference to deallocate properly
     }
+    
+    deinit {
+        print("Deinit LevelSelection Scene")
+    }
 }
