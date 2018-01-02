@@ -24,7 +24,7 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
     weak var heart5: SKSpriteNode?
     weak var plus: SKSpriteNode?
     weak var countDownLabel: SKLabelNode?
-    weak var settings: SKSpriteNode?
+    weak var settingsButton: SKSpriteNode?
     weak var westWall: SKSpriteNode?
     weak var settingsScroll: SKSpriteNode?
     weak var settingsExit: SKSpriteNode?
@@ -56,7 +56,7 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
         heart5 = self.childNode(withName: "//Heart5") as? SKSpriteNode
         plus = self.childNode(withName: "//Plus") as? SKSpriteNode
         countDownLabel = self.childNode(withName: "//Countdown") as? SKLabelNode
-        settings = self.childNode(withName: "//Settings") as? SKSpriteNode
+        settingsButton = self.childNode(withName: "//Settings") as? SKSpriteNode
         westWall = self.childNode(withName: "WestWall") as? SKSpriteNode
         settingsScroll = self.childNode(withName: "SettingsScroll") as? SKSpriteNode
         settingsExit = self.childNode(withName: "//SettingsExit") as? SKSpriteNode
@@ -114,10 +114,10 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
                     demolition?.run(fadeOutAction)
                     DispatchQueue.global().async { self.disablePhysicsAfterBounce(sprite1: self.settingsScroll!, sprite2: self.westWall!) }
                     settingsExit?.isHidden = false
-                    settings?.isHidden = true
+                    settingsButton?.isHidden = true
                 }
             } else if name == "SettingsExit" {
-                if collisionCount == -1 && (settings?.isHidden)! {
+                if collisionCount == -1 && (settingsButton?.isHidden)! {
                     settingsScroll?.physicsBody?.isDynamic = false //TODO Optimise this the same way as GameScene
                     self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
                     let duration = TimeInterval(0.5)
@@ -130,7 +130,7 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
                     classic?.run(fadeInAction)
                     demolition?.run(fadeInAction)
                     settingsExit?.isHidden = true
-                    settings?.isHidden = false
+                    settingsButton?.isHidden = false
                     collisionCount = 0
                 }
             } else if name == "SFX" {
@@ -142,7 +142,7 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
             } else if name == "AppPurchases" {
                 
             } else if name == "Credits" {
-                if collisionCount == -1 && (settings?.isHidden)! {
+                if collisionCount == -1 && (settingsButton?.isHidden)! {
                     NotificationCenter.default.post(name: .creditsButtonPressed, object: nil)
                 }
             } else if name == "GameCenter" {

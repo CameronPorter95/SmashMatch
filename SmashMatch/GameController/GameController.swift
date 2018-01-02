@@ -16,7 +16,7 @@ class GameController {
     var scene: GameScene!
     var level: Level!
     
-    var currentLevelNum = 0 //TODO increase current level upon level completion and call setupLevel again to go to next level
+    var currentLevelNum = 2 //TODO increase current level upon level completion and call setupLevel again to go to next level
     var movesMade = 0
     var score = 0
     var timeLeft = Int()
@@ -107,21 +107,20 @@ class GameController {
             return
         }
         let matchedCannons = getCannonsFromChains(chains: chains)
-        self.scene.animateMatchedCannons(cannons: matchedCannons){
-            self.fireMatchedCannons(cannons: matchedCannons){ //TODO mysterious cannon not falling all the way bug (only on top of other cannons?)
-                self.scene.animateMatchedGems(for: chains) { //TODO do this same time as fire cannon animation?
-                    let cannons = self.level.getCannons() //TODO refactor
-                    self.scene.animateNewCannons(cannons: cannons) {
-                        for chain in chains{
-                            self.score += chain.score
-                        }
-                        self.updateLabels()
-                        let columns = self.level.fillHoles()
-                        self.scene.animateFallingGems(columns: columns) {
-                            let columns = self.level.topUpGems()
-                            self.scene.animateNewGems(columns) {
-                                self.handleMatches()
-                            }
+        self.scene.animateMatchedCannons(cannons: matchedCannons)
+        self.fireMatchedCannons(cannons: matchedCannons){ //TODO mysterious cannon not falling all the way bug (only on top of other cannons?)
+            self.scene.animateMatchedGems(for: chains) { //TODO do this same time as fire cannon animation?
+                let cannons = self.level.getCannons() //TODO refactor
+                self.scene.animateNewCannons(cannons: cannons) {
+                    for chain in chains{
+                        self.score += chain.score
+                    }
+                    self.updateLabels()
+                    let columns = self.level.fillHoles()
+                    self.scene.animateFallingGems(columns: columns) {
+                        let columns = self.level.topUpGems()
+                        self.scene.animateNewGems(columns) {
+                            self.handleMatches()
                         }
                     }
                 }
@@ -173,18 +172,18 @@ class GameController {
      */
     func createCannonFireTasks(cannon: Cannon){
         if cannon.cannonType == CannonType.twoWayHorz {
-            group.enter();self.fireCannon(cannon: cannon, direction: "East"){}
-            group.enter();self.fireCannon(cannon: cannon, direction: "West"){}
+            group.enter();queue.async{ self.fireCannon(cannon: cannon, direction: "East"){} }
+            group.enter();queue.async{ self.fireCannon(cannon: cannon, direction: "West"){} }
         }
         else if cannon.cannonType == CannonType.twoWayVert {
-            group.enter();self.fireCannon(cannon: cannon, direction: "North"){}
-            group.enter();self.fireCannon(cannon: cannon, direction: "South"){}
+            group.enter();queue.async{ self.fireCannon(cannon: cannon, direction: "North"){} }
+            group.enter();queue.async{ self.fireCannon(cannon: cannon, direction: "South"){} }
         }
         else {
-            group.enter();self.fireCannon(cannon: cannon, direction: "East"){}
-            group.enter();self.fireCannon(cannon: cannon, direction: "West"){}
-            group.enter();self.fireCannon(cannon: cannon, direction: "North"){}
-            group.enter();self.fireCannon(cannon: cannon, direction: "South"){}
+            group.enter();queue.async{ self.fireCannon(cannon: cannon, direction: "East"){} }
+            group.enter();queue.async{ self.fireCannon(cannon: cannon, direction: "West"){} }
+            group.enter();queue.async{ self.fireCannon(cannon: cannon, direction: "North"){} }
+            group.enter();queue.async{ self.fireCannon(cannon: cannon, direction: "South"){} }
         }
     }
     
@@ -196,8 +195,20 @@ class GameController {
             completion()
             return
         }
-        self.scene.animateHitCannon(cannon: hitCannonTile) {
-            self.scene.animateRemoveCannon(cannon: hitCannonTile!)
+        var distance: Int
+        if direction == "East" || direction == "West"{
+            distance = (hitCannonTile?.column)! - cannon.column
+        } else {
+            distance = (hitCannonTile?.row)! - cannon.row
+        }
+        let from = CGPoint(x: cannon.column, y: cannon.row)
+        let to =  CGPoint(x: (hitCannonTile?.column)!, y: (hitCannonTile?.row)!)
+        let duration: Double = abs(Double(distance)/10.0)
+        self.scene.animateCannonball(from: from, to: to, duration: duration){
+            print("completed animation to: \(to)")
+            self.scene.animateHitCannon(cannon: hitCannonTile){
+                self.scene.animateRemoveCannon(cannon: hitCannonTile!)
+            }
             self.createCannonFireTasks(cannon: hitCannonTile!)
             self.group.leave()
         }

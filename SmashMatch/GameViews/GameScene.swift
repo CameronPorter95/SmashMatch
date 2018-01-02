@@ -111,7 +111,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         timeLabel.position = CGPoint(x: (size.width/3.9), y: -bannerHeight*0.85)
         banner.addChild(timeLabel)
         
-        //320, 425
         let scrollWidth = size.width
         let scrollHeight = scrollWidth*1.328
         pauseScroll = SKSpriteNode(imageNamed: "longbanner")
@@ -456,10 +455,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         run(SKAction.wait(forDuration: 0.25), completion: completion)
     }
     
-    //Animates the creation of cannons
-    func animateMatchedCannons(cannons: [Cannon], completion: @escaping () -> ()){
+    func animateMatchedCannons(cannons: [Cannon]){
         if cannons.count == 0 {
-            completion()
             return
         }
         run(cannonFireSound)
@@ -481,11 +478,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 f2 = SKTexture.init(imageNamed: "UDcannon3")
                 f3 = SKTexture.init(imageNamed: "UDcannon4")
             }
-            // Add frames
             let frames: [SKTexture] = [f0!, f1!, f2!, f3!]
-            
             let sprite: SKSpriteNode?
-            // Load the first frame as initialization
+            
             if cannon.cannonType == CannonType.fourWay {
                 sprite = SKSpriteNode(imageNamed: "\(cannon.gemType)4cannon")
             } else if cannon.cannonType == CannonType.twoWayHorz {
@@ -497,14 +492,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             sprite?.position = pointFor(column: cannon.column, row: cannon.row)
             sprite?.size = CGSize(width: TileWidth, height: TileWidth)
             gemsLayer.addChild(sprite!)
-            // Change the frame per 0.2 sec
+            
             let animation = SKAction.animate(with: frames, timePerFrame: 0.2)
             sprite?.run(animation)
         }
-        run(SKAction.wait(forDuration: 0.8), completion: completion)
+        run(SKAction.wait(forDuration: 0.8)) //TODO change duration depending on how far cannonball travels
     }
     
-    //Animates the creation of cannons
     func animateHitCannon(cannon: Cannon?, completion: @escaping () -> ()){
         if cannon == nil {
             completion()
@@ -548,6 +542,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let animation = SKAction.animate(with: frames, timePerFrame: 0.2)
         sprite?.run(animation)
         run(SKAction.wait(forDuration: 0.8), completion: completion)
+    }
+    
+    func animateCannonball(from: CGPoint, to: CGPoint, duration: Double, completion: @escaping () -> ()){
+        print("Firing cannon to: \(to), duration: \(duration)")
+        let sprite = SKSpriteNode(imageNamed: "cannonball")
+        sprite.position = pointFor(column: Int(from.x), row: Int(from.y))
+        sprite.size = CGSize(width: TileWidth/2, height: TileWidth/4)
+        gemsLayer.addChild(sprite)
+        let hitCannonPos = pointFor(column: Int(to.x), row: Int(to.y))
+        let moveAction = SKAction.move(to: hitCannonPos, duration: duration)
+        sprite.run(moveAction)
+        run(SKAction.wait(forDuration: duration), completion: completion)
     }
     
     func animateRemoveCannon(cannon: Cannon){
@@ -618,7 +624,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         DispatchQueue.global().async { self.disablePhysicsAfterBounce(sprite1: self.pauseScroll, sprite2: self.southWall) }
                     }
                 } else if name == "Resume" {
-                    if collisionCount == 0 && isGamePaused { //Can only resume if pauseScroll has finished transition
+                    if collisionCount == -1 && isGamePaused { //Can only resume if pauseScroll has finished transition
                         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
                         pause.texture = SKTexture(imageNamed: "Pause")
                         let duration = TimeInterval(0.5)
@@ -631,6 +637,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         gameLayer.run(fadeInAction)
                         pauseScroll?.run(moveAction)
                         isGamePaused = false
+                        collisionCount = 0
                     }
                 } else if name == "Quit" {
                     removeAllGemSprites()
@@ -697,7 +704,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 sprite1.physicsBody = nil
                 sprite2.physicsBody = nil
                 DispatchQueue.main.async {
-                    self.collisionCount = 0
+                    self.collisionCount = -1
                 }
                 break
             }

@@ -84,7 +84,6 @@ class Level {
                 }
             }
         }
-        print(walls)
         initialLoad = false
         return set
     }
@@ -403,7 +402,6 @@ class Level {
     
     //Returns a cannon tile hit by this cannon, this is a singular cannon not a cannon tile
     func fireCannon(cannon: Cannon, direction: String) -> Cannon? {
-        print(cannon.description)
         var curColumn = cannon.column+1
         var curRow = cannon.row
         while(curColumn < NumColumns-1 && direction == "East") {
