@@ -410,8 +410,10 @@ class Level {
                 if hitTile is Wall {
                     let wall = hitTile as! Wall
                     if wall.wallType == .broken {
+                        wall.isDestroyed = true
                         tiles[curColumn, curRow] = nil
                     } else {
+                        wall.wallType = .broken
                         return hitTile
                     }
                 }
@@ -431,8 +433,10 @@ class Level {
                 if hitTile is Wall {
                     let wall = hitTile as! Wall
                     if wall.wallType == .broken {
+                        wall.isDestroyed = true
                         tiles[curColumn, curRow] = nil
                     } else {
+                        wall.wallType = .broken
                         return hitTile
                     }
                 }
@@ -452,8 +456,10 @@ class Level {
                 if hitTile is Wall {
                     let wall = hitTile as! Wall
                     if wall.wallType == .broken {
+                        wall.isDestroyed = true
                         tiles[curColumn, curRow] = nil
                     } else {
+                        wall.wallType = .broken
                         return hitTile
                     }
                 }
@@ -473,8 +479,10 @@ class Level {
                 if hitTile is Wall {
                     let wall = hitTile as! Wall
                     if wall.wallType == .broken {
+                        wall.isDestroyed = true
                         tiles[curColumn, curRow] = nil
                     } else {
+                        wall.wallType = .broken
                         return hitTile
                     }
                 }

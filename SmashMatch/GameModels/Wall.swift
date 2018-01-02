@@ -32,8 +32,9 @@ enum WallType: Int, CustomStringConvertible  {
 }
 
 class Wall: Gem {
-    let wallType: WallType
+    var wallType: WallType
     let horizontal: Bool
+    var isDestroyed = false
     
     init(column: Int, row: Int, wallType: WallType, horizontal: Bool) {
         self.wallType = wallType

@@ -16,7 +16,7 @@ class GameController {
     var scene: GameScene!
     var level: Level!
     
-    var currentLevelNum = 1 //TODO increase current level upon level completion and call setupLevel again to go to next level
+    var currentLevelNum = 2 //TODO increase current level upon level completion and call setupLevel again to go to next level
     var movesMade = 0
     var score = 0
     var timeLeft = Int()
@@ -214,7 +214,8 @@ class GameController {
                 }
                 self.createCannonFireTasks(cannon: hitTile! as! Cannon)
             } else if hitTile is Wall {
-                //TODO perform wall break animation
+                let wall = hitTile as! Wall
+                self.scene.animateBreakWall(wall: wall)
             } else {
                 //self.scene.animateRemoveCannon(cannon: cannon)
                 self.group.leave()

@@ -52,6 +52,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let addGemSound = SKAction.playSoundFileNamed("Drip.wav", waitForCompletion: false)
     let specialMatchSound = SKAction.playSoundFileNamed("special_match.mp3", waitForCompletion: false)
     let cannonFireSound = SKAction.playSoundFileNamed("cannon.mp3", waitForCompletion: false)
+    let wallCrackSound = SKAction.playSoundFileNamed("wall_crack.mp3", waitForCompletion: false)
+    let wallSmashSound = SKAction.playSoundFileNamed("wall_smash.mp3", waitForCompletion: false)
     
     var isGamePaused = false
     
@@ -573,6 +575,36 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         run(SKAction.wait(forDuration: 0.3))
+    }
+    
+    func animateBreakWall(wall: Wall){
+//        if wall == nil {
+//            return
+//        }
+        
+//        let f0 = SKTexture.init(imageNamed: "")                               TODO Setup wall breaking sprites here (cannonball impact)
+//        let f1 = SKTexture.init(imageNamed: "")
+//        let f2 = SKTexture.init(imageNamed: "")
+//        let f3 = SKTexture.init(imageNamed: "")
+//
+//        let frames: [SKTexture] = [f0!, f1!, f2!, f3!]
+//        let sprite = SKSpriteNode(imageNamed: "")
+        
+//        sprite.position = pointFor(column: wall.column, row: wall.row)
+//        sprite.size = CGSize(width: TileWidth, height: TileWidth)             TODO orient impact sprites correctly
+//        gemsLayer.addChild(sprite!)
+        
+//        let animation = SKAction.animate(with: frames, timePerFrame: 0.2)
+//        sprite?.run(animation)
+        if wall.wallType == .broken && wall.isDestroyed == false {
+            print("Breaking wall")
+            run(wallCrackSound)
+            wall.sprite?.texture = SKTexture(imageNamed: "brickcracked")
+        } else {
+            print("Smashing wall")
+            run(wallSmashSound)
+            wall.sprite?.removeFromParent()
+        }
     }
     
     func animateScore(for chain: Chain) { //TODO Move label position to intercept gem for intercept chains
