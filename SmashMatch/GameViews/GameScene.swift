@@ -494,7 +494,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             gemsLayer.addChild(sprite!)
             
             let animation = SKAction.animate(with: frames, timePerFrame: 0.2)
-            sprite?.run(animation)
+            sprite?.run(animation){
+                sprite?.removeFromParent()
+            }
         }
         run(SKAction.wait(forDuration: 0.8)) //TODO change duration depending on how far cannonball travels
     }
@@ -540,20 +542,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gemsLayer.addChild(sprite!)
         // Change the frame per 0.2 sec
         let animation = SKAction.animate(with: frames, timePerFrame: 0.2)
-        sprite?.run(animation)
+        sprite?.run(animation){
+            sprite?.removeFromParent()
+        }
         run(SKAction.wait(forDuration: 0.8), completion: completion)
     }
     
     func animateCannonball(from: CGPoint, to: CGPoint, duration: Double, completion: @escaping () -> ()){
-        print("Firing cannon to: \(to), duration: \(duration)")
+        //print("Firing cannon to: \(to), duration: \(duration)")
         let sprite = SKSpriteNode(imageNamed: "cannonball")
         sprite.position = pointFor(column: Int(from.x), row: Int(from.y))
         sprite.size = CGSize(width: TileWidth/2, height: TileWidth/4)
         gemsLayer.addChild(sprite)
         let hitCannonPos = pointFor(column: Int(to.x), row: Int(to.y))
         let moveAction = SKAction.move(to: hitCannonPos, duration: duration)
-        sprite.run(moveAction)
-        run(SKAction.wait(forDuration: duration), completion: completion)
+        sprite.run(moveAction){
+            sprite.removeFromParent()
+            completion()
+        }
+        //run(SKAction.wait(forDuration: duration), completion: completion)
     }
     
     func animateRemoveCannon(cannon: Cannon){
