@@ -553,21 +553,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func animateCannonball(from: CGPoint, to: CGPoint, duration: Double, direction: String, completion: @escaping () -> ()){
         //print("Firing cannon to: \(to), duration: \(duration)")
         let sprite = SKSpriteNode(imageNamed: "cannonball")
+        var newTo = to
+        switch direction {
+        case "North":
+            sprite.zRotation = .pi/2
+            newTo.y += 4
+        case "South":
+            sprite.zRotation = (.pi/2)*3
+            newTo.y -= 4
+        case "East":
+            newTo.x += 4
+        case "West":
+            newTo.x -= 4
+        default:
+            break
+        }
         sprite.position = pointFor(column: Int(from.x), row: Int(from.y))
         sprite.size = CGSize(width: TileWidth/2, height: TileWidth/4)
-        if direction == "North" {
-            sprite.zRotation = .pi/2
-        } else if direction == "South" {
-            sprite.zRotation = (.pi/2)*3
-        }
         gemsLayer.addChild(sprite)
-        let hitCannonPos = pointFor(column: Int(to.x), row: Int(to.y))
+        let hitCannonPos = pointFor(column: Int(newTo.x), row: Int(newTo.y))
+        
         let moveAction = SKAction.move(to: hitCannonPos, duration: duration)
-        sprite.run(moveAction){
+        let fadeOutAction = SKAction.fadeOut(withDuration: duration)
+        sprite.run(SKAction.sequence([moveAction, fadeOutAction])){
             sprite.removeFromParent()
-            completion()
         }
-        //run(SKAction.wait(forDuration: duration), completion: completion)
+        run(SKAction.wait(forDuration: duration - 0.4), completion: completion)
     }
     
     func animateRemoveCannon(cannon: Cannon){

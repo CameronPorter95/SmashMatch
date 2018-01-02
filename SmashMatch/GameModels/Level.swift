@@ -401,8 +401,8 @@ class Level {
     }
     
     //Returns a set of tiles hit by this cannonball
-    func fireCannon(cannon: Cannon, direction: String) -> Set<Gem>? {
-        var hitTiles = Set<Gem>()
+    func fireCannon(cannon: Cannon, direction: String) -> [Gem]? {
+        var hitTiles = [Gem]()
         var curColumn = cannon.column+1
         var curRow = cannon.row
         while(curColumn < NumColumns && direction == "East") {
@@ -415,17 +415,17 @@ class Level {
                         tiles[curColumn, curRow] = nil
                     } else {
                         wall.wallType = .broken
-                        hitTiles.insert(hitTile!)
+                        hitTiles.append(hitTile!)
                         curColumn += 1
                         if curColumn >= NumColumns { break }
                         continue
                     }
                 }
                 gems[curColumn, curRow] = nil
-                hitTiles.insert(hitTile!)
+                hitTiles.append(hitTile!)
             }
             if curColumn == NumColumns-1 {
-                hitTiles.insert(Gem(column: curColumn, row: curRow, gemType: .unknown))
+                hitTiles.append(Gem(column: curColumn, row: curRow, gemType: .unknown))
             }
             curColumn += 1
         }
@@ -441,17 +441,17 @@ class Level {
                         tiles[curColumn, curRow] = nil
                     } else {
                         wall.wallType = .broken
-                        hitTiles.insert(hitTile!)
+                        hitTiles.append(hitTile!)
                         curColumn -= 1
                         if curColumn <= -1 { break }
                         continue
                     }
                 }
                 gems[curColumn, curRow] = nil
-                hitTiles.insert(hitTile!)
+                hitTiles.append(hitTile!)
             }
             if curColumn == 0 {
-                hitTiles.insert(Gem(column: curColumn, row: curRow, gemType: .unknown))
+                hitTiles.append(Gem(column: curColumn, row: curRow, gemType: .unknown))
             }
             curColumn -= 1
         }
@@ -467,17 +467,17 @@ class Level {
                         tiles[curColumn, curRow] = nil
                     } else {
                         wall.wallType = .broken
-                        hitTiles.insert(hitTile!)
+                        hitTiles.append(hitTile!)
                         curRow += 1
                         if curRow >= NumRows { break }
                         continue
                     }
                 }
                 gems[curColumn, curRow] = nil
-                hitTiles.insert(hitTile!)
+                hitTiles.append(hitTile!)
             }
             if curRow == NumRows-1 {
-                hitTiles.insert(Gem(column: curColumn, row: curRow, gemType: .unknown))
+                hitTiles.append(Gem(column: curColumn, row: curRow, gemType: .unknown))
             }
             curRow += 1
         }
@@ -493,17 +493,17 @@ class Level {
                         tiles[curColumn, curRow] = nil
                     } else {
                         wall.wallType = .broken
-                        hitTiles.insert(hitTile!)
+                        hitTiles.append(hitTile!)
                         curRow -= 1
                         if curRow <= -1 { break }
                         continue
                     }
                 }
                 gems[curColumn, curRow] = nil
-                hitTiles.insert(hitTile!)
+                hitTiles.append(hitTile!)
             }
             if curRow == 0 {
-                hitTiles.insert(Gem(column: curColumn, row: curRow, gemType: .unknown))
+                hitTiles.append(Gem(column: curColumn, row: curRow, gemType: .unknown))
             }
             curRow -= 1
         }

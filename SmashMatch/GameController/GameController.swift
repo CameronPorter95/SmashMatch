@@ -197,14 +197,14 @@ class GameController {
             group.enter()
             var distance: Int
             if direction == "East" || direction == "West"{
-                distance = (tile.column) - cannon.column
+                distance = abs((tile.column) - cannon.column) + 4
             } else {
-                distance = (tile.row) - cannon.row
+                distance = abs((tile.row) - cannon.row) + 4
             }
             let from = CGPoint(x: cannon.column, y: cannon.row)
             let to =  CGPoint(x: (tile.column), y: (tile.row))
-            let duration: Double = abs(Double(distance)/10.0)
-            self.scene.animateCannonball(from: from, to: to, duration: duration, direction: direction){
+            let duration: Double = Double(distance)/10.0
+            self.scene.animateCannonball(from: from, to: to, duration: duration, direction: direction){ //do this once
                 //print("completed animation to: \(to)")
                 if tile is Cannon {
                     self.scene.animateHitCannon(cannon: tile as? Cannon){
@@ -213,7 +213,7 @@ class GameController {
                     self.createCannonFireTasks(cannon: tile as! Cannon)
                 } else if tile is Wall {
                     let wall = tile as! Wall
-                    self.scene.animateBreakWall(wall: wall)
+                    self.scene.animateBreakWall(wall: wall) //do this once
                 } else {
                     //self.scene.animateRemoveCannon(cannon: cannon)
                     self.group.leave()
