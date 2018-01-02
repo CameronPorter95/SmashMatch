@@ -16,7 +16,7 @@ class GameController {
     var scene: GameScene!
     var level: Level!
     
-    var currentLevelNum = 3 //TODO increase current level upon level completion and call setupLevel again to go to next level
+    var currentLevelNum = 2 //TODO increase current level upon level completion and call setupLevel again to go to next level
     var movesMade = 0
     var score = 0
     var timeLeft = Int()
@@ -206,7 +206,7 @@ class GameController {
         let from = CGPoint(x: cannon.column, y: cannon.row)
         let to =  CGPoint(x: (hitTile?.column)!, y: (hitTile?.row)!)
         let duration: Double = abs(Double(distance)/10.0)
-        self.scene.animateCannonball(from: from, to: to, duration: duration){
+        self.scene.animateCannonball(from: from, to: to, duration: duration, direction: direction){
             //print("completed animation to: \(to)")
             if hitTile is Cannon {
                 self.scene.animateHitCannon(cannon: hitTile as? Cannon){

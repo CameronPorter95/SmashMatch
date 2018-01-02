@@ -550,11 +550,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         run(SKAction.wait(forDuration: 0.8), completion: completion)
     }
     
-    func animateCannonball(from: CGPoint, to: CGPoint, duration: Double, completion: @escaping () -> ()){
+    func animateCannonball(from: CGPoint, to: CGPoint, duration: Double, direction: String, completion: @escaping () -> ()){
         //print("Firing cannon to: \(to), duration: \(duration)")
         let sprite = SKSpriteNode(imageNamed: "cannonball")
         sprite.position = pointFor(column: Int(from.x), row: Int(from.y))
         sprite.size = CGSize(width: TileWidth/2, height: TileWidth/4)
+        if direction == "North" {
+            sprite.zRotation = .pi/2
+        } else if direction == "South" {
+            sprite.zRotation = (.pi/2)*3
+        }
         gemsLayer.addChild(sprite)
         let hitCannonPos = pointFor(column: Int(to.x), row: Int(to.y))
         let moveAction = SKAction.move(to: hitCannonPos, duration: duration)
