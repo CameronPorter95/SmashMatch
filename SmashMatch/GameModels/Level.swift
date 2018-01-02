@@ -416,6 +416,9 @@ class Level {
                     } else {
                         wall.wallType = .broken
                         hitTiles.insert(hitTile!)
+                        curColumn += 1
+                        if curColumn >= NumColumns { break }
+                        continue
                     }
                 }
                 gems[curColumn, curRow] = nil
@@ -439,6 +442,9 @@ class Level {
                     } else {
                         wall.wallType = .broken
                         hitTiles.insert(hitTile!)
+                        curColumn -= 1
+                        if curColumn <= -1 { break }
+                        continue
                     }
                 }
                 gems[curColumn, curRow] = nil
@@ -462,6 +468,9 @@ class Level {
                     } else {
                         wall.wallType = .broken
                         hitTiles.insert(hitTile!)
+                        curRow += 1
+                        if curRow >= NumRows { break }
+                        continue
                     }
                 }
                 gems[curColumn, curRow] = nil
@@ -485,6 +494,9 @@ class Level {
                     } else {
                         wall.wallType = .broken
                         hitTiles.insert(hitTile!)
+                        curRow -= 1
+                        if curRow <= -1 { break }
+                        continue
                     }
                 }
                 gems[curColumn, curRow] = nil
