@@ -400,14 +400,22 @@ class Level {
         return self.addedCannons
     }
     
-    //Returns a cannon tile hit by this cannon, this is a singular cannon not a cannon tile
+    //Returns a tile hit by this cannonball
     func fireCannon(cannon: Cannon, direction: String) -> Gem? {
         var curColumn = cannon.column+1
         var curRow = cannon.row
         while(curColumn < NumColumns && direction == "East") {
             if(gems[curColumn, curRow] is Cannon || gems[curColumn, curRow] is Wall) {
                 let hitTile = gems[curColumn, curRow]
-                gems[curColumn, curRow] = nil //two cannons hitting the same cannon/wall causes second to be nil exception
+                if hitTile is Wall {
+                    let wall = hitTile as! Wall
+                    if wall.wallType == .broken {
+                        tiles[curColumn, curRow] = nil
+                    } else {
+                        return hitTile
+                    }
+                }
+                gems[curColumn, curRow] = nil
                 return hitTile
             }
             if curColumn == NumColumns-1 {
@@ -420,6 +428,14 @@ class Level {
         while(curColumn > -1 && direction == "West") {
             if(gems[curColumn, curRow] is Cannon || gems[curColumn, curRow] is Wall) {
                 let hitTile = gems[curColumn, curRow]
+                if hitTile is Wall {
+                    let wall = hitTile as! Wall
+                    if wall.wallType == .broken {
+                        tiles[curColumn, curRow] = nil
+                    } else {
+                        return hitTile
+                    }
+                }
                 gems[curColumn, curRow] = nil
                 return hitTile
             }
@@ -433,6 +449,14 @@ class Level {
         while(curRow < NumRows && direction == "North") {
             if(gems[curColumn, curRow] is Cannon || gems[curColumn, curRow] is Wall) {
                 let hitTile = gems[curColumn, curRow]
+                if hitTile is Wall {
+                    let wall = hitTile as! Wall
+                    if wall.wallType == .broken {
+                        tiles[curColumn, curRow] = nil
+                    } else {
+                        return hitTile
+                    }
+                }
                 gems[curColumn, curRow] = nil
                 return hitTile
             }
@@ -446,6 +470,14 @@ class Level {
         while(curRow > -1 && direction == "South") {
             if(gems[curColumn, curRow] is Cannon || gems[curColumn, curRow] is Wall) {
                 let hitTile = gems[curColumn, curRow]
+                if hitTile is Wall {
+                    let wall = hitTile as! Wall
+                    if wall.wallType == .broken {
+                        tiles[curColumn, curRow] = nil
+                    } else {
+                        return hitTile
+                    }
+                }
                 gems[curColumn, curRow] = nil
                 return hitTile
             }

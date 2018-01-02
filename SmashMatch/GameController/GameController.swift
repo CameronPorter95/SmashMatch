@@ -207,7 +207,6 @@ class GameController {
         let to =  CGPoint(x: (hitTile?.column)!, y: (hitTile?.row)!)
         let duration: Double = abs(Double(distance)/10.0)
         self.scene.animateCannonball(from: from, to: to, duration: duration){
-            //TODO remove cannonball here
             //print("completed animation to: \(to)")
             if hitTile is Cannon {
                 self.scene.animateHitCannon(cannon: hitTile as? Cannon){
