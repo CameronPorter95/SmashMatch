@@ -401,44 +401,56 @@ class Level {
     }
     
     //Returns a cannon tile hit by this cannon, this is a singular cannon not a cannon tile
-    func fireCannon(cannon: Cannon, direction: String) -> Cannon? {
+    func fireCannon(cannon: Cannon, direction: String) -> Gem? {
         var curColumn = cannon.column+1
         var curRow = cannon.row
-        while(curColumn < NumColumns-1 && direction == "East") {
-            if(gems[curColumn, curRow] is Cannon) {
-                let cannon = gems[curColumn, curRow] as! Cannon
-                gems[curColumn, curRow] = nil
-                return cannon
+        while(curColumn < NumColumns && direction == "East") {
+            if(gems[curColumn, curRow] is Cannon || gems[curColumn, curRow] is Wall) {
+                let hitTile = gems[curColumn, curRow]
+                gems[curColumn, curRow] = nil //two cannons hitting the same cannon/wall causes second to be nil exception
+                return hitTile
+            }
+            if curColumn == NumColumns-1 {
+                return Gem(column: curColumn, row: curRow, gemType: .unknown)
             }
             curColumn += 1
         }
         curColumn = cannon.column-1
         curRow = cannon.row
-        while(curColumn > 0 && direction == "West") {
-            if(gems[curColumn, curRow] is Cannon) {
-                let cannon = gems[curColumn, curRow] as! Cannon
+        while(curColumn > -1 && direction == "West") {
+            if(gems[curColumn, curRow] is Cannon || gems[curColumn, curRow] is Wall) {
+                let hitTile = gems[curColumn, curRow]
                 gems[curColumn, curRow] = nil
-                return cannon
+                return hitTile
+            }
+            if curColumn == 0 {
+                return Gem(column: curColumn, row: curRow, gemType: .unknown)
             }
             curColumn -= 1
         }
         curColumn = cannon.column
         curRow = cannon.row+1
-        while(curRow < NumRows-1 && direction == "North") {
-            if(gems[curColumn, curRow] is Cannon) {
-                let cannon = gems[curColumn, curRow] as! Cannon
+        while(curRow < NumRows && direction == "North") {
+            if(gems[curColumn, curRow] is Cannon || gems[curColumn, curRow] is Wall) {
+                let hitTile = gems[curColumn, curRow]
                 gems[curColumn, curRow] = nil
-                return cannon
+                return hitTile
+            }
+            if curRow == NumRows-1 {
+                return Gem(column: curColumn, row: curRow, gemType: .unknown)
             }
             curRow += 1
         }
         curColumn = cannon.column
         curRow = cannon.row-1
-        while(curRow > 0 && direction == "South") {
-            if(gems[curColumn, curRow] is Cannon) {
-                let cannon = gems[curColumn, curRow] as! Cannon
+        while(curRow > -1 && direction == "South") {
+            if(gems[curColumn, curRow] is Cannon || gems[curColumn, curRow] is Wall) {
+                let hitTile = gems[curColumn, curRow]
                 gems[curColumn, curRow] = nil
-                return cannon
+                return hitTile
+            }
+            if curRow == 0 {
+                return Gem(column: curColumn, row: curRow, gemType: .unknown)
             }
             curRow -= 1
         }

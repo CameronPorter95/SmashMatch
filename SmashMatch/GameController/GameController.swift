@@ -16,7 +16,7 @@ class GameController {
     var scene: GameScene!
     var level: Level!
     
-    var currentLevelNum = 2 //TODO increase current level upon level completion and call setupLevel again to go to next level
+    var currentLevelNum = 1 //TODO increase current level upon level completion and call setupLevel again to go to next level
     var movesMade = 0
     var score = 0
     var timeLeft = Int()
@@ -188,28 +188,39 @@ class GameController {
     }
     
     func fireCannon(cannon: Cannon, direction: String, completion: @escaping () -> ()) {
-        let hitCannonTile = self.level.fireCannon(cannon: cannon, direction: direction)
-        if(hitCannonTile == nil){
-            //self.scene.animateRemoveCannon(cannon: cannon)
-            self.group.leave()
+        let hitTile = self.level.fireCannon(cannon: cannon, direction: direction)
+//        if(hitTile?.gemType == GemType.unknown){ //make hitCannonTile never nil but either a wall or empty tile if no cannon
+//
+//        }
+        if(hitTile == nil){
+            print("ERROR: hitTile is nil")
             completion()
             return
         }
         var distance: Int
         if direction == "East" || direction == "West"{
-            distance = (hitCannonTile?.column)! - cannon.column
+            distance = (hitTile?.column)! - cannon.column
         } else {
-            distance = (hitCannonTile?.row)! - cannon.row
+            distance = (hitTile?.row)! - cannon.row
         }
         let from = CGPoint(x: cannon.column, y: cannon.row)
-        let to =  CGPoint(x: (hitCannonTile?.column)!, y: (hitCannonTile?.row)!)
+        let to =  CGPoint(x: (hitTile?.column)!, y: (hitTile?.row)!)
         let duration: Double = abs(Double(distance)/10.0)
         self.scene.animateCannonball(from: from, to: to, duration: duration){
             print("completed animation to: \(to)")
-            self.scene.animateHitCannon(cannon: hitCannonTile){
-                self.scene.animateRemoveCannon(cannon: hitCannonTile!)
+            if hitTile is Cannon {
+                self.scene.animateHitCannon(cannon: hitTile as? Cannon){
+                    self.scene.animateRemoveCannon(cannon: hitTile! as! Cannon)
+                }
+                self.createCannonFireTasks(cannon: hitTile! as! Cannon)
+            } else if hitTile is Wall {
+                //TODO perform wall break animation
+            } else {
+                //self.scene.animateRemoveCannon(cannon: cannon)
+                self.group.leave()
+                completion()
+                return
             }
-            self.createCannonFireTasks(cannon: hitCannonTile!)
             self.group.leave()
         }
     }
