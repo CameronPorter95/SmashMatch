@@ -555,31 +555,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func animateCannonball(from: CGPoint, to: CGPoint, duration: Double, direction: String){
         //print("Firing cannon to: \(to), duration: \(duration)")
         let sprite = SKSpriteNode(imageNamed: "cannonball")
-        var newTo = to
-//        switch direction {
-//        case "North":
-//            sprite.zRotation = .pi/2
-//            newTo.y += 4
-//        case "South":
-//            sprite.zRotation = (.pi/2)*3
-//            newTo.y -= 4
-//        case "East":
-//            newTo.x += 4
-//        case "West":
-//            newTo.x -= 4
-//        default:
-//            break
-//        }
+        var endTo = to
+        switch direction {
+        case "North":
+            sprite.zRotation = .pi/2
+            endTo.y += 2
+        case "South":
+            sprite.zRotation = (.pi/2)*3
+            endTo.y -= 2
+        case "East":
+            endTo.x += 2
+        case "West":
+            endTo.x -= 2
+            sprite.zRotation = .pi
+        default:
+            break
+        }
         sprite.position = pointFor(column: Int(from.x), row: Int(from.y))
         sprite.size = CGSize(width: TileWidth/2, height: TileWidth/4)
         gemsLayer.addChild(sprite)
-        let hitCannonPos = pointFor(column: Int(newTo.x), row: Int(newTo.y))
+        let beginFadeOutPos = pointFor(column: Int(to.x), row: Int(to.y))
+        let endFadeOutPos = pointFor(column: Int(endTo.x), row: Int(endTo.y))
         
-        let moveAction = SKAction.move(to: hitCannonPos, duration: duration)
-        let fadeOutAction = SKAction.fadeOut(withDuration: duration)
-        sprite.run(SKAction.sequence([moveAction, fadeOutAction])){
-            sprite.removeFromParent()
-            //completion()
+        let moveAction1 = SKAction.move(to: beginFadeOutPos, duration: duration)
+        let moveAction2 = SKAction.move(to: endFadeOutPos, duration: 0.2)
+        let fadeOutAction = SKAction.fadeOut(withDuration: 0.2)
+        sprite.run(moveAction1){
+            sprite.run(SKAction.sequence([SKAction.group([
+                moveAction2, fadeOutAction])
+                ])){
+                    sprite.removeFromParent()
+                    //completion()
+            }
         }
         //run(SKAction.wait(forDuration: duration), completion: completion)
     }
