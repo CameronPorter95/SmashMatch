@@ -16,7 +16,7 @@ class GameController {
     var scene: GameScene!
     var level: Level!
     
-    var currentLevelNum = 1 //TODO increase current level upon level completion and call setupLevel again to go to next level
+    var currentLevelNum = 3 //TODO increase current level upon level completion and call setupLevel again to go to next level
     var movesMade = 0
     var score = 0
     var timeLeft = Int()
@@ -216,7 +216,6 @@ class GameController {
                 self.respondToHit(cannon: cannon, hitTile: tile, direction: direction)
             }
             //print("DEBUG Start of iterating over hitTiles")
-            //self.group.enter();self.queue.async{ self.respondToHit(cannon: cannon, hitTile: tile, direction: direction){} }
         }
         //print("DEBUG end of animateCannonball completion")
         self.group.leave()
