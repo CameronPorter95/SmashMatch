@@ -552,7 +552,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         run(SKAction.wait(forDuration: 0.8), completion: completion)
     }
     
-    func animateCannonball(from: CGPoint, to: CGPoint, duration: Double, direction: String, completion: @escaping () -> ()){
+    func animateCannonball(from: CGPoint, to: CGPoint, duration: Double, direction: String){
         //print("Firing cannon to: \(to), duration: \(duration)")
         let sprite = SKSpriteNode(imageNamed: "cannonball")
         var newTo = to
@@ -579,7 +579,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let fadeOutAction = SKAction.fadeOut(withDuration: duration)
         sprite.run(SKAction.sequence([moveAction, fadeOutAction])){
             sprite.removeFromParent()
-            completion()
+            //completion()
         }
         //run(SKAction.wait(forDuration: duration), completion: completion)
     }
@@ -649,6 +649,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //print("DEBUG before run score animation")
         scoreLabel.run(SKAction.sequence([moveAction, SKAction.removeFromParent()]))
         //print("DEBUG after run score animation")
+    }
+    
+    func waitFor(duration: Double, completion: @escaping () -> ()){
+        run(SKAction.wait(forDuration: duration), completion: completion)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

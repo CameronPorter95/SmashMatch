@@ -109,20 +109,20 @@ class GameController {
         let matchedCannons = getCannonsFromChains(chains: chains)
         self.scene.animateMatchedCannons(cannons: matchedCannons)
         self.fireMatchedCannons(cannons: matchedCannons){
-            print("DEBUG before animateMatchedGems")
+            //print("DEBUG before animateMatchedGems")
             self.scene.animateMatchedGems(for: chains) {
-                print("DEBUG before level.getCannons")
+                //print("DEBUG before level.getCannons")
                 let cannons = self.level.getCannons() //TODO refactor
-                print("DEBUG before animateNewCannons")
+                //print("DEBUG before animateNewCannons")
                 self.scene.animateNewCannons(cannons: cannons) {
                     for chain in chains{
                         self.score += chain.score
                     }
                     self.updateLabels()
-                    print("DEBUG before fillHoles")
+                    //print("DEBUG before fillHoles")
                     let columns = self.level.fillHoles()
                     self.scene.animateFallingGems(columns: columns) {
-                        print("DEBUG before topUpGems")
+                        //print("DEBUG before topUpGems")
                         let columns = self.level.topUpGems()
                         self.scene.animateNewGems(columns) {
                             self.handleMatches()
@@ -164,12 +164,12 @@ class GameController {
     }
     
     func fireMatchedCannons(cannons: [Cannon], completion: @escaping () -> ()){
-        print("DEBUG start of fireMatchedCannons")
+        //print("DEBUG start of fireMatchedCannons")
         for i in (0..<cannons.count) {
             createCannonFireTasks(cannon: cannons[i])
         }
         group.notify(queue: queue) {
-            print("DEBUG end of fireMatchedCannons")
+            //print("DEBUG end of fireMatchedCannons")
             print("-------------------------------------------------------------")
             completion()
         }
@@ -179,7 +179,7 @@ class GameController {
      Takes a cannon tile and adds a new task to the dispatch queue for each cannon on the tile
      */
     func createCannonFireTasks(cannon: Cannon){
-        print("DEBUG start of createCannonFireTasks")
+        //print("DEBUG start of createCannonFireTasks")
         if cannon.cannonType == CannonType.twoWayHorz {
             group.enter();self.fireCannon(cannon: cannon, direction: "East")
             group.enter();self.fireCannon(cannon: cannon, direction: "West")
@@ -194,11 +194,11 @@ class GameController {
             group.enter();self.fireCannon(cannon: cannon, direction: "North")
             group.enter();self.fireCannon(cannon: cannon, direction: "South")
         }
-        print("DEBUG end of createCannonFireTasks")
+        //print("DEBUG end of createCannonFireTasks")
     }
     
     func fireCannon(cannon: Cannon, direction: String) {
-        print("DEBUG start of controller.fireCannon")
+        //print("DEBUG start of controller.fireCannon")
         let hitTiles = self.level.fireCannon(cannon: cannon, direction: direction)
 //        if(hitTile?.gemType == GemType.unknown){ //make hitCannonTile never nil but either a wall or empty tile if no cannon
 //
@@ -208,42 +208,44 @@ class GameController {
         let from = CGPoint(x: cannon.column, y: cannon.row)
         let to =  CGPoint(x: (tile!.column), y: (tile!.row))
         let duration = calculateDuration(direction: direction, cannon: cannon, hitTile: tile!)
-        self.scene.animateCannonball(from: from, to: to, duration: duration, direction: direction){ //do this once
-            for tile in hitTiles! {
-                print("DEBUG Start of iterating over hitTiles")
-                //self.group.enter();self.queue.async{ self.respondToHit(cannon: cannon, hitTile: tile, direction: direction){} }
-                self.group.enter()
+        self.scene.animateCannonball(from: from, to: to, duration: duration, direction: direction) //TODO, find a way to wait for animation to finish but not finish; and not break everything at the same time...
+        for tile in hitTiles! {
+            let duration = calculateDuration(direction: direction, cannon: cannon, hitTile: tile)
+            self.group.enter()
+            self.scene.waitFor(duration: duration){
                 self.respondToHit(cannon: cannon, hitTile: tile, direction: direction)
             }
-        print("DEBUG end of animateCannonball completion")
-        self.group.leave()
+            //print("DEBUG Start of iterating over hitTiles")
+            //self.group.enter();self.queue.async{ self.respondToHit(cannon: cannon, hitTile: tile, direction: direction){} }
         }
+        //print("DEBUG end of animateCannonball completion")
+        self.group.leave()
     }
     
     func respondToHit(cannon: Cannon, hitTile: Gem, direction: String){
-        print("DEBUG start of respondToHit")
+        //print("DEBUG start of respondToHit")
         //print("completed animation to: \(to)")
         if hitTile is Cannon {
             self.scene.animateHitCannon(cannon: hitTile as? Cannon){
-                print("DEBUG finished animateHitCannon")
+                //print("DEBUG finished animateHitCannon")
                 self.scene.animateRemoveCannon(cannon: hitTile as! Cannon)
             }
-            print("DEBUG before CreateCannonFireTasks")
+            //print("DEBUG before CreateCannonFireTasks")
             self.createCannonFireTasks(cannon: hitTile as! Cannon)
-            print("DEBUG after CreateCannonFireTasks")
+            //print("DEBUG after CreateCannonFireTasks")
         } else if hitTile is Wall {
             let wall = hitTile as! Wall
-            print("DEBUG animateHitWall")
+            //print("DEBUG animateHitWall")
             self.scene.animateHitWall(wall: wall) //do this once
         } else {
-            print("DEBUG group end when hit empty tile")
+            //print("DEBUG group end when hit empty tile")
             //self.scene.animateRemoveCannon(cannon: cannon)
             self.group.leave()
             //completion()
             return
         }
         //completion()
-        print("DEBUG group end at end of respondHit")
+        //print("DEBUG group end at end of respondHit")
         self.group.leave()
     }
     
