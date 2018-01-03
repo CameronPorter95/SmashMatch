@@ -365,9 +365,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func animateMatchedGems(for chains: Set<Chain>, completion: @escaping () -> ()) {
         for chain in chains {
-            print("DEBUG before animateScore")
+            //print("DEBUG before animateScore")
             animateScore(for: chain)
-            print("DEBUG after animateScore")
+            //print("DEBUG after animateScore")
             for gem in chain.gems {
                 if let sprite = gem.sprite {
                     if sprite.action(forKey: "removing") == nil {
@@ -552,40 +552,47 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         run(SKAction.wait(forDuration: 0.8), completion: completion)
     }
     
-    func animateCannonball(from: CGPoint, to: CGPoint, duration: Double, direction: String){
+    func animateCannonball(from: CGPoint, to: Gem, duration: Double, direction: String){
         //print("Firing cannon to: \(to), duration: \(duration)")
         let sprite = SKSpriteNode(imageNamed: "cannonball")
-        var endTo = to
+        var endTo = CGPoint(x: to.column, y: to.row)
+        
+        let fadeOutLength: CGFloat = 2.0
         switch direction {
         case "North":
             sprite.zRotation = .pi/2
-            endTo.y += 2
+            endTo.y += fadeOutLength
         case "South":
             sprite.zRotation = (.pi/2)*3
-            endTo.y -= 2
+            endTo.y -= fadeOutLength
         case "East":
-            endTo.x += 2
+            endTo.x += fadeOutLength
         case "West":
-            endTo.x -= 2
+            endTo.x -= fadeOutLength
             sprite.zRotation = .pi
         default:
             break
         }
         sprite.position = pointFor(column: Int(from.x), row: Int(from.y))
-        sprite.size = CGSize(width: TileWidth/2, height: TileWidth/4)
+        sprite.size = CGSize(width: TileWidth/2, height: TileWidth/4) //TODO setup correct dimensions
         gemsLayer.addChild(sprite)
-        let beginFadeOutPos = pointFor(column: Int(to.x), row: Int(to.y))
+        let beginFadeOutPos = pointFor(column: to.column, row: to.row)
         let endFadeOutPos = pointFor(column: Int(endTo.x), row: Int(endTo.y))
         
         let moveAction1 = SKAction.move(to: beginFadeOutPos, duration: duration)
-        let moveAction2 = SKAction.move(to: endFadeOutPos, duration: 0.2)
-        let fadeOutAction = SKAction.fadeOut(withDuration: 0.2)
+        let moveAction2 = SKAction.move(to: endFadeOutPos, duration: TimeInterval(fadeOutLength/10))
+        let fadeOutAction = SKAction.fadeOut(withDuration: TimeInterval(fadeOutLength/10))
         sprite.run(moveAction1){
-            sprite.run(SKAction.sequence([SKAction.group([
-                moveAction2, fadeOutAction])
-                ])){
-                    sprite.removeFromParent()
-                    //completion()
+            if to is Wall == false {
+                print("beginFadeOutPos: \(beginFadeOutPos)  endFadeOutPos: \(endFadeOutPos)")
+                sprite.run(SKAction.sequence([SKAction.group([
+                    moveAction2, fadeOutAction])
+                    ])){
+                        sprite.removeFromParent()
+                        //completion()
+                }
+            } else {
+                sprite.removeFromParent()
             }
         }
         //run(SKAction.wait(forDuration: duration), completion: completion)
@@ -647,10 +654,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.text = String(format: "%ld", chain.score)
         scoreLabel.position = centerPosition
         scoreLabel.zPosition = 300
-        print("DEBUG before adding to layer")
+        //print("DEBUG before adding to layer")
         print(gemsLayer.children.count)
         gemsLayer.addChild(scoreLabel)
-        print("DEBUG before moveAction")
+        //print("DEBUG before moveAction")
         let moveAction = SKAction.move(by: CGVector(dx: 0, dy: 3), duration: 0.7)
         moveAction.timingMode = .easeOut
         //print("DEBUG before run score animation")

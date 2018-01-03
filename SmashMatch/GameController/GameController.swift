@@ -206,9 +206,9 @@ class GameController {
         
         let tile = hitTiles?.last
         let from = CGPoint(x: cannon.column, y: cannon.row)
-        let to =  CGPoint(x: (tile!.column), y: (tile!.row))
+        //let to =  CGPoint(x: (tile!.column), y: (tile!.row))
         let duration = calculateDuration(direction: direction, cannon: cannon, hitTile: tile!)
-        self.scene.animateCannonball(from: from, to: to, duration: duration, direction: direction) //TODO, find a way to wait for animation to finish but not finish; and not break everything at the same time...
+        self.scene.animateCannonball(from: from, to: tile!, duration: duration, direction: direction) //TODO, find a way to wait for animation to finish but not finish; and not break everything at the same time...
         for tile in hitTiles! {
             let duration = calculateDuration(direction: direction, cannon: cannon, hitTile: tile)
             self.group.enter()
