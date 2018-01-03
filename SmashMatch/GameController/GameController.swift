@@ -16,7 +16,7 @@ class GameController {
     var scene: GameScene!
     var level: Level!
     
-    var currentLevelNum = 3 //TODO increase current level upon level completion and call setupLevel again to go to next level
+    var currentLevelNum = 2 //TODO increase current level upon level completion and call setupLevel again to go to next level
     var movesMade = 0
     var score = 0
     var timeLeft = Int()
@@ -170,7 +170,7 @@ class GameController {
         }
         group.notify(queue: queue) {
             //print("DEBUG end of fireMatchedCannons")
-            print("-------------------------------------------------------------")
+            //print("-------------------------------------------------------------")
             completion()
         }
     }
@@ -208,7 +208,8 @@ class GameController {
         let from = CGPoint(x: cannon.column, y: cannon.row)
         //let to =  CGPoint(x: (tile!.column), y: (tile!.row))
         let duration = calculateDuration(direction: direction, cannon: cannon, hitTile: tile!)
-        self.scene.animateCannonball(from: from, to: tile!, duration: duration, direction: direction) //TODO, find a way to wait for animation to finish but not finish; and not break everything at the same time...
+        group.enter()
+        self.scene.animateCannonball(from: from, to: tile!, duration: duration, direction: direction){self.group.leave()}
         for tile in hitTiles! {
             let duration = calculateDuration(direction: direction, cannon: cannon, hitTile: tile)
             self.group.enter()

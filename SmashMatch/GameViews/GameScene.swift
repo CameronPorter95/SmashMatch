@@ -552,7 +552,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         run(SKAction.wait(forDuration: 0.8), completion: completion)
     }
     
-    func animateCannonball(from: CGPoint, to: Gem, duration: Double, direction: String){
+    func animateCannonball(from: CGPoint, to: Gem, duration: Double, direction: String, completion: @escaping () -> ()){
         //print("Firing cannon to: \(to), duration: \(duration)")
         let sprite = SKSpriteNode(imageNamed: "cannonball")
         var endTo = CGPoint(x: to.column, y: to.row)
@@ -584,15 +584,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let fadeOutAction = SKAction.fadeOut(withDuration: TimeInterval(fadeOutLength/10))
         sprite.run(moveAction1){
             if to is Wall == false {
-                print("beginFadeOutPos: \(beginFadeOutPos)  endFadeOutPos: \(endFadeOutPos)")
                 sprite.run(SKAction.sequence([SKAction.group([
                     moveAction2, fadeOutAction])
                     ])){
                         sprite.removeFromParent()
-                        //completion()
+                        completion()
                 }
             } else {
                 sprite.removeFromParent()
+                completion()
             }
         }
         //run(SKAction.wait(forDuration: duration), completion: completion)
@@ -654,10 +654,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.text = String(format: "%ld", chain.score)
         scoreLabel.position = centerPosition
         scoreLabel.zPosition = 300
-        //print("DEBUG before adding to layer")
-        print(gemsLayer.children.count)
+        print("DEBUG before adding score to layer")
         gemsLayer.addChild(scoreLabel)
-        //print("DEBUG before moveAction")
+        print("DEBUG after adding score to layer")
         let moveAction = SKAction.move(by: CGVector(dx: 0, dy: 3), duration: 0.7)
         moveAction.timingMode = .easeOut
         //print("DEBUG before run score animation")
