@@ -365,7 +365,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func animateMatchedGems(for chains: Set<Chain>, completion: @escaping () -> ()) {
         for chain in chains {
+            print("DEBUG before animateScore")
             animateScore(for: chain)
+            print("DEBUG after animateScore")
             for gem in chain.gems {
                 if let sprite = gem.sprite {
                     if sprite.action(forKey: "removing") == nil {
@@ -554,20 +556,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //print("Firing cannon to: \(to), duration: \(duration)")
         let sprite = SKSpriteNode(imageNamed: "cannonball")
         var newTo = to
-        switch direction {
-        case "North":
-            sprite.zRotation = .pi/2
-            newTo.y += 4
-        case "South":
-            sprite.zRotation = (.pi/2)*3
-            newTo.y -= 4
-        case "East":
-            newTo.x += 4
-        case "West":
-            newTo.x -= 4
-        default:
-            break
-        }
+//        switch direction {
+//        case "North":
+//            sprite.zRotation = .pi/2
+//            newTo.y += 4
+//        case "South":
+//            sprite.zRotation = (.pi/2)*3
+//            newTo.y -= 4
+//        case "East":
+//            newTo.x += 4
+//        case "West":
+//            newTo.x -= 4
+//        default:
+//            break
+//        }
         sprite.position = pointFor(column: Int(from.x), row: Int(from.y))
         sprite.size = CGSize(width: TileWidth/2, height: TileWidth/4)
         gemsLayer.addChild(sprite)
@@ -577,8 +579,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let fadeOutAction = SKAction.fadeOut(withDuration: duration)
         sprite.run(SKAction.sequence([moveAction, fadeOutAction])){
             sprite.removeFromParent()
+            completion()
         }
-        run(SKAction.wait(forDuration: duration - 0.4), completion: completion)
+        //run(SKAction.wait(forDuration: duration), completion: completion)
     }
     
     func animateRemoveCannon(cannon: Cannon){
@@ -593,7 +596,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         run(SKAction.wait(forDuration: 0.3))
     }
     
-    func animateBreakWall(wall: Wall){
+    func animateHitWall(wall: Wall){
 //        if wall == nil {
 //            return
 //        }
@@ -624,8 +627,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func animateScore(for chain: Chain) { //TODO Move label position to intercept gem for intercept chains
+        //print("DEBUG before getting sprites")
         let firstSprite = chain.firstGem().sprite!
         let lastSprite = chain.lastGem().sprite!
+        //print("DEBUG before getting position")
         let centerPosition = CGPoint(
             x: (firstSprite.position.x + lastSprite.position.x)/2,
             y: (firstSprite.position.y + lastSprite.position.y)/2 - 10)
@@ -635,11 +640,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.text = String(format: "%ld", chain.score)
         scoreLabel.position = centerPosition
         scoreLabel.zPosition = 300
+        print("DEBUG before adding to layer")
+        print(gemsLayer.children.count)
         gemsLayer.addChild(scoreLabel)
-        
+        print("DEBUG before moveAction")
         let moveAction = SKAction.move(by: CGVector(dx: 0, dy: 3), duration: 0.7)
         moveAction.timingMode = .easeOut
+        //print("DEBUG before run score animation")
         scoreLabel.run(SKAction.sequence([moveAction, SKAction.removeFromParent()]))
+        //print("DEBUG after run score animation")
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

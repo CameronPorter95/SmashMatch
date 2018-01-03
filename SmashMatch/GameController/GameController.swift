@@ -108,16 +108,21 @@ class GameController {
         }
         let matchedCannons = getCannonsFromChains(chains: chains)
         self.scene.animateMatchedCannons(cannons: matchedCannons)
-        self.fireMatchedCannons(cannons: matchedCannons){ //TODO mysterious cannon not falling all the way bug (only on top of other cannons?)
-            self.scene.animateMatchedGems(for: chains) { //TODO do this same time as fire cannon animation?
+        self.fireMatchedCannons(cannons: matchedCannons){
+            print("DEBUG before animateMatchedGems")
+            self.scene.animateMatchedGems(for: chains) {
+                print("DEBUG before level.getCannons")
                 let cannons = self.level.getCannons() //TODO refactor
+                print("DEBUG before animateNewCannons")
                 self.scene.animateNewCannons(cannons: cannons) {
                     for chain in chains{
                         self.score += chain.score
                     }
                     self.updateLabels()
+                    print("DEBUG before fillHoles")
                     let columns = self.level.fillHoles()
                     self.scene.animateFallingGems(columns: columns) {
+                        print("DEBUG before topUpGems")
                         let columns = self.level.topUpGems()
                         self.scene.animateNewGems(columns) {
                             self.handleMatches()
@@ -159,10 +164,13 @@ class GameController {
     }
     
     func fireMatchedCannons(cannons: [Cannon], completion: @escaping () -> ()){
+        print("DEBUG start of fireMatchedCannons")
         for i in (0..<cannons.count) {
             createCannonFireTasks(cannon: cannons[i])
         }
         group.notify(queue: queue) {
+            print("DEBUG end of fireMatchedCannons")
+            print("-------------------------------------------------------------")
             completion()
         }
     }
@@ -171,59 +179,82 @@ class GameController {
      Takes a cannon tile and adds a new task to the dispatch queue for each cannon on the tile
      */
     func createCannonFireTasks(cannon: Cannon){
+        print("DEBUG start of createCannonFireTasks")
         if cannon.cannonType == CannonType.twoWayHorz {
-            group.enter();queue.async{ self.fireCannon(cannon: cannon, direction: "East"){} }
-            group.enter();queue.async{ self.fireCannon(cannon: cannon, direction: "West"){} }
+            group.enter();self.fireCannon(cannon: cannon, direction: "East")
+            group.enter();self.fireCannon(cannon: cannon, direction: "West")
         }
         else if cannon.cannonType == CannonType.twoWayVert {
-            group.enter();queue.async{ self.fireCannon(cannon: cannon, direction: "North"){} }
-            group.enter();queue.async{ self.fireCannon(cannon: cannon, direction: "South"){} }
+            group.enter();self.fireCannon(cannon: cannon, direction: "North")
+            group.enter();self.fireCannon(cannon: cannon, direction: "South")
         }
         else {
-            group.enter();queue.async{ self.fireCannon(cannon: cannon, direction: "East"){} }
-            group.enter();queue.async{ self.fireCannon(cannon: cannon, direction: "West"){} }
-            group.enter();queue.async{ self.fireCannon(cannon: cannon, direction: "North"){} }
-            group.enter();queue.async{ self.fireCannon(cannon: cannon, direction: "South"){} }
+            group.enter();self.fireCannon(cannon: cannon, direction: "East")
+            group.enter();self.fireCannon(cannon: cannon, direction: "West")
+            group.enter();self.fireCannon(cannon: cannon, direction: "North")
+            group.enter();self.fireCannon(cannon: cannon, direction: "South")
         }
+        print("DEBUG end of createCannonFireTasks")
     }
     
-    func fireCannon(cannon: Cannon, direction: String, completion: @escaping () -> ()) {
+    func fireCannon(cannon: Cannon, direction: String) {
+        print("DEBUG start of controller.fireCannon")
         let hitTiles = self.level.fireCannon(cannon: cannon, direction: direction)
 //        if(hitTile?.gemType == GemType.unknown){ //make hitCannonTile never nil but either a wall or empty tile if no cannon
 //
 //        }
         
-        for tile in hitTiles! {
-            group.enter()
-            var distance: Int
-            if direction == "East" || direction == "West"{
-                distance = abs((tile.column) - cannon.column) + 4
-            } else {
-                distance = abs((tile.row) - cannon.row) + 4
+        let tile = hitTiles?.last
+        let from = CGPoint(x: cannon.column, y: cannon.row)
+        let to =  CGPoint(x: (tile!.column), y: (tile!.row))
+        let duration = calculateDuration(direction: direction, cannon: cannon, hitTile: tile!)
+        self.scene.animateCannonball(from: from, to: to, duration: duration, direction: direction){ //do this once
+            for tile in hitTiles! {
+                print("DEBUG Start of iterating over hitTiles")
+                //self.group.enter();self.queue.async{ self.respondToHit(cannon: cannon, hitTile: tile, direction: direction){} }
+                self.group.enter()
+                self.respondToHit(cannon: cannon, hitTile: tile, direction: direction)
             }
-            let from = CGPoint(x: cannon.column, y: cannon.row)
-            let to =  CGPoint(x: (tile.column), y: (tile.row))
-            let duration: Double = Double(distance)/10.0
-            self.scene.animateCannonball(from: from, to: to, duration: duration, direction: direction){ //do this once
-                //print("completed animation to: \(to)")
-                if tile is Cannon {
-                    self.scene.animateHitCannon(cannon: tile as? Cannon){
-                        self.scene.animateRemoveCannon(cannon: tile as! Cannon)
-                    }
-                    self.createCannonFireTasks(cannon: tile as! Cannon)
-                } else if tile is Wall {
-                    let wall = tile as! Wall
-                    self.scene.animateBreakWall(wall: wall) //do this once
-                } else {
-                    //self.scene.animateRemoveCannon(cannon: cannon)
-                    self.group.leave()
-                    completion()
-                    return
-                }
-               self.group.leave()
-            }
-        }
+        print("DEBUG end of animateCannonball completion")
         self.group.leave()
+        }
+    }
+    
+    func respondToHit(cannon: Cannon, hitTile: Gem, direction: String){
+        print("DEBUG start of respondToHit")
+        //print("completed animation to: \(to)")
+        if hitTile is Cannon {
+            self.scene.animateHitCannon(cannon: hitTile as? Cannon){
+                print("DEBUG finished animateHitCannon")
+                self.scene.animateRemoveCannon(cannon: hitTile as! Cannon)
+            }
+            print("DEBUG before CreateCannonFireTasks")
+            self.createCannonFireTasks(cannon: hitTile as! Cannon)
+            print("DEBUG after CreateCannonFireTasks")
+        } else if hitTile is Wall {
+            let wall = hitTile as! Wall
+            print("DEBUG animateHitWall")
+            self.scene.animateHitWall(wall: wall) //do this once
+        } else {
+            print("DEBUG group end when hit empty tile")
+            //self.scene.animateRemoveCannon(cannon: cannon)
+            self.group.leave()
+            //completion()
+            return
+        }
+        //completion()
+        print("DEBUG group end at end of respondHit")
+        self.group.leave()
+    }
+    
+    func calculateDuration(direction: String, cannon: Cannon, hitTile: Gem) -> Double {
+        var distance: Int
+        if direction == "East" || direction == "West"{
+            distance = abs((hitTile.column) - cannon.column)
+        } else {
+            distance = abs((hitTile.row) - cannon.row)
+        }
+        return Double(distance)/10.0
     }
     
     @objc func shuffleNotification(_ notification: Notification) {

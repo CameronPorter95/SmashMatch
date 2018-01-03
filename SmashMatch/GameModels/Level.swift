@@ -413,12 +413,16 @@ class Level {
                     if wall.wallType == .broken {
                         wall.isDestroyed = true
                         tiles[curColumn, curRow] = nil
+                        gems[curColumn, curRow] = nil
+                        hitTiles.append(hitTile!)
+                        break
                     } else {
                         wall.wallType = .broken
                         hitTiles.append(hitTile!)
-                        curColumn += 1
-                        if curColumn >= NumColumns { break }
-                        continue
+                        break
+//                        curColumn += 1
+//                        if curColumn >= NumColumns { break }
+//                        continue
                     }
                 }
                 gems[curColumn, curRow] = nil
@@ -439,12 +443,16 @@ class Level {
                     if wall.wallType == .broken {
                         wall.isDestroyed = true
                         tiles[curColumn, curRow] = nil
+                        gems[curColumn, curRow] = nil
+                        hitTiles.append(hitTile!)
+                        break
                     } else {
                         wall.wallType = .broken
                         hitTiles.append(hitTile!)
-                        curColumn -= 1
-                        if curColumn <= -1 { break }
-                        continue
+                        break
+//                        curColumn -= 1
+//                        if curColumn <= -1 { break }
+//                        continue
                     }
                 }
                 gems[curColumn, curRow] = nil
@@ -465,12 +473,16 @@ class Level {
                     if wall.wallType == .broken {
                         wall.isDestroyed = true
                         tiles[curColumn, curRow] = nil
+                        gems[curColumn, curRow] = nil
+                        hitTiles.append(hitTile!)
+                        break
                     } else {
                         wall.wallType = .broken
                         hitTiles.append(hitTile!)
-                        curRow += 1
-                        if curRow >= NumRows { break }
-                        continue
+                        break
+//                        curRow += 1
+//                        if curRow >= NumRows { break }
+//                        continue
                     }
                 }
                 gems[curColumn, curRow] = nil
@@ -491,12 +503,16 @@ class Level {
                     if wall.wallType == .broken {
                         wall.isDestroyed = true
                         tiles[curColumn, curRow] = nil
+                        gems[curColumn, curRow] = nil
+                        hitTiles.append(hitTile!)
+                        break
                     } else {
                         wall.wallType = .broken
                         hitTiles.append(hitTile!)
-                        curRow -= 1
-                        if curRow <= -1 { break }
-                        continue
+                        break
+//                        curRow -= 1
+//                        if curRow <= -1 { break }
+//                        continue
                     }
                 }
                 gems[curColumn, curRow] = nil
