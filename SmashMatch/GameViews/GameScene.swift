@@ -654,9 +654,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.text = String(format: "%ld", chain.score)
         scoreLabel.position = centerPosition
         scoreLabel.zPosition = 300
-        print("DEBUG before adding score to layer")
+        //print("DEBUG before adding score to layer")
         gemsLayer.addChild(scoreLabel)
-        print("DEBUG after adding score to layer")
+        //print("DEBUG after adding score to layer")
         let moveAction = SKAction.move(by: CGVector(dx: 0, dy: 3), duration: 0.7)
         moveAction.timingMode = .easeOut
         //print("DEBUG before run score animation")

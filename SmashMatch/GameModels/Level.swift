@@ -25,7 +25,7 @@ class Level {
     var maximumMoves = 0
     
     var gemsFromFileArray: [[Int]]?
-    var isClassicMode = true; //Set this based on the game mode
+    var isClassicMode = false; //Set this based on the game mode
     var initialLoad = true;
     
     func shuffle() -> Set<Gem> {
@@ -54,7 +54,8 @@ class Level {
                     if(row == 0 || row == NumRows-1 || column == 0 || column == NumColumns-1){
                         //Random place walls but only once
                         if walls.count < maxWalls && initialLoad == true {
-                            let positionIndex = Int(arc4random_uniform(32))
+                            var positionIndex = Int(arc4random_uniform(32))
+                            if positionIndex == 7 || positionIndex == 31 { positionIndex = Int(arc4random_uniform(32)) }
                             let wall: Wall
                             if(possibleWallPositions[positionIndex][0] == 0 || possibleWallPositions[positionIndex][0] == NumRows-1) {
                                 wall = Wall(column: possibleWallPositions[positionIndex][1], row: possibleWallPositions[positionIndex][0], wallType: WallType.new, horizontal: true)
