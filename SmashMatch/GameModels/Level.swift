@@ -43,7 +43,7 @@ class Level {
         repeat {
             set = createInitialGems()
             _ = detectPossibleSwaps()
-//            print("possible swaps: \(possibleSwaps)")
+            //            print("possible swaps: \(possibleSwaps)")
         } while possibleSwaps.count == 0
         
         return set
@@ -116,7 +116,6 @@ class Level {
                         var gem = Gem(column: column, row: row, gemType: GemType(rawValue: gemType)!)
                         if gem.gemType.spriteName == "Cannon" {
                             gem = Cannon(column: column, row: row, cannonType: CannonType.fourWay, gemType: GemType.blue)
-                            
                         }
                         gems[column, row] = gem
                         set.insert(gem)
@@ -136,6 +135,9 @@ class Level {
             let tileRow = NumRows - row - 1
             for (column, value) in rowArray.enumerated() {
                 if value == 1 {
+                    if isClassicMode == false && (tileRow == 0 || tileRow == NumRows-1 || column == 0 || column == NumColumns-1) {
+                        continue
+                    }
                     tiles[column, tileRow] = Tile()
                 }
             }
@@ -426,9 +428,9 @@ class Level {
                         wall.wallType = .broken
                         hitTiles.append(hitTile!)
                         break
-//                        curColumn += 1
-//                        if curColumn >= NumColumns { break }
-//                        continue
+                        //                        curColumn += 1
+                        //                        if curColumn >= NumColumns { break }
+                        //                        continue
                     }
                 }
                 gems[curColumn, curRow] = nil
@@ -456,9 +458,9 @@ class Level {
                         wall.wallType = .broken
                         hitTiles.append(hitTile!)
                         break
-//                        curColumn -= 1
-//                        if curColumn <= -1 { break }
-//                        continue
+                        //                        curColumn -= 1
+                        //                        if curColumn <= -1 { break }
+                        //                        continue
                     }
                 }
                 gems[curColumn, curRow] = nil
@@ -486,9 +488,9 @@ class Level {
                         wall.wallType = .broken
                         hitTiles.append(hitTile!)
                         break
-//                        curRow += 1
-//                        if curRow >= NumRows { break }
-//                        continue
+                        //                        curRow += 1
+                        //                        if curRow >= NumRows { break }
+                        //                        continue
                     }
                 }
                 gems[curColumn, curRow] = nil
@@ -516,9 +518,9 @@ class Level {
                         wall.wallType = .broken
                         hitTiles.append(hitTile!)
                         break
-//                        curRow -= 1
-//                        if curRow <= -1 { break }
-//                        continue
+                        //                        curRow -= 1
+                        //                        if curRow <= -1 { break }
+                        //                        continue
                     }
                 }
                 gems[curColumn, curRow] = nil
@@ -630,3 +632,4 @@ class Level {
         return vertLength >= 3
     }
 }
+
