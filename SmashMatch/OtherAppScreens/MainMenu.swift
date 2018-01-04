@@ -104,7 +104,7 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
                 if (settingsExit?.isHidden)! {
                     settingsScroll?.physicsBody = settingsScrollPhysics
                     westWall?.physicsBody = westWallPhysics
-                    self.physicsWorld.gravity = CGVector(dx: -9.8, dy: 0)
+                    self.physicsWorld.gravity = CGVector(dx: -12, dy: 0)
                     let duration = TimeInterval(0.5)
                     let colorAction = SKAction.colorize(withColorBlendFactor: 0.4, duration: duration)
                     let fadeOutAction = SKAction.fadeOut(withDuration: duration)

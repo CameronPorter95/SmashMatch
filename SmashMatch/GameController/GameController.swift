@@ -154,7 +154,7 @@ class GameController {
     }
     
     @objc func updateTimer() {
-        if(scene != nil){
+        if(scene != nil && !scene.isGamePaused){
             if(timeLeft >= 0) {
                 let formatter = DateComponentsFormatter()
                 formatter.allowedUnits = [.minute, .second]
