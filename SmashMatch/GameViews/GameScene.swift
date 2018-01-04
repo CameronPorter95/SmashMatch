@@ -389,8 +389,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             for (idx, gem) in array.enumerated() {
                 let newPosition = pointFor(column: gem.column, row: gem.row)
                 let delay = 0.05 + 0.15*TimeInterval(idx)
-                let sprite = gem.sprite!   // sprite always exists at this point
-                let duration = TimeInterval(((sprite.position.y - newPosition.y) / TileHeight) * 0.1) //TODO use this logic for cannonball animation
+                let sprite: SKSpriteNode!
+                if gem.sprite != nil {
+                    sprite = gem.sprite!
+                } else {
+                    sprite = SKSpriteNode(imageNamed: gem.spriteName)
+                    gemsLayer.addChild(sprite)
+                    sprite.size = CGSize(width: TileWidth/2, height: TileHeight/2)
+                    sprite.position = pointFor(column: gem.column, row: 10)
+                    gem.sprite = sprite
+                }
+                let duration = TimeInterval(((sprite.position.y - newPosition.y) / TileHeight) * 0.1)
                 longestDuration = max(longestDuration, duration + delay)
                 let moveAction = SKAction.move(to: newPosition, duration: duration)
                 moveAction.timingMode = .easeOut

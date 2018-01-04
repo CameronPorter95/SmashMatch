@@ -14,6 +14,7 @@ let NumLevels = 4 // Excluding level 0
 
 class Level {
     fileprivate var gems = Array2D<Gem>(columns: NumColumns, rows: NumRows)
+    fileprivate var futureGems: Array2D<Gem>?
     private var tiles = Array2D<Tile>(columns: NumColumns, rows: NumRows)
     private var addedCannons = Set<Cannon>() //The cannons added for the current gameloop (gets reset every game loop, gems holds the cannons indefintely)
     private var walls = Set<Wall>()
@@ -25,7 +26,9 @@ class Level {
     var maximumMoves = 0
     
     var gemsFromFileArray: [[Int]]?
-    var isClassicMode = false; //Set this based on the game mode
+    var futureGemsFromFileArray: [[Int]]?
+    var numFutureGemRows = 3
+    var isClassicMode = true; //Set this based on the game mode
     var initialLoad = true;
     
     func shuffle() -> Set<Gem> {
@@ -51,7 +54,6 @@ class Level {
     
     private func createInitialGems() -> Set<Gem> {
         var set = Set<Gem>()
-        let possibleWallPositions = getPossibleWallPositions()
         for row in 0..<NumRows {
             for column in 0..<NumColumns {
                 if tiles[column, row] != nil {
@@ -75,6 +77,7 @@ class Level {
                 }
             }
         }
+        let possibleWallPositions = getPossibleWallPositions()
         for _ in 0..<maxWalls {
             if initialLoad == true {
                 var positionIndex = Int(arc4random_uniform(32))
@@ -95,6 +98,7 @@ class Level {
     }
     
     private func createInitialGemsFromFile() -> Set<Gem> {
+        futureGems = Array2D<Gem>(columns: NumColumns, rows: numFutureGemRows)
         var set = Set<Gem>()
         for row in 0..<NumRows {
             for column in 0..<NumColumns {
@@ -123,6 +127,17 @@ class Level {
                 }
             }
         }
+        for row in 0..<numFutureGemRows {
+            for column in 0..<NumColumns {
+                if(column == 0 || column == NumColumns-1){
+                    continue
+                } else {
+                    let gemType = futureGemsFromFileArray![row][column]
+                    let gem = Gem(column: column, row: row, gemType: GemType(rawValue: gemType)!)
+                    futureGems![column, row] = gem
+                }
+            }
+        }
         initialLoad = false
         return set
     }
@@ -131,6 +146,7 @@ class Level {
         guard let dictionary = Dictionary<String, AnyObject>.loadJSONFromBundle(filename: filename) else { return }
         guard let tilesArray = dictionary["tiles"] as? [[Int]] else { return }
         gemsFromFileArray = dictionary["gems"] as? [[Int]]
+        futureGemsFromFileArray = dictionary["futureGems"] as? [[Int]]
         for (row, rowArray) in tilesArray.enumerated() {
             let tileRow = NumRows - row - 1
             for (column, value) in rowArray.enumerated() {
@@ -543,22 +559,37 @@ class Level {
     }
     
     func fillHoles() -> [[Gem]] {
+        var numRows = NumRows
         var columns = [[Gem]]()
         for column in 0..<NumColumns {
             var array = [Gem]()
-            for row in 0..<NumRows {
-                if tiles[column, row] != nil && gems[column, row] == nil {
-                    for lookup in (row + 1)..<NumRows {
-                        if let gem = gems[column, lookup] {
-                            if(gem is Wall){
+            if isClassicMode {
+                numRows += numFutureGemRows
+            }
+            for row in 0..<NumRows-1 {
+                if (tiles[column, row] != nil && gems[column, row] == nil) { //Only fill holes in the playavble grid. Filling holes in futureGems comes later
+                    for lookup in (row + 1)..<numRows { //Scan upwards in search of gems to fill hole
+                        if lookup<NumRows-1 { //If looking up to first 8 rows of grid
+                            if let gem = gems[column, lookup] { //If found gem above current gem
+//                                if(gem is Wall){
+//                                    break
+//                                }
+                                gem.moved = true;
+                                gems[column, lookup] = nil
+                                gems[column, row] = gem
+                                gem.row = row
+                                array.append(gem)
                                 break
                             }
-                            gem.moved = true;
-                            gems[column, lookup] = nil
-                            gems[column, row] = gem
-                            gem.row = row
-                            array.append(gem)
-                            break
+                        } else { //If reached top row or above (i.e. looking above the grid) we need to jump to look for futureGems
+                            if let gem = futureGems![column, lookup-9] { //A lookup of 9 looks in the first row of futureGems which is index 0
+                                gem.moved = true;
+                                futureGems![column, lookup-9] = nil
+                                gems[column, row] = gem
+                                gem.row = row
+                                array.append(gem)//TODO
+                                break
+                            }
                         }
                     }
                 }
