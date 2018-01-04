@@ -561,6 +561,7 @@ class Level {
     func fillHoles() -> [[Gem]] {
         var numRows = NumRows
         var columns = [[Gem]]()
+        var numHoles = 0
         for column in 0..<NumColumns {
             var array = [Gem]()
             if isClassicMode {
@@ -568,6 +569,7 @@ class Level {
             }
             for row in 0..<NumRows-1 {
                 if (tiles[column, row] != nil && gems[column, row] == nil) { //Only fill holes in the playavble grid. Filling holes in futureGems comes later
+                    numHoles += 1
                     for lookup in (row + 1)..<numRows { //Scan upwards in search of gems to fill hole
                         if lookup<NumRows-1 { //If looking up to first 8 rows of grid
                             if let gem = gems[column, lookup] { //If found gem above current gem
@@ -582,13 +584,15 @@ class Level {
                                 break
                             }
                         } else { //If reached top row or above (i.e. looking above the grid) we need to jump to look for futureGems
-                            if let gem = futureGems![column, lookup-9] { //A lookup of 9 looks in the first row of futureGems which is index 0
-                                gem.moved = true;
-                                futureGems![column, lookup-9] = nil
-                                gems[column, row] = gem
-                                gem.row = row
-                                array.append(gem)//TODO
-                                break
+                            for futureLookup in 0..<numHoles { //If lookup reaches top row, must grab futureGems for as many holes were formed (number of holes = number of futureGems required).
+                                if let gem = futureGems![column, futureLookup] {
+                                    gem.moved = true;
+                                    futureGems![column, futureLookup] = nil
+                                    gems[column, row] = gem
+                                    gem.row = row
+                                    array.append(gem)//TODO
+                                    break
+                                }
                             }
                         }
                     }
