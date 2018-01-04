@@ -16,7 +16,7 @@ class GameController {
     var scene: GameScene!
     var level: Level!
     
-    var currentLevelNum = 1 //TODO increase current level upon level completion and call setupLevel again to go to next level
+    var currentLevelNum = 3 //TODO increase current level upon level completion and call setupLevel again to go to next level
     var movesMade = 0
     var score = 0
     var timeLeft = Int()
@@ -42,14 +42,17 @@ class GameController {
         var _ = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
     }
     
-    func setupLevel(view: SKView) {
+    func setupLevel(view: SKView, mode: String) {
         self.view = view
         view.isMultipleTouchEnabled = false
         scene = GameScene(size: (view.bounds.size))
         scene.scaleMode = .aspectFill
-        level = Level(filename: "Level_\(currentLevelNum)")
+        if mode != "Classic" {currentLevelNum = 0}
+        else {
+            
+        }
+        level = Level(filename:  "Level_\(currentLevelNum)", mode: mode)
         scene.level = level
-        
         scene.addTiles()
         scene.swipeHandler = handleSwipe
         
@@ -85,12 +88,18 @@ class GameController {
     func incrementMoves() {
         movesMade += 1
         updateLabels()
-        if score >= level.targetScore {
-            //showGameOver()
-        } else if level.getWalls().isEmpty {
-            //showGameOver()
+        if level.getWalls().isEmpty {
+            if level.isClassicMode {
+                //showClassicWin()
+            } else if level.isDemolitionMode {
+                //showDemolitionEnd()
+            }
         } else if timeLeft <= 0 {
-            //showGameOver()
+            if level.isClassicMode {
+                //showClassicGameOver()
+            } else if level.isArcadeMode {
+                //ShowArcadeEnd()
+            }
         }
     }
     
