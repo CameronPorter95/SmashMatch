@@ -672,5 +672,9 @@ class Level {
         }
         return vertLength >= 3
     }
+    
+    func getWalls() -> Set<Wall>{
+        return walls
+    }
 }
 

@@ -85,6 +85,13 @@ class GameController {
     func incrementMoves() {
         movesMade += 1
         updateLabels()
+        if score >= level.targetScore {
+            //showGameOver()
+        } else if level.getWalls().isEmpty {
+            //showGameOver()
+        } else if timeLeft <= 0 {
+            //showGameOver()
+        }
     }
     
     func handleSwipe(_ swap: Swap) {
