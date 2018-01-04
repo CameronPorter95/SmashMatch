@@ -664,14 +664,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func animateHitWall(wall: Wall){
-//        let sprite = SKSpriteNode(imageNamed: "smokeybrick")
-//        if sprite.action(forKey: "removing") == nil {
-//            let scaleAction = SKAction.scale(to: 0.1, duration: 0.3)
-//            scaleAction.timingMode = .easeOut
-//            sprite.run(SKAction.sequence([scaleAction, SKAction.removeFromParent()]),
-//                       withKey:"removing")
-//        }
-//        run(SKAction.wait(forDuration: 0.3))
+        let sprite = SKSpriteNode(imageNamed: "smokeybrick")
+        sprite.size = CGSize(width: TileWidth, height: TileWidth * 0.2666)
+        var pos = pointFor(column: wall.column, row: wall.row)
+        let offset = (TileWidth/2)-((0.2666*TileWidth)/2)
+        if wall.horizontal == false {
+            sprite.zRotation = .pi/2
+            if(wall.column == 0){
+                pos.x = pos.x + offset
+            }
+            else {
+                pos.x = pos.x - offset
+            }
+        } else {
+            if(wall.row == 0){
+                pos.y = pos.y + offset
+            }
+            else {
+                pos.y = pos.y - offset
+            }
+        }
+        sprite.position = pos
+        wallsLayer.addChild(sprite)
+        
+        let scaleAction = SKAction.scale(to: 2, duration: 1.5)
+        let fadeOutAction = SKAction.fadeOut(withDuration: 1.5)
+        scaleAction.timingMode = .easeOut
+        sprite.run(SKAction.sequence([scaleAction, fadeOutAction, SKAction.removeFromParent()]))
+        run(SKAction.wait(forDuration: 1.5))
         
         if wall.wallType == .broken && wall.isDestroyed == false {
             print("Breaking wall")
