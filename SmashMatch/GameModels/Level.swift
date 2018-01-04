@@ -27,7 +27,7 @@ class Level {
     
     var gemsFromFileArray: [[Int]]?
     var futureGemsFromFileArray: [[Int]]?
-    var numFutureGemRows = 3
+    var numFutureGemRows = Int()
     var isClassicMode = true; //Set this based on the game mode
     var initialLoad = true;
     
@@ -147,6 +147,7 @@ class Level {
         guard let tilesArray = dictionary["tiles"] as? [[Int]] else { return }
         gemsFromFileArray = dictionary["gems"] as? [[Int]]
         futureGemsFromFileArray = dictionary["futureGems"] as? [[Int]]
+        numFutureGemRows = futureGemsFromFileArray!.count
         for (row, rowArray) in tilesArray.enumerated() {
             let tileRow = NumRows - row - 1
             for (column, value) in rowArray.enumerated() {
@@ -585,6 +586,10 @@ class Level {
                             }
                         } else { //If reached top row or above (i.e. looking above the grid) we need to jump to look for futureGems
                             for futureLookup in 0..<numHoles { //If lookup reaches top row, must grab futureGems for as many holes were formed (number of holes = number of futureGems required).
+                                print("futureGem rows: \(String(describing: futureGems?.rows))")
+                                if(futureLookup >= (futureGems?.rows)!){
+                                    break
+                                }
                                 if let gem = futureGems![column, futureLookup] {
                                     gem.moved = true;
                                     futureGems![column, futureLookup] = nil
