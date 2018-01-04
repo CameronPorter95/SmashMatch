@@ -424,9 +424,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for array in columns {
             let startRow = 9
             
-            for (idx, gem) in array.enumerated() {
+            for (idx, gem) in array.reversed().enumerated() {
                 let sprite = SKSpriteNode(imageNamed: gem.spriteName)
-                sprite.size = CGSize(width: TileWidth/2, height: TileHeight/2)
+                sprite.size = CGSize(width: TileWidth, height: TileHeight)
                 sprite.position = pointFor(column: gem.column, row: startRow)
                 gemsLayer.addChild(sprite)
                 gem.sprite = sprite
