@@ -384,8 +384,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func animateFallingGems(columns: [[Gem]], completion: @escaping () -> ()) {
+        var futureColumns = [[Gem]]()
         var longestDuration: TimeInterval = 0
         for array in columns {
+            var futureColumn = [Gem]()
             for (idx, gem) in array.enumerated() {
                 let newPosition = pointFor(column: gem.column, row: gem.row)
                 let delay = 0.05 + 0.15*TimeInterval(idx)
@@ -393,11 +395,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if gem.sprite != nil {
                     sprite = gem.sprite!
                 } else {
-                    sprite = SKSpriteNode(imageNamed: gem.spriteName)
-                    gemsLayer.addChild(sprite)
-                    sprite.size = CGSize(width: TileWidth/2, height: TileHeight/2)
-                    sprite.position = pointFor(column: gem.column, row: 10)
-                    gem.sprite = sprite
+                    let futureSprite = SKSpriteNode(imageNamed: gem.spriteName)
+                    futureSprite.size = CGSize(width: TileWidth/2, height: TileHeight/2)
+                    futureSprite.position = pointFor(column: gem.column, row: 9)
+                    gem.sprite = futureSprite
+                    futureColumn.append(gem)
+                    continue
                 }
                 let duration = TimeInterval(((sprite.position.y - newPosition.y) / TileHeight) * 0.1)
                 longestDuration = max(longestDuration, duration + delay)
@@ -408,9 +411,45 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         SKAction.wait(forDuration: delay),
                         SKAction.group([moveAction, fallingGemSound])]))
             }
+            futureColumns.append(futureColumn)
+        }
+        run(SKAction.wait(forDuration: longestDuration)){
+            self.animateFutureGems(futureColumns){completion()}
+        }
+    }
+    
+    func animateFutureGems(_ columns: [[Gem]], completion: @escaping () -> ()) {
+        var longestDuration: TimeInterval = 0
+        
+        for array in columns {
+            let startRow = 9
+            
+            for (idx, gem) in array.enumerated() {
+                let sprite = SKSpriteNode(imageNamed: gem.spriteName)
+                sprite.size = CGSize(width: TileWidth/2, height: TileHeight/2)
+                sprite.position = pointFor(column: gem.column, row: startRow)
+                gemsLayer.addChild(sprite)
+                gem.sprite = sprite
+                let delay = 0.1 + 0.2 * TimeInterval(array.count - idx - 1)
+                let duration = TimeInterval(startRow - gem.row) * 0.1
+                longestDuration = max(longestDuration, duration + delay)
+                let newPosition = pointFor(column: gem.column, row: gem.row)
+                let moveAction = SKAction.move(to: newPosition, duration: duration)
+                moveAction.timingMode = .easeOut
+                sprite.alpha = 0
+                sprite.run(
+                    SKAction.sequence([
+                        SKAction.wait(forDuration: delay),
+                        SKAction.group([
+                            SKAction.fadeIn(withDuration: 0.05),
+                            moveAction,
+                            addGemSound])
+                        ]))
+            }
         }
         run(SKAction.wait(forDuration: longestDuration), completion: completion)
     }
+    
     
     func animateNewGems(_ columns: [[Gem]], completion: @escaping () -> ()) {
         var longestDuration: TimeInterval = 0

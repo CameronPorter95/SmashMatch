@@ -562,9 +562,9 @@ class Level {
     func fillHoles() -> [[Gem]] {
         var numRows = NumRows
         var columns = [[Gem]]()
-        var numHoles = 0
         for column in 0..<NumColumns {
             var array = [Gem]()
+            var numHoles = 0
             if isClassicMode {
                 numRows += numFutureGemRows
             }
@@ -585,9 +585,10 @@ class Level {
                                 break
                             }
                         } else { //If reached top row or above (i.e. looking above the grid) we need to jump to look for futureGems
-                            for futureLookup in 0..<numHoles { //If lookup reaches top row, must grab futureGems for as many holes were formed (number of holes = number of futureGems required).
+                            var count = 0
+                            for futureLookup in 0..<numFutureGemRows { //If lookup reaches top row, must grab futureGems for as many holes were formed (number of holes = number of futureGems required).
                                 print("futureGem rows: \(String(describing: futureGems?.rows))")
-                                if(futureLookup >= (futureGems?.rows)!){
+                                if(futureLookup >= (futureGems?.rows)! || count == numHoles){
                                     break
                                 }
                                 if let gem = futureGems![column, futureLookup] {
@@ -596,6 +597,7 @@ class Level {
                                     gems[column, row] = gem
                                     gem.row = row
                                     array.append(gem)//TODO
+                                    count += 1
                                     break
                                 }
                             }
