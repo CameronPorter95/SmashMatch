@@ -664,24 +664,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func animateHitWall(wall: Wall){
-//        if wall == nil {
-//            return
+//        let sprite = SKSpriteNode(imageNamed: "smokeybrick")
+//        if sprite.action(forKey: "removing") == nil {
+//            let scaleAction = SKAction.scale(to: 0.1, duration: 0.3)
+//            scaleAction.timingMode = .easeOut
+//            sprite.run(SKAction.sequence([scaleAction, SKAction.removeFromParent()]),
+//                       withKey:"removing")
 //        }
+//        run(SKAction.wait(forDuration: 0.3))
         
-//        let f0 = SKTexture.init(imageNamed: "")                               TODO Setup wall breaking sprites here (cannonball impact)
-//        let f1 = SKTexture.init(imageNamed: "")
-//        let f2 = SKTexture.init(imageNamed: "")
-//        let f3 = SKTexture.init(imageNamed: "")
-//
-//        let frames: [SKTexture] = [f0!, f1!, f2!, f3!]
-//        let sprite = SKSpriteNode(imageNamed: "")
-        
-//        sprite.position = pointFor(column: wall.column, row: wall.row)
-//        sprite.size = CGSize(width: TileWidth, height: TileWidth)             TODO orient impact sprites correctly
-//        gemsLayer.addChild(sprite!)
-        
-//        let animation = SKAction.animate(with: frames, timePerFrame: 0.2)
-//        sprite?.run(animation)
         if wall.wallType == .broken && wall.isDestroyed == false {
             print("Breaking wall")
             run(wallCrackSound)

@@ -201,7 +201,7 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
             if(lives > 5){
                 lives = 5
             }
-            startTime = currTime + UInt64(timeDiff.remainder(dividingBy: 3600))
+            startTime = currTime - UInt64(timeDiff.remainder(dividingBy: 3600))
             _ = PersistentEntity.shared.updateAt(id: 1, index: 5, value: startTime as AnyObject)
             _ = PersistentEntity.shared.updateAt(id: 1, index: 4, value: lives as AnyObject)
         }
@@ -215,7 +215,7 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
         if(lives < 5){
                 let currTime = mach_absolute_time()
                 let timeDiff = Double(((currTime - startTime) * numer) / denom)/1e9
-            _ = PersistentEntity.shared.updateAt(id: 1, index: 5, value: currTime as AnyObject)
+            
             let timeLeftForNextLife = 3600 - (timeDiff)
 
             //countDownLabel?.text = String(currTime)
@@ -246,6 +246,7 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
                 lives += 1
                 addLife()
                 startTime = currTime
+                _ = PersistentEntity.shared.updateAt(id: 1, index: 5, value: startTime as AnyObject)
             }
         }
     }

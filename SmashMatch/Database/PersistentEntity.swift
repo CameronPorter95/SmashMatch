@@ -136,6 +136,7 @@ class PersistentEntity {
                 setters.append(self.numberOfLives <- numberOfLives)
             }
             if index == 5 {
+                let timeStopped = Int64(truncating: value as! NSNumber)
                 setters.append(self.timeStopped <- timeStopped)
             }
             if index == 6 {
