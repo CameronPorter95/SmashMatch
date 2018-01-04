@@ -587,7 +587,6 @@ class Level {
                         } else { //If reached top row or above (i.e. looking above the grid) we need to jump to look for futureGems
                             var count = 0
                             for futureLookup in 0..<numFutureGemRows { //If lookup reaches top row, must grab futureGems for as many holes were formed (number of holes = number of futureGems required).
-                                print("futureGem rows: \(String(describing: futureGems?.rows))")
                                 if(futureLookup >= (futureGems?.rows)! || count == numHoles){
                                     break
                                 }

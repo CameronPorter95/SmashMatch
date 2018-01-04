@@ -115,7 +115,7 @@ class GameController {
                 let cannons = self.level.getCannons() //TODO refactor
                 //print("DEBUG before animateNewCannons")
                 self.scene.animateNewCannons(cannons: cannons) {
-                    for chain in chains{
+                    for chain in chains {
                         self.score += chain.score
                     }
                     self.updateLabels()
@@ -156,7 +156,10 @@ class GameController {
         for chain in chains {
             for gem in chain.gems {
                 if gem is Cannon {
+                    let cannon = gem as! Cannon
                     cannons.append(gem as! Cannon)
+                    if cannon.cannonType == .fourWay {score += 400}
+                    else {score += 200}
                 }
             }
         }
@@ -226,9 +229,16 @@ class GameController {
         //print("DEBUG start of respondToHit")
         //print("completed animation to: \(to)")
         if hitTile is Cannon {
-            self.scene.animateHitCannon(cannon: hitTile as? Cannon){
+            let hitCannon = hitTile as! Cannon
+            self.scene.animateHitCannon(cannon: hitCannon){
                 //print("DEBUG finished animateHitCannon")
-                self.scene.animateRemoveCannon(cannon: hitTile as! Cannon)
+                self.scene.animateRemoveCannon(cannon: hitCannon)
+                if hitCannon.cannonType == .fourWay {
+                    self.score += 400
+                    self.scene.animateScore(for: hitCannon, chainScore: 0)
+                } else {
+                    self.score += 200
+                }
             }
             //print("DEBUG before CreateCannonFireTasks")
             self.createCannonFireTasks(cannon: hitTile as! Cannon)

@@ -365,10 +365,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func animateMatchedGems(for chains: Set<Chain>, completion: @escaping () -> ()) {
         for chain in chains {
+            var chainContainsCannon = false
             //print("DEBUG before animateScore")
-            animateScore(for: chain)
             //print("DEBUG after animateScore")
             for gem in chain.gems {
+                if gem is Cannon {
+                    animateScore(for: gem as! Cannon, chainScore: chain.score)
+                    chainContainsCannon = true
+                }
                 if let sprite = gem.sprite {
                     if sprite.action(forKey: "removing") == nil {
                         let scaleAction = SKAction.scale(to: 0.1, duration: 0.3)
@@ -378,6 +382,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     }
                 }
             }
+            if !chainContainsCannon {animateScore(for: chain)}
         }
         run(matchSound)
         run(SKAction.wait(forDuration: 0.3), completion: completion)
@@ -710,6 +715,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //print("DEBUG before run score animation")
         scoreLabel.run(SKAction.sequence([moveAction, SKAction.removeFromParent()]))
         //print("DEBUG after run score animation")
+    }
+    
+    func animateScore(for cannon: Cannon, chainScore: Int) {
+        let centerPosition = pointFor(column: cannon.column, row: cannon.row)
+        let scoreLabel = SKLabelNode(fontNamed: "GillSans-BoldItalic")
+        scoreLabel.fontSize = 16
+        if cannon.cannonType == .fourWay {
+            scoreLabel.text = String(format: "%ld", 400+chainScore)
+        } else {
+            scoreLabel.text = String(format: "%ld", 200+chainScore)
+        }
+        scoreLabel.position = centerPosition
+        scoreLabel.zPosition = 300
+        gemsLayer.addChild(scoreLabel)
+        let moveAction = SKAction.move(by: CGVector(dx: 0, dy: 3), duration: 0.7)
+        moveAction.timingMode = .easeOut
+        scoreLabel.run(SKAction.sequence([moveAction, SKAction.removeFromParent()]))
     }
     
     func waitFor(duration: Double, completion: @escaping () -> ()){
