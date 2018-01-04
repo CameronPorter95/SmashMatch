@@ -16,7 +16,7 @@ class GameController {
     var scene: GameScene!
     var level: Level!
     
-    var currentLevelNum = 3 //TODO increase current level upon level completion and call setupLevel again to go to next level
+    var currentLevelNum = 2 //TODO increase current level upon level completion and call setupLevel again to go to next level
     var movesMade = 0
     var score = 0
     var timeLeft = Int()
@@ -235,7 +235,7 @@ class GameController {
             //print("DEBUG after CreateCannonFireTasks")
         } else if hitTile is Wall {
             let wall = hitTile as! Wall
-            //print("DEBUG animateHitWall")
+            print("DEBUG animateHitWall")
             self.scene.animateHitWall(wall: wall) //do this once
         } else {
             //print("DEBUG group end when hit empty tile")

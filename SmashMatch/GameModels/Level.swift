@@ -29,6 +29,10 @@ class Level {
     var initialLoad = true;
     
     func shuffle() -> Set<Gem> {
+        for wall in walls {
+            print(wall.wallType)
+        }
+        print(walls.count)
         var set: Set<Gem>
         if(isClassicMode){
             set = createInitialGemsFromFile()
@@ -52,21 +56,7 @@ class Level {
             for column in 0..<NumColumns {
                 if tiles[column, row] != nil {
                     if(row == 0 || row == NumRows-1 || column == 0 || column == NumColumns-1){
-                        //Random place walls but only once
-                        if walls.count < maxWalls && initialLoad == true {
-                            var positionIndex = Int(arc4random_uniform(32))
-                            if positionIndex == 7 || positionIndex == 31 { positionIndex = Int(arc4random_uniform(32)) }
-                            let wall: Wall
-                            if(possibleWallPositions[positionIndex][0] == 0 || possibleWallPositions[positionIndex][0] == NumRows-1) {
-                                wall = Wall(column: possibleWallPositions[positionIndex][1], row: possibleWallPositions[positionIndex][0], wallType: WallType.new, horizontal: true)
-                            } else {
-                                wall = Wall(column: possibleWallPositions[positionIndex][1], row: possibleWallPositions[positionIndex][0], wallType: WallType.new, horizontal: false)
-                            }
-                            gems[column, row] = wall
-                            set.insert(wall)
-                            walls.insert(wall)
-                            continue;
-                        }
+                        continue
                     } else {
                         var gemType: GemType
                         repeat {
@@ -83,6 +73,21 @@ class Level {
                         set.insert(gem)
                     }
                 }
+            }
+        }
+        for _ in 0..<maxWalls {
+            if initialLoad == true {
+                var positionIndex = Int(arc4random_uniform(32))
+                if positionIndex == 7 || positionIndex == 31 { positionIndex = Int(arc4random_uniform(32)) }
+                let wall: Wall
+                if(possibleWallPositions[positionIndex][0] == 0 || possibleWallPositions[positionIndex][0] == NumRows-1) {
+                    wall = Wall(column: possibleWallPositions[positionIndex][1], row: possibleWallPositions[positionIndex][0], wallType: WallType.new, horizontal: true)
+                } else {
+                    wall = Wall(column: possibleWallPositions[positionIndex][1], row: possibleWallPositions[positionIndex][0], wallType: WallType.new, horizontal: false)
+                }
+                gems[possibleWallPositions[positionIndex][1], possibleWallPositions[positionIndex][0]] = wall
+                set.insert(wall)
+                walls.insert(wall)
             }
         }
         initialLoad = false
