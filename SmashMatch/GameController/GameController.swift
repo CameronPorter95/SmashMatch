@@ -16,7 +16,7 @@ class GameController {
     var scene: GameScene!
     var level: Level!
     
-    var currentLevelNum = 1 //TODO increase current level upon level completion and call setupLevel again to go to next level
+    var currentLevelNum = 3 //TODO increase current level upon level completion and call setupLevel again to go to next level
     var movesMade = 0
     var score = 0
     var timeLeft = Int()
@@ -42,20 +42,23 @@ class GameController {
         var _ = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
     }
     
-    func setupLevel(view: SKView) {
+    func setupLevel(view: SKView, mode: String) {
         self.view = view
         view.isMultipleTouchEnabled = false
         scene = GameScene(size: (view.bounds.size))
         scene.scaleMode = .aspectFill
-        level = Level(filename: "Level_\(currentLevelNum)")
+        if mode != "Classic" {currentLevelNum = 0}
+        else {
+            
+        }
+        level = Level(filename:  "Level_\(currentLevelNum)", mode: mode)
         scene.level = level
-        
         scene.addTiles()
         scene.swipeHandler = handleSwipe
         
         view.presentScene(scene)
         backgroundMusic?.play()
-        timeLeft = 120
+        timeLeft = 2 //TODO read from database
         beginGame()
     }
     
@@ -85,12 +88,12 @@ class GameController {
     func incrementMoves() {
         movesMade += 1
         updateLabels()
-        if score >= level.targetScore {
-            //showGameOver()
-        } else if level.getWalls().isEmpty {
-            //showGameOver()
-        } else if timeLeft <= 0 {
-            //showGameOver()
+        if level.getWalls().isEmpty {
+            if level.isClassicMode {
+                self.scene.animateHazarScroll()
+            } else if level.isDemolitionMode {
+                self.scene.animateHazarScroll()
+            }
         }
     }
     
@@ -145,7 +148,7 @@ class GameController {
     }
     
     @objc func updateTimer() {
-        if(scene != nil){
+        if(scene != nil && !scene.isGamePaused){
             if(timeLeft >= 0) {
                 let formatter = DateComponentsFormatter()
                 formatter.allowedUnits = [.minute, .second]
@@ -154,6 +157,12 @@ class GameController {
                 let formattedString = formatter.string(from: TimeInterval(timeLeft))!
                 scene.timeLabel.text = formattedString
                 timeLeft -= 1
+            } else {
+                if level.isClassicMode {
+                    self.scene.animateOhNoScroll()
+                } else if level.isArcadeMode {
+                    self.scene.animateHazarScroll()
+                }
             }
         }
     }

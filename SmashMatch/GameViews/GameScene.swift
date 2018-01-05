@@ -30,19 +30,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var background: SKSpriteNode!
     var trees: SKSpriteNode!
+    var banner: SKSpriteNode!
+    weak var livesBackground: SKSpriteNode?
     var pause: SKSpriteNode!
     var scoreLabelTitle: SKLabelNode!
     var timeLabelTitle: SKLabelNode!
     var scoreLabel: SKLabelNode!
     var timeLabel: SKLabelNode!
     var pauseScroll: SKSpriteNode!
-    var southWall: SKSpriteNode!
+    var westWall: SKSpriteNode!
+    var hazarScroll: SKSpriteNode!
+    var hazarScore: SKLabelNode!
+    var ohNoScroll: SKSpriteNode!
+    var ohNoScore: SKLabelNode!
     
     var pauseScrollPhysics: SKPhysicsBody?
-    var southWallPhysics: SKPhysicsBody?
+    var hazarScrollPhysics: SKPhysicsBody?
+    var ohNoScrollPhysics: SKPhysicsBody?
+    var westWallPhysics: SKPhysicsBody?
     let noCategory:UInt32 = 0
-    let southWallCategory:UInt32 = 0b1
+    let westWallCategory:UInt32 = 0b1
     let pauseMenuCategory:UInt32 = 0b1 << 1
+    let hazarMenuCategory:UInt32 = 0b1 << 2
+    let ohNoMenuCategory:UInt32 = 0b1 << 3
     var collisionCount = 0
     
     let swapSound = SKAction.playSoundFileNamed("gem_swap.mp3", waitForCompletion: false)
@@ -75,7 +85,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         trees.position = CGPoint(x: 0, y: -size.height/2)
         addChild(trees)
         let bannerHeight = size.height/12
-        let banner = SKSpriteNode(color: UIColor.white, size: CGSize(width: size.width, height: bannerHeight))
+        banner = SKSpriteNode(color: UIColor.white, size: CGSize(width: size.width, height: bannerHeight))
         banner.anchorPoint = CGPoint(x: 0.5, y: 1.0)
         banner.position = CGPoint(x: 0.0, y: (size.height/2)-(bannerHeight*0.685))
         addChild(banner)
@@ -113,10 +123,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         timeLabel.position = CGPoint(x: (size.width/3.9), y: -bannerHeight*0.85)
         banner.addChild(timeLabel)
         
+        let mainMenuScene:SKScene = SKScene(fileNamed: "MainMenu")!
+        livesBackground = mainMenuScene.childNode(withName: "//LivesBackground") as? SKSpriteNode
+        livesBackground?.position = CGPoint(x: -(size.width*0.55625), y: size.height*0.57218)
+        livesBackground?.setScale(1)
+        livesBackground?.move(toParent: self)
+        
         let scrollWidth = size.width
-        let scrollHeight = scrollWidth*1.328
+        var scrollHeight = scrollWidth*1.328
         pauseScroll = SKSpriteNode(imageNamed: "longbanner")
-        orientSprite(sprite: pauseScroll!, size: CGSize(width: scrollWidth, height: scrollHeight), position: CGPoint(x: 0, y: (size.height/2)+scrollHeight))
+        orientSprite(sprite: pauseScroll!, size: CGSize(width: scrollWidth, height: scrollHeight), position: CGPoint(x: (size.width/2)+scrollWidth, y: -size.height*0.05))
         pauseScroll.zPosition = 1000
         addChild(pauseScroll!)
         let resume = SKSpriteNode(imageNamed: "resume")
@@ -155,10 +171,66 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let greyHeart5 = SKSpriteNode(imageNamed: "greybig")
         orientSprite(sprite: greyHeart5, size: heartSize, position: CGPoint(x: scrollWidth*0.29062, y: scrollHeight*0.35764))
         pauseScroll?.addChild(greyHeart5)
-        southWall = SKSpriteNode(color: .black, size: CGSize(width: 320, height: 5))
-        southWall.position = CGPoint(x: 0, y: -(size.height/2)*0.86)
-        southWall.alpha = 0.0
-        addChild(southWall)
+        
+        scrollHeight = scrollWidth*1.5079
+        hazarScroll = SKSpriteNode(imageNamed: "hazar")
+        orientSprite(sprite: hazarScroll!, size: CGSize(width: scrollWidth, height: scrollHeight), position: CGPoint(x: (size.width/2)+scrollWidth, y: -size.height*0.02))
+        hazarScroll.zPosition = 1000
+        addChild(hazarScroll!)
+        let continueBut = SKSpriteNode(imageNamed: "continue")
+        orientSprite(sprite: continueBut, size: CGSize(width: scrollWidth*0.5375, height: scrollHeight*0.0804), position: CGPoint(x: 0, y: -scrollHeight*0.0854))
+        continueBut.name = "Continue"
+        hazarScroll?.addChild(continueBut)
+        let restartHazar = SKSpriteNode(imageNamed: "restart-1")
+        orientSprite(sprite: restartHazar, size: CGSize(width: scrollWidth*0.14375, height: scrollWidth*0.14375), position: CGPoint(x: -scrollWidth*0.10625, y: -scrollHeight*0.207265))
+        restartHazar.name = "Restart"
+        hazarScroll?.addChild(restartHazar)
+        let home = SKSpriteNode(imageNamed: "home")
+        orientSprite(sprite: home, size: CGSize(width: scrollWidth*0.14375, height: scrollWidth*0.14375), position: CGPoint(x: scrollWidth*0.10625, y: -scrollHeight*0.207265))
+        home.name = "HazarHome"
+        hazarScroll?.addChild(home)
+        let hazarLevel = SKLabelNode(fontNamed: "System")
+        hazarLevel.text = "LEVEL 23"
+        hazarLevel.fontColor = UIColor.black
+        hazarLevel.fontSize = 14
+        hazarLevel.position = CGPoint(x: 0, y: scrollHeight*0.05983)
+        hazarScroll.addChild(hazarLevel)
+        hazarScore = SKLabelNode(fontNamed: "System")
+        hazarScore.text = "032193"
+        hazarScore.fontColor = UIColor.black
+        hazarScore.fontSize = 32
+        hazarScore.position = CGPoint(x: 0, y: scrollHeight*0.004274)
+        hazarScroll.addChild(hazarScore)
+        
+        ohNoScroll = SKSpriteNode(imageNamed: "ohno")
+        orientSprite(sprite: ohNoScroll!, size: CGSize(width: scrollWidth, height: scrollHeight), position: CGPoint(x: (size.width/2)+scrollWidth, y: -size.height*0.02))
+        ohNoScroll.zPosition = 1000
+        addChild(ohNoScroll!)
+        let tryAgain = SKSpriteNode(imageNamed: "tryagain")
+        orientSprite(sprite: tryAgain, size: CGSize(width: scrollWidth*0.5375, height: scrollHeight*0.0997436), position: CGPoint(x: 0, y: -scrollHeight*0.0854))
+        tryAgain.name = "TryAgain"
+        ohNoScroll?.addChild(tryAgain)
+        let ohNohome = SKSpriteNode(imageNamed: "home")
+        orientSprite(sprite: ohNohome, size: CGSize(width: scrollWidth*0.14375, height: scrollWidth*0.14375), position: CGPoint(x: 0, y: -scrollHeight*0.207265))
+        ohNohome.name = "OhNoHome"
+        ohNoScroll?.addChild(ohNohome)
+        let ohNoLevel = SKLabelNode(fontNamed: "System")
+        ohNoLevel.text = "LEVEL 23"
+        ohNoLevel.fontColor = UIColor.black
+        ohNoLevel.fontSize = 14
+        ohNoLevel.position = CGPoint(x: 0, y: scrollHeight*0.05983)
+        ohNoScroll.addChild(ohNoLevel)
+        let ohNoScore = SKLabelNode(fontNamed: "System")
+        ohNoScore.text = "009193"
+        ohNoScore.fontColor = UIColor.black
+        ohNoScore.fontSize = 32
+        ohNoScore.position = CGPoint(x: 0, y: scrollHeight*0.004274)
+        ohNoScroll.addChild(ohNoScore)
+        
+        westWall = SKSpriteNode(color: .black, size: CGSize(width: 5, height: size.height))
+        westWall.position = CGPoint(x: -(size.width/2), y: 0)
+        westWall.alpha = 0.0
+        addChild(westWall)
         
         pauseScrollPhysics = SKPhysicsBody(rectangleOf: pauseScroll.size)
         pauseScrollPhysics?.isDynamic = true
@@ -168,16 +240,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         pauseScrollPhysics?.restitution = 0.0
         pauseScrollPhysics?.friction = 0.0
         pauseScrollPhysics?.categoryBitMask = pauseMenuCategory
-        pauseScrollPhysics?.collisionBitMask = southWallCategory
-        pauseScrollPhysics?.contactTestBitMask = southWallCategory
+        pauseScrollPhysics?.collisionBitMask = westWallCategory
+        pauseScrollPhysics?.contactTestBitMask = westWallCategory
         
-        southWallPhysics = SKPhysicsBody(rectangleOf: southWall.size)
-        southWallPhysics?.isDynamic = true
-        southWallPhysics?.affectedByGravity = false
-        southWallPhysics?.restitution = 0.0
-        southWallPhysics?.categoryBitMask = southWallCategory
-        southWallPhysics?.collisionBitMask = noCategory
-        southWallPhysics?.contactTestBitMask = noCategory
+        hazarScrollPhysics = SKPhysicsBody(rectangleOf: pauseScroll.size)
+        hazarScrollPhysics?.isDynamic = true
+        hazarScrollPhysics?.affectedByGravity = true
+        hazarScrollPhysics?.allowsRotation = false
+        hazarScrollPhysics?.mass = 1.0
+        hazarScrollPhysics?.restitution = 0.0
+        hazarScrollPhysics?.friction = 0.0
+        hazarScrollPhysics?.categoryBitMask = hazarMenuCategory
+        hazarScrollPhysics?.collisionBitMask = westWallCategory
+        hazarScrollPhysics?.contactTestBitMask = westWallCategory
+        
+        ohNoScrollPhysics = SKPhysicsBody(rectangleOf: pauseScroll.size)
+        ohNoScrollPhysics?.isDynamic = true
+        ohNoScrollPhysics?.affectedByGravity = true
+        ohNoScrollPhysics?.allowsRotation = false
+        ohNoScrollPhysics?.mass = 1.0
+        ohNoScrollPhysics?.restitution = 0.0
+        ohNoScrollPhysics?.friction = 0.0
+        ohNoScrollPhysics?.categoryBitMask = ohNoMenuCategory
+        ohNoScrollPhysics?.collisionBitMask = westWallCategory
+        ohNoScrollPhysics?.contactTestBitMask = westWallCategory
+        
+        westWallPhysics = SKPhysicsBody(rectangleOf: westWall.size)
+        westWallPhysics?.isDynamic = true
+        westWallPhysics?.affectedByGravity = false
+        westWallPhysics?.restitution = 0.0
+        westWallPhysics?.categoryBitMask = westWallCategory
+        westWallPhysics?.collisionBitMask = noCategory
+        westWallPhysics?.contactTestBitMask = noCategory
         
         let back = SKSpriteNode(color: UIColor.black, size: CGSize(width: 20, height: 20))
         back.position = CGPoint(x: -50, y: ((size.height/2)-33)-77)
@@ -745,6 +839,36 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.run(SKAction.sequence([moveAction, SKAction.removeFromParent()]))
     }
     
+    func animateHazarScroll(){
+        hazarScroll.physicsBody = hazarScrollPhysics
+        westWall.physicsBody = westWallPhysics
+        self.physicsWorld.gravity = CGVector(dx: -12, dy: 0)
+        let duration = TimeInterval(0.5)
+        let colorAction = SKAction.colorize(withColorBlendFactor: 0.4, duration: duration)
+        let fadeOutAction = SKAction.fadeOut(withDuration: duration)
+        background?.run(colorAction)
+        trees.run(colorAction)
+        banner.run(fadeOutAction)
+        gameLayer.run(fadeOutAction)
+        isGamePaused = true
+        DispatchQueue.global().async { self.disablePhysicsAfterBounce(sprite1: self.hazarScroll, sprite2: self.westWall) }
+    }
+    
+    func animateOhNoScroll(){
+        ohNoScroll.physicsBody = hazarScrollPhysics
+        westWall.physicsBody = ohNoScrollPhysics
+        self.physicsWorld.gravity = CGVector(dx: -12, dy: 0)
+        let duration = TimeInterval(0.5)
+        let colorAction = SKAction.colorize(withColorBlendFactor: 0.4, duration: duration)
+        let fadeOutAction = SKAction.fadeOut(withDuration: duration)
+        background?.run(colorAction)
+        trees.run(colorAction)
+        banner.run(fadeOutAction)
+        gameLayer.run(fadeOutAction)
+        isGamePaused = true
+        DispatchQueue.global().async { self.disablePhysicsAfterBounce(sprite1: self.ohNoScroll, sprite2: self.westWall) }
+    }
+    
     func waitFor(duration: Double, completion: @escaping () -> ()){
         run(SKAction.wait(forDuration: duration), completion: completion)
     }
@@ -773,8 +897,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 } else if name == "Pause" { //TODO disable physics after scroll has fallen in place
                     if !isGamePaused {
                         pauseScroll.physicsBody = pauseScrollPhysics
-                        southWall.physicsBody = southWallPhysics
-                        self.physicsWorld.gravity = CGVector(dx: 0, dy: -20)
+                        westWall.physicsBody = westWallPhysics
+                        self.physicsWorld.gravity = CGVector(dx: -12, dy: 0)
                         pause.texture = SKTexture(imageNamed: "pausered")
                         let duration = TimeInterval(0.5)
                         let colorAction = SKAction.colorize(withColorBlendFactor: 0.4, duration: duration)
@@ -783,15 +907,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         trees.run(fadeOutAction)
                         gameLayer.run(fadeOutAction)
                         isGamePaused = true
-                        DispatchQueue.global().async { self.disablePhysicsAfterBounce(sprite1: self.pauseScroll, sprite2: self.southWall) }
+                        DispatchQueue.global().async { self.disablePhysicsAfterBounce(sprite1: self.pauseScroll, sprite2: self.westWall) }
                     }
                 } else if name == "Resume" {
                     if collisionCount == -1 && isGamePaused { //Can only resume if pauseScroll has finished transition
                         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
                         pause.texture = SKTexture(imageNamed: "Pause")
                         let duration = TimeInterval(0.5)
-                        let scrollPositionY = ((self.view?.frame.size.height)!/2)+(self.view?.frame.size.width)!*1.328
-                        let moveAction = SKAction.move(to: CGPoint(x: 0, y: scrollPositionY) , duration: duration)
+                        let scrollPositionX = ((self.view?.frame.size.width)!+(pauseScroll.size.width/2))
+                        let moveAction = SKAction.move(to: CGPoint(x: scrollPositionX, y: pauseScroll.position.y) , duration: duration)
                         let colorAction = SKAction.colorize(withColorBlendFactor: 0.0, duration: duration)
                         let fadeInAction = SKAction.fadeIn(withDuration: duration)
                         background?.run(colorAction)
@@ -802,6 +926,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         collisionCount = 0
                     }
                 } else if name == "Quit" {
+                    removeAllGemSprites()
+                    NotificationCenter.default.post(name: .backToMainMenu, object: nil)
+                } else if name == "Continue" {  //TODO whatever is meant to happen here
+                    if collisionCount == -1 && isGamePaused {
+                        self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+                        let duration = TimeInterval(0.5)
+                        let scrollPositionX = ((self.view?.frame.size.width)!+(hazarScroll.size.width/2))
+                        let moveAction = SKAction.move(to: CGPoint(x: scrollPositionX, y: hazarScroll.position.y) , duration: duration)
+                        let colorAction = SKAction.colorize(withColorBlendFactor: 0.0, duration: duration)
+                        let fadeInAction = SKAction.fadeIn(withDuration: duration)
+                        background?.run(colorAction)
+                        trees.run(fadeInAction)
+                        gameLayer.run(fadeInAction)
+                        hazarScroll?.run(moveAction)
+                        isGamePaused = false
+                        collisionCount = 0
+                    }
+                } else if name == "Restart" {
+                    
+                } else if name == "HazarHome" {
                     removeAllGemSprites()
                     NotificationCenter.default.post(name: .backToMainMenu, object: nil)
                 }
@@ -856,6 +1000,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let cB:UInt32 = contact.bodyB.categoryBitMask
         
         if cA == pauseMenuCategory || cB == pauseMenuCategory {
+            collisionCount += 1
+        } else if cA == hazarMenuCategory || cB == hazarMenuCategory {
+            collisionCount += 1
+        } else if cA == ohNoMenuCategory || cB == ohNoMenuCategory {
             collisionCount += 1
         }
     }

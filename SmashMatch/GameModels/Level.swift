@@ -28,8 +28,10 @@ class Level {
     var gemsFromFileArray: [[Int]]?
     var futureGemsFromFileArray: [[Int]]?
     var numFutureGemRows = Int()
-    var isClassicMode = true; //Set this based on the game mode
-    var initialLoad = true;
+    var isClassicMode = false
+    var isArcadeMode = false
+    var isDemolitionMode = false
+    var initialLoad = true
     
     func shuffle() -> Set<Gem> {
         for wall in walls {
@@ -142,7 +144,17 @@ class Level {
         return set
     }
     
-    init(filename: String) {
+    init(filename: String, mode: String) {
+        switch mode {
+        case "Classic":
+            isClassicMode = true
+        case "Arcade":
+            isArcadeMode = true
+        case "Demolition":
+            isDemolitionMode = true
+        default:
+            break
+        }
         guard let dictionary = Dictionary<String, AnyObject>.loadJSONFromBundle(filename: filename) else { return }
         guard let tilesArray = dictionary["tiles"] as? [[Int]] else { return }
         gemsFromFileArray = dictionary["gems"] as? [[Int]]
@@ -584,7 +596,7 @@ class Level {
                                 array.append(gem)
                                 break
                             }
-                        } else { //If reached top row or above (i.e. looking above the grid) we need to jump to look for futureGems
+                        } else if isClassicMode { //If reached top row or above (i.e. looking above the grid) and in classic mode we need to jump to look for futureGems
                             var count = 0
                             for futureLookup in 0..<numFutureGemRows { //If lookup reaches top row, must grab futureGems for as many holes were formed (number of holes = number of futureGems required).
                                 if(futureLookup >= (futureGems?.rows)! || count == numHoles){

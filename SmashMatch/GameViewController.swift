@@ -118,8 +118,12 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
     
     @objc func showGameScene(_ notification: Notification) {
         deallocScenes()
-        gameController.setupLevel(view: skView!)
         bannerView.isHidden = false
+        if notification.name == .arcadeButtonPressed {
+            gameController.setupLevel(view: skView!, mode: "Arcade")
+        } else if notification.name == .demolitionButtonPressed {
+            gameController.setupLevel(view: skView!, mode: "Demolition")
+        }
     }
     
     @objc func showLevelSelection(_ notification: Notification) {

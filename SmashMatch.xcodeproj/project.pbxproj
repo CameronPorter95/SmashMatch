@@ -10,7 +10,7 @@
 		750F139D1FE9DC7500121507 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F139C1FE9DC7500121507 /* AppDelegate.swift */; };
 		750F13AC1FEA1F3600121507 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F13AA1FEA1F3600121507 /* Database.swift */; };
 		750F13AD1FEA1F3600121507 /* PersistentEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750F13AB1FEA1F3600121507 /* PersistentEntity.swift */; };
-		751115C91FFEB616000B87FA /* WinOrLose.sks in Resources */ = {isa = PBXBuildFile; fileRef = 751115C81FFEB616000B87FA /* WinOrLose.sks */; };
+		751115CB1FFEDE02000B87FA /* EndGame.sks in Resources */ = {isa = PBXBuildFile; fileRef = 751115CA1FFEDE02000B87FA /* EndGame.sks */; };
 		7513834D1FEAEFD600AE0D5A /* Wall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7513834C1FEAEFD600AE0D5A /* Wall.swift */; };
 		75167FF91FEBA88900A623C1 /* Sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 75167FF81FEBA88900A623C1 /* Sprites.atlas */; };
 		75167FFB1FEC912400A623C1 /* iOS Game Theme Medieval Version.wav in Resources */ = {isa = PBXBuildFile; fileRef = 75167FFA1FEC912400A623C1 /* iOS Game Theme Medieval Version.wav */; };
@@ -178,7 +178,7 @@
 		750F139C1FE9DC7500121507 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		750F13AA1FEA1F3600121507 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		750F13AB1FEA1F3600121507 /* PersistentEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentEntity.swift; sourceTree = "<group>"; };
-		751115C81FFEB616000B87FA /* WinOrLose.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = WinOrLose.sks; sourceTree = "<group>"; };
+		751115CA1FFEDE02000B87FA /* EndGame.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = EndGame.sks; sourceTree = "<group>"; };
 		7513834C1FEAEFD600AE0D5A /* Wall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wall.swift; sourceTree = "<group>"; };
 		75167FF81FEBA88900A623C1 /* Sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Sprites.atlas; sourceTree = "<group>"; };
 		75167FFA1FEC912400A623C1 /* iOS Game Theme Medieval Version.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "iOS Game Theme Medieval Version.wav"; sourceTree = "<group>"; };
@@ -407,7 +407,7 @@
 				7EB9CA9D1FF65627002C5F04 /* LevelSelection.swift */,
 				7E262CFF1FFA1C7E00341CEB /* Credits.sks */,
 				7E78C37A1FFA1EB200DD2924 /* Credits.swift */,
-				751115C81FFEB616000B87FA /* WinOrLose.sks */,
+				751115CA1FFEDE02000B87FA /* EndGame.sks */,
 			);
 			path = OtherAppScreens;
 			sourceTree = "<group>";
@@ -632,12 +632,12 @@
 				751680021FEC913200A623C1 /* cannon.mp3 in Resources */,
 				B3628A071FEB82CA00F432B1 /* The Builder.mp3 in Resources */,
 				753738D91FE8FB2000B08292 /* Mining by Moonlight.mp3 in Resources */,
-				751115C91FFEB616000B87FA /* WinOrLose.sks in Resources */,
 				75167FFB1FEC912400A623C1 /* iOS Game Theme Medieval Version.wav in Resources */,
 				753738DA1FE8FB2000B08292 /* Drip.wav in Resources */,
 				751680031FEC913200A623C1 /* wall_crack.mp3 in Resources */,
 				7E262D001FFA1C7E00341CEB /* Credits.sks in Resources */,
 				751680051FEC913200A623C1 /* time_counter.mp3 in Resources */,
+				751115CB1FFEDE02000B87FA /* EndGame.sks in Resources */,
 				753738DB1FE8FB2000B08292 /* Chomp.wav in Resources */,
 				753738DC1FE8FB2000B08292 /* Error.wav in Resources */,
 				75167FF91FEBA88900A623C1 /* Sprites.atlas in Resources */,

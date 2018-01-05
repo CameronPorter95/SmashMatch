@@ -65,6 +65,8 @@ public class SwiftySKScrollView: UIScrollView {
     /// Current scene reference
     private weak var currentScene: SKScene?
     
+    private var touched = false
+    
     // MARK: - Init
     
     /// Init
@@ -74,6 +76,7 @@ public class SwiftySKScrollView: UIScrollView {
     /// - parameter scrollDirection: The scroll direction of the scrollView.
     public init(frame: CGRect, moveableNode: SKNode, direction: ScrollDirection, indicatorPosition: ScrollIndicatorPosition = .bottom) {
         self.moveableNode = moveableNode
+        moveableNode.position.y = 4976
         self.direction = direction
         self.indicatorPosition = indicatorPosition
         super.init(frame: frame)
@@ -179,6 +182,10 @@ extension SwiftySKScrollView {
 extension SwiftySKScrollView: UIScrollViewDelegate {
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if touched == false {
+            scrollView.contentOffset = CGPoint(x: 0, y: 4976)
+            touched = true
+        }
         if direction == .horizontal {
             moveableNode.position.x = scrollView.contentOffset.x
         } else {
