@@ -58,7 +58,7 @@ class GameController {
         
         view.presentScene(scene)
         backgroundMusic?.play()
-        timeLeft = 120
+        timeLeft = 2 //TODO read from database
         beginGame()
     }
     
@@ -90,15 +90,9 @@ class GameController {
         updateLabels()
         if level.getWalls().isEmpty {
             if level.isClassicMode {
-                //showClassicWin()
+                self.scene.animateHazarScroll()
             } else if level.isDemolitionMode {
-                //showDemolitionEnd()
-            }
-        } else if timeLeft <= 0 {
-            if level.isClassicMode {
-                //showClassicGameOver()
-            } else if level.isArcadeMode {
-                //ShowArcadeEnd()
+                self.scene.animateHazarScroll()
             }
         }
     }
@@ -163,6 +157,12 @@ class GameController {
                 let formattedString = formatter.string(from: TimeInterval(timeLeft))!
                 scene.timeLabel.text = formattedString
                 timeLeft -= 1
+            } else {
+                if level.isClassicMode {
+                    self.scene.animateOhNoScroll()
+                } else if level.isArcadeMode {
+                    self.scene.animateHazarScroll()
+                }
             }
         }
     }
