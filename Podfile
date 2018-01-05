@@ -9,6 +9,7 @@ target 'SmashMatch' do
   # Pods for SmashMatch
   pod 'SQLite.swift', '~> 0.11.4'
   pod 'SwiftySKScrollView'
+  pod 'Google-Mobile-Ads-SDK'
 
   post_install do |installer| installer.pods_project.build_configurations.each do |config| config.build_settings['PROVISIONING_PROFILE_SPECIFIER'] = '' end end
 
