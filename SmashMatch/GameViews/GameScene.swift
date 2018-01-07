@@ -851,6 +851,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         banner.run(fadeOutAction)
         gameLayer.run(fadeOutAction)
         isGamePaused = true
+        hazarScore.text = scoreLabel.text
         DispatchQueue.global().async { self.disablePhysicsAfterBounce(sprite1: self.hazarScroll, sprite2: self.westWall) }
     }
     
@@ -866,6 +867,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         banner.run(fadeOutAction)
         gameLayer.run(fadeOutAction)
         isGamePaused = true
+        ohNoScore.text = scoreLabel.text
         DispatchQueue.global().async { self.disablePhysicsAfterBounce(sprite1: self.ohNoScroll, sprite2: self.westWall) }
     }
     
