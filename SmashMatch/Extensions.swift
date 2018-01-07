@@ -41,4 +41,9 @@ extension Notification.Name {
     public static let creditsButtonPressed = Notification.Name(rawValue: "creditsButtonPressed")
     public static let backToMainMenu = Notification.Name(rawValue: "backToMainMenu")
     public static let shuffleButtonPressed = Notification.Name(rawValue: "shuffleButtonPressed")
+    public static let settingsButtonPressed = Notification.Name(rawValue: "settingsButtonPressed")
+    public static let settingsExitButtonPressed = Notification.Name(rawValue: "settingsExitButtonPressed")
+    public static let inAppButtonPressed = Notification.Name(rawValue: "inAppButtonPressed")
+    
 }
+

@@ -28,12 +28,16 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
     weak var westWall: SKSpriteNode?
     weak var settingsScroll: SKSpriteNode?
     weak var settingsExit: SKSpriteNode?
+    weak var inAppScroll: SKSpriteNode?
+    weak var addLifeButton: SKSpriteNode?
     
     var settingsScrollPhysics: SKPhysicsBody?
+    var inAppScrollPhysics: SKPhysicsBody?
     var westWallPhysics: SKPhysicsBody?
     let noCategory:UInt32 = 0
     let westWallCategory:UInt32 = 0b1
     let settingsCategory:UInt32 = 0b1 << 1
+    let inAppCategory:UInt32 = 0b1 << 2
     var collisionCount = 0
     
     var startTime = UInt64()
@@ -61,6 +65,8 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
         settingsScroll = self.childNode(withName: "SettingsScroll") as? SKSpriteNode
         settingsExit = self.childNode(withName: "//SettingsExit") as? SKSpriteNode
         settingsExit?.isHidden = true
+        inAppScroll = self.childNode(withName: "PurchaseBanner") as? SKSpriteNode
+        addLifeButton = self.childNode(withName: "LivesBackground") as? SKSpriteNode
         
         settingsScrollPhysics = SKPhysicsBody(rectangleOf: (settingsScroll?.size)!)
         settingsScrollPhysics?.isDynamic = true
@@ -73,6 +79,18 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
         settingsScrollPhysics?.collisionBitMask = westWallCategory
         settingsScrollPhysics?.contactTestBitMask = westWallCategory
         settingsScroll?.physicsBody = nil
+        
+        inAppScrollPhysics = SKPhysicsBody(rectangleOf: (inAppScroll?.size)!)
+        inAppScrollPhysics?.isDynamic = true
+        inAppScrollPhysics?.affectedByGravity = true
+        inAppScrollPhysics?.allowsRotation = false
+        inAppScrollPhysics?.mass = 4.0
+        inAppScrollPhysics?.restitution = 0.2
+        inAppScrollPhysics?.friction = 0.2
+        inAppScrollPhysics?.categoryBitMask = inAppCategory
+        inAppScrollPhysics?.collisionBitMask = westWallCategory
+        inAppScrollPhysics?.contactTestBitMask = westWallCategory
+        inAppScroll?.physicsBody = nil
         
         westWallPhysics = SKPhysicsBody(rectangleOf: (westWall?.size)!)
         westWallPhysics?.isDynamic = true
@@ -115,16 +133,41 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
                     DispatchQueue.global().async { self.disablePhysicsAfterBounce(sprite1: self.settingsScroll!, sprite2: self.westWall!) }
                     settingsExit?.isHidden = false
                     settingsButton?.isHidden = true
+                    NotificationCenter.default.post(name: .settingsButtonPressed, object: nil)
                 }
-            } else if name == "SettingsExit" {
+                
+            } else if(name == "LivesBackground"){
+                if (settingsExit?.isHidden)! {
+                    inAppScroll?.physicsBody = inAppScrollPhysics
+                    westWall?.physicsBody = westWallPhysics
+                    self.physicsWorld.gravity = CGVector(dx: -9.8, dy: 0)
+                    let duration = TimeInterval(0.5)
+                    let colorAction = SKAction.colorize(withColorBlendFactor: 0.4, duration: duration)
+                    let fadeOutAction = SKAction.fadeOut(withDuration: duration)
+                    background?.run(colorAction)
+                    arcade?.run(fadeOutAction)
+                    classic?.run(fadeOutAction)
+                    demolition?.run(fadeOutAction)
+                    DispatchQueue.global().async { self.disablePhysicsAfterBounce(sprite1: self.inAppScroll!, sprite2: self.westWall!) }
+                    settingsExit?.isHidden = false
+                    settingsButton?.isHidden = true
+                    NotificationCenter.default.post(name: .inAppButtonPressed, object: nil)
+                }
+                
+                
+                
+            }else if name == "SettingsExit" {
                 if collisionCount == -1 && (settingsButton?.isHidden)! {
-                    settingsScroll?.physicsBody?.isDynamic = false //TODO Optimise this the same way as GameScene
+                    settingsScroll?.physicsBody?.isDynamic = false
+                    inAppScroll?.physicsBody?.isDynamic = false
                     self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
                     let duration = TimeInterval(0.5)
-                    let moveAction = SKAction.move(to: CGPoint(x: 322, y: -76) , duration: duration)
+                    let moveActionSettings = SKAction.move(to: CGPoint(x: 322, y: -76) , duration: duration)
+                    let moveActionInApp = SKAction.move(to: CGPoint(x: 322, y: 0) , duration: duration)
                     let colorAction = SKAction.colorize(withColorBlendFactor: 0.0, duration: duration)
                     let fadeInAction = SKAction.fadeIn(withDuration: duration)
-                    settingsScroll?.run(moveAction)
+                    settingsScroll?.run(moveActionSettings)
+                    inAppScroll?.run(moveActionInApp)
                     background?.run(colorAction)
                     arcade?.run(fadeInAction)
                     classic?.run(fadeInAction)
@@ -132,6 +175,7 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
                     settingsExit?.isHidden = true
                     settingsButton?.isHidden = false
                     collisionCount = 0
+                    NotificationCenter.default.post(name: .settingsExitButtonPressed, object: nil)
                 }
             } else if name == "SFX" {
                 
@@ -158,6 +202,9 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
         let cB:UInt32 = contact.bodyB.categoryBitMask
         
         if cA == settingsCategory || cB == settingsCategory {
+            collisionCount += 1
+        }
+        else if cA == inAppCategory || cB == inAppCategory {
             collisionCount += 1
         }
     }
@@ -201,7 +248,6 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
             if(lives > 5){
                 lives = 5
             }
-            //startTime = currTime - UInt64(timeDiff.remainder(dividingBy: 3600))
             _ = PersistentEntity.shared.updateAt(id: 1, index: 5, value: startTime as AnyObject)
             _ = PersistentEntity.shared.updateAt(id: 1, index: 4, value: lives as AnyObject)
         }
@@ -218,8 +264,6 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
             
             let timeLeftForNextLife = 3600 - (timeDiff)
 
-            //countDownLabel?.text = String(currTime)
-
             let (m,s) = secondsToMinutesSeconds(seconds: timeLeftForNextLife)
             var zeroM = ""
             var zeroS = ""
@@ -228,6 +272,12 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
             }
             if(s < 10){
                 zeroS = "0\(s)"
+            }
+            if(s < 0){
+                zeroS = "00"
+            }
+            if(m < 0){
+                zeroM = "00"
             }
             if(zeroM != "" && zeroS != ""){
                 countDownLabel?.text = String("\(zeroM):\(zeroS)")
@@ -247,6 +297,7 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
                 addLife()
                 startTime = currTime
                 _ = PersistentEntity.shared.updateAt(id: 1, index: 5, value: startTime as AnyObject)
+                _ = PersistentEntity.shared.updateAt(id: 1, index: 4, value: lives as AnyObject)
             }
         }
     }
@@ -275,6 +326,7 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
     
     override func willMove(from view: SKView) {
         removeAllChildren()
+        
     }
     
     deinit {

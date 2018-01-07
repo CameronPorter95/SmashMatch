@@ -10,6 +10,7 @@ import UIKit
 import GameKit
 import SQLite
 import SQLite3
+import GoogleMobileAds
 
 class GameViewController: UIViewController, GKGameCenterControllerDelegate {
     
@@ -18,6 +19,8 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
     var mainMenu: MainMenu?
     var levelSelection: LevelSelection?
     var credits: Credits?
+    
+     var bannerView: GADBannerView!
     
     var gcEnabled = Bool() // Check if the user has Game Center enabled
     var gcDefaultLeaderBoard = String() // Check the default leaderboardID
@@ -37,17 +40,71 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(self.showGameScene(_:)), name: Notification.Name.demolitionButtonPressed, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.showCredits(_:)), name: Notification.Name.creditsButtonPressed, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.showMainMenu(_:)), name: Notification.Name.backToMainMenu, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.showBanner(_:)), name: Notification.Name.settingsButtonPressed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.hideBanner(_:)), name: Notification.Name.settingsExitButtonPressed, object: nil)
         
         // Call the GC authentication controller
         authenticateLocalPlayer()
+        
+        bannerView = GADBannerView(adSize: kGADAdSizeBanner)
+        var displayAds = true
+        
+        if let persistentQuery: AnySequence<Row> = PersistentEntity.shared.queryFirst() {
+            for eachPersistent in persistentQuery {
+                displayAds = PersistentEntity.shared.getKeyAt(persistent: eachPersistent, index: 6)! as! Bool
+            }
+        }
+        
+        addBannerViewToView(bannerView)
+            
+        
+        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        bannerView.rootViewController = self
+        if(displayAds){
+        bannerView.load(GADRequest())
+        }
         
         skView = self.view as! SKView?
         if skView != nil {
             mainMenu = MainMenu(fileNamed: "MainMenu")
             mainMenu?.scaleMode = .fill
             skView?.presentScene(mainMenu)
+            bannerView.isHidden = true
         }
+        
+        
     }
+    
+    func addBannerViewToView(_ bannerView: GADBannerView) {
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(bannerView)
+        view.addConstraints(
+            [NSLayoutConstraint(item: bannerView,
+                                attribute: .bottom,
+                                relatedBy: .equal,
+                                toItem: bottomLayoutGuide,
+                                attribute: .top,
+                                multiplier: 1,
+                                constant: 0),
+             NSLayoutConstraint(item: bannerView,
+                                attribute: .centerX,
+                                relatedBy: .equal,
+                                toItem: view,
+                                attribute: .centerX,
+                                multiplier: 1,
+                                constant: 0)
+            ])
+    }
+    
+    @objc func showBanner(_ notification: Notification){
+        bannerView.isHidden = false
+        
+    }
+    @objc func hideBanner(_ notification: Notification){
+        bannerView.isHidden = true
+        
+    }
+    
     
     @objc func showMainMenu(_ notification: Notification) {
         deallocScenes()
@@ -56,10 +113,12 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
         skView!.presentScene(mainMenu)
         gameController.backgroundMusic?.stop()
         gameController.backgroundMusic?.currentTime = 0
+        bannerView.isHidden = true
     }
     
     @objc func showGameScene(_ notification: Notification) {
         deallocScenes()
+        bannerView.isHidden = false
         if notification.name == .arcadeButtonPressed {
             gameController.setupLevel(view: skView!, mode: "Arcade")
         } else if notification.name == .demolitionButtonPressed {
@@ -72,6 +131,7 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
         levelSelection = LevelSelection(fileNamed: "LevelSelection")
         levelSelection?.scaleMode = .aspectFill
         skView!.presentScene(levelSelection)
+        bannerView.isHidden = true
     }
     
     @objc func showCredits(_ notification: Notification) {
@@ -79,6 +139,7 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
         credits = Credits(fileNamed: "Credits")
         credits?.scaleMode = .fill
         skView!.presentScene(credits)
+        bannerView.isHidden = true
     }
     
     // IMPORTANT: replace the red string below with your own Leaderboard ID (the one you've set in iTunes Connect)
@@ -145,6 +206,7 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
         levelSelection = nil
         credits = nil
     }
+    
     
     //    How to update and query all tables in database (for later).
     //
