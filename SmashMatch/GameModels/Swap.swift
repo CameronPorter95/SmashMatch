@@ -2,6 +2,8 @@
 //  Swap.swift
 //  SmashMatch
 //
+//  Holds the two gems that the user is attempting to swap
+//
 //  Created by Cameron Porter on 19/12/17.
 //  Copyright © 2017 Cameron Porter. All rights reserved.
 //

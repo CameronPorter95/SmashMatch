@@ -2,6 +2,8 @@
 //  Gem.swift
 //  SmashMatch
 //
+//  The gem object represents the gems the fill the board, cannons and walls are types of gem
+//
 //  Created by Cameron Porter on 18/12/17.
 //  Copyright © 2017 Cameron Porter. All rights reserved.
 //

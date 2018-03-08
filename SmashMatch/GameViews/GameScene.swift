@@ -44,6 +44,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var ohNoScroll: SKSpriteNode!
     var ohNoScore: SKLabelNode!
     
+    //Set up physics bodies for physical items.
     var pauseScrollPhysics: SKPhysicsBody?
     var hazarScrollPhysics: SKPhysicsBody?
     var ohNoScrollPhysics: SKPhysicsBody?
@@ -404,6 +405,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    
     func trySwap(horizontal horzDelta: Int, vertical vertDelta: Int) {
         let toColumn = swipeFromColumn! + horzDelta
         let toRow = swipeFromRow! + vertDelta
@@ -411,7 +413,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         guard toRow >= 0 && toRow < NumRows else { return }
         if let toGem = level.gemAt(column: toColumn, row: toRow),
             let fromGem = level.gemAt(column: swipeFromColumn!, row: swipeFromRow!) {
-            if let handler = swipeHandler {
+            if let handler = swipeHandler { //This function is defined in gameController (func handleSwipe(_ swap: Swap))
                 let swap = Swap(gemA: fromGem, gemB: toGem)
                 handler(swap)
             }

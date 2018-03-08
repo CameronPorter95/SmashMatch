@@ -245,7 +245,6 @@ class Level {
                             gems[column, row] = other
                             gems[column, row + 1] = gem
                             
-                            // Is either gem now part of a chain?
                             if hasChainAt(column: column, row: row + 1) ||
                                 hasChainAt(column: column, row: row) {
                                 set.insert(Swap(gemA: gem, gemB: other))
@@ -318,6 +317,7 @@ class Level {
         }
         return set
     }
+    
     
     func removeMatches() -> Set<Chain> {
         var horizontalChains = detectHorizontalMatches()

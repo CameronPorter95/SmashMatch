@@ -2,6 +2,9 @@
 //  GameViewController.swift
 //  SmashMatch
 //
+//  The central controller for smash match, holds all the game scenes and switches between them
+//  as well as allocates/deallocates them when necerssary.
+//
 //  Created by Cameron Porter on 29/12/17.
 //  Copyright © 2017 Cameron Porter. All rights reserved.
 //

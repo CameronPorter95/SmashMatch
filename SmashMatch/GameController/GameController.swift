@@ -2,6 +2,13 @@
 //  GameViewController.swift
 //  SmashMatch
 //
+//  The controller for the actual smash match game.
+//
+//  Smash Match uses a strict MVC pattern, this (the controller) handles data transfer and
+//  method calls between the model (Level.swift) and the view (GameScene.swift).
+//
+//  The controller holds the central game loop and also initialises the game.
+//
 //  Created by Cameron Porter on 18/12/17.
 //  Copyright © 2017 Cameron Porter. All rights reserved.
 //
@@ -42,6 +49,10 @@ class GameController {
         var _ = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
     }
     
+    /**
+     * Setup the model for storing and manipulation of data and present the view for displaying
+     * said information
+     **/
     func setupLevel(view: SKView, mode: String) {
         self.view = view
         view.isMultipleTouchEnabled = false
@@ -62,6 +73,9 @@ class GameController {
         beginGame()
     }
     
+    /**
+     * Shuffle the game board and initialise game values
+     **/
     func beginGame() {
         movesMade = 0
         score = 0
@@ -70,6 +84,9 @@ class GameController {
         shuffle()
     }
     
+    /**
+     * Reset the combo multiplier and shuffle the game board if no possible moves
+     **/
     func beginNextTurn() {
         level.resetComboMultiplier()
         if(level.detectPossibleSwaps().capacity == 0) {
@@ -79,6 +96,9 @@ class GameController {
         incrementMoves();
     }
     
+    /**
+     * Clear the game board and add all new gems.
+     **/
     func shuffle() {
         scene.removeAllGemSprites()
         let newGems = level.shuffle()
@@ -97,6 +117,10 @@ class GameController {
         }
     }
     
+    /**
+     * Called each time the user makes a swipe, checks if the swap will make a match
+     * and if so animate a success, other animate a failure.
+     **/
     func handleSwipe(_ swap: Swap) {
         view?.isUserInteractionEnabled = false
         
@@ -110,30 +134,30 @@ class GameController {
         }
     }
     
+    /**
+     * The central game loop which is called each time a match is made,
+     * performs each step after waiting the previous to finish and recurses
+     * if another match is made in the process.
+     **/
     func handleMatches() {
         let chains = level.removeMatches()
         if chains.count == 0 {
-            beginNextTurn()
+            beginNextTurn() //If no more matches are made then return.
             return
         }
         let matchedCannons = getCannonsFromChains(chains: chains)
         self.scene.animateMatchedCannons(cannons: matchedCannons)
         self.fireMatchedCannons(cannons: matchedCannons){
-            //print("DEBUG before animateMatchedGems")
             self.scene.animateMatchedGems(for: chains) {
-                //print("DEBUG before level.getCannons")
                 let cannons = self.level.getCannons() //TODO refactor
-                //print("DEBUG before animateNewCannons")
                 self.scene.animateNewCannons(cannons: cannons) {
                     for chain in chains {
                         self.score += chain.score
                     }
                     self.updateLabels()
-                    //print("DEBUG before fillHoles")
-                    let columns = self.level.fillHoles()
+                    let columns = self.level.fillHoles() //Make existing gems on top of matches fall to fill the empty space.
                     self.scene.animateFallingGems(columns: columns) {
-                        //print("DEBUG before topUpGems")
-                        let columns = self.level.topUpGems()
+                        let columns = self.level.topUpGems() //Creates new gems to fill the empty spaces created by making matches.
                         self.scene.animateNewGems(columns) {
                             self.handleMatches()
                         }
@@ -182,23 +206,22 @@ class GameController {
         return cannons
     }
     
+    /**
+     * Sets up the cannon fire tasks and waits until they have all finished firing.
+     */
     func fireMatchedCannons(cannons: [Cannon], completion: @escaping () -> ()){
-        //print("DEBUG start of fireMatchedCannons")
         for i in (0..<cannons.count) {
             createCannonFireTasks(cannon: cannons[i])
         }
         group.notify(queue: queue) {
-            //print("DEBUG end of fireMatchedCannons")
-            //print("-------------------------------------------------------------")
-            completion()
+            completion()    //Only move on to the next stage in the game loop after all cannons have finished firing.
         }
     }
     
     /**
-     Takes a cannon tile and adds a new task to the dispatch queue for each cannon on the tile
+     * Takes a cannon tile and adds a new task to the dispatch group for each cannon on the tile
      */
     func createCannonFireTasks(cannon: Cannon){
-        //print("DEBUG start of createCannonFireTasks")
         if cannon.cannonType == CannonType.twoWayHorz {
             group.enter();self.fireCannon(cannon: cannon, direction: "East")
             group.enter();self.fireCannon(cannon: cannon, direction: "West")
@@ -213,19 +236,16 @@ class GameController {
             group.enter();self.fireCannon(cannon: cannon, direction: "North")
             group.enter();self.fireCannon(cannon: cannon, direction: "South")
         }
-        //print("DEBUG end of createCannonFireTasks")
     }
     
+    /**
+     * calculates the result of the firing of the cannonball and animates it.
+     */
     func fireCannon(cannon: Cannon, direction: String) {
-        //print("DEBUG start of controller.fireCannon")
         let hitTiles = self.level.fireCannon(cannon: cannon, direction: direction)
-//        if(hitTile?.gemType == GemType.unknown){ //make hitCannonTile never nil but either a wall or empty tile if no cannon
-//
-//        }
         
         let tile = hitTiles?.last
         let from = CGPoint(x: cannon.column, y: cannon.row)
-        //let to =  CGPoint(x: (tile!.column), y: (tile!.row))
         let duration = calculateDuration(direction: direction, cannon: cannon, hitTile: tile!)
         group.enter()
         self.scene.animateCannonball(from: from, to: tile!, duration: duration, direction: direction){self.group.leave()}
@@ -234,20 +254,18 @@ class GameController {
             self.group.enter()
             self.scene.waitFor(duration: duration){
                 self.respondToHit(cannon: cannon, hitTile: tile, direction: direction)
-            }
-            //print("DEBUG Start of iterating over hitTiles")
-        }
-        //print("DEBUG end of animateCannonball completion")
+            }        }
         self.group.leave()
     }
     
+    /**
+     * If a wall is hit, break/destroy it. If a cannon is hit, recurse on createCannonFireTasks()
+     * to create a chain reaction.
+     */
     func respondToHit(cannon: Cannon, hitTile: Gem, direction: String){
-        //print("DEBUG start of respondToHit")
-        //print("completed animation to: \(to)")
         if hitTile is Cannon {
             let hitCannon = hitTile as! Cannon
             self.scene.animateHitCannon(cannon: hitCannon){
-                //print("DEBUG finished animateHitCannon")
                 self.scene.animateRemoveCannon(cannon: hitCannon)
                 if hitCannon.cannonType == .fourWay {
                     self.score += 400
@@ -256,25 +274,21 @@ class GameController {
                     self.score += 200
                 }
             }
-            //print("DEBUG before CreateCannonFireTasks")
             self.createCannonFireTasks(cannon: hitTile as! Cannon)
-            //print("DEBUG after CreateCannonFireTasks")
         } else if hitTile is Wall {
             let wall = hitTile as! Wall
-            print("DEBUG animateHitWall")
             self.scene.animateHitWall(wall: wall) //do this once
         } else {
-            //print("DEBUG group end when hit empty tile")
-            //self.scene.animateRemoveCannon(cannon: cannon)
             self.group.leave()
-            //completion()
             return
         }
-        //completion()
-        //print("DEBUG group end at end of respondHit")
         self.group.leave()
     }
     
+    /**
+     * Get the distance a cannonball has to travel in order to hit the given tile.
+     * Used for calculating the animation time.
+     */
     func calculateDuration(direction: String, cannon: Cannon, hitTile: Gem) -> Double {
         var distance: Int
         if direction == "East" || direction == "West"{

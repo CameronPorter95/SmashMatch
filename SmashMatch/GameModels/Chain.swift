@@ -2,6 +2,8 @@
 //  Chain.swift
 //  SmashMatch
 //
+//  An object that holds an array of gems included in a match that has been made,
+//
 //  Created by Cameron Porter on 19/12/17.
 //  Copyright © 2017 Cameron Porter. All rights reserved.
 //

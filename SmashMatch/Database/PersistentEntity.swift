@@ -2,6 +2,8 @@
 //  PersistentEntity.swift
 //  SmashMatch
 //
+//  Object mapper for an sql table that stores relevant smash match persistent data
+//
 //  Created by Cameron Porter on 20/12/17.
 //  Copyright © 2017 Cameron Porter. All rights reserved.
 //

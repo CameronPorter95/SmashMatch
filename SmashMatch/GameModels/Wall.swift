@@ -2,6 +2,8 @@
 //  Wall.swift
 //  SmashMatch
 //
+//  A type of gem that defines the walls around the edge.
+//
 //  Created by Cameron Porter on 18/12/17.
 //  Copyright © 2017 Cameron Porter. All rights reserved.
 //
