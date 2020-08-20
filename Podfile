@@ -7,7 +7,6 @@ target 'SmashMatch' do
   use_frameworks!
 
   # Pods for SmashMatch
-  pod 'SQLite.swift', '~> 0.11.4'
   pod 'SwiftySKScrollView'
   pod 'Google-Mobile-Ads-SDK'
 

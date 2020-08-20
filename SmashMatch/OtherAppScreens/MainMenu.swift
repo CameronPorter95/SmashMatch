@@ -8,8 +8,6 @@
 
 import SpriteKit
 import GameplayKit
-import SQLite
-import SQLite3
 
 class MainMenu: SKScene, SKPhysicsContactDelegate {
     
@@ -101,7 +99,7 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
         westWallPhysics?.contactTestBitMask = noCategory
         westWall?.physicsBody = nil
         
-        setupLifeTimer()
+        //setupLifeTimer()
         addLife()
         runTimer()
     }
@@ -229,15 +227,15 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
         denom = UInt64(info.denom)
 
 
-        if let persistentQuery: AnySequence<Row> = PersistentEntity.shared.queryFirst() {
-            for eachPersistent in persistentQuery {
-                startTime = PersistentEntity.shared.getKeyAt(persistent: eachPersistent, index: 5)! as! UInt64
-                lives = PersistentEntity.shared.getKeyAt(persistent: eachPersistent, index: 4)! as! Int
-            }
-        }
+//        if let persistentQuery: AnySequence<Row> = PersistentEntity.shared.queryFirst() {
+//            for eachPersistent in persistentQuery {
+//                startTime = PersistentEntity.shared.getKeyAt(persistent: eachPersistent, index: 5)! as! UInt64
+//                lives = PersistentEntity.shared.getKeyAt(persistent: eachPersistent, index: 4)! as! Int
+//            }
+//        }
         if(startTime == 0){
             startTime = mach_absolute_time()
-            _ = PersistentEntity.shared.updateAt(id: 1, index: 5, value: startTime as AnyObject)
+            //_ = PersistentEntity.shared.updateAt(id: 1, index: 5, value: startTime as AnyObject)
             lives = 3
         }
         else{
@@ -248,13 +246,13 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
             if(lives > 5){
                 lives = 5
             }
-            _ = PersistentEntity.shared.updateAt(id: 1, index: 5, value: startTime as AnyObject)
-            _ = PersistentEntity.shared.updateAt(id: 1, index: 4, value: lives as AnyObject)
+//            _ = PersistentEntity.shared.updateAt(id: 1, index: 5, value: startTime as AnyObject)
+//            _ = PersistentEntity.shared.updateAt(id: 1, index: 4, value: lives as AnyObject)
         }
     }
 
     func runTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(updateTimer)), userInfo: nil, repeats: true)
+        //timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(updateTimer)), userInfo: nil, repeats: true)
     }
 
     @objc func updateTimer(){ //TODO rewrite this to use a DateComponentsFormatter
@@ -296,8 +294,8 @@ class MainMenu: SKScene, SKPhysicsContactDelegate {
                 lives += 1
                 addLife()
                 startTime = currTime
-                _ = PersistentEntity.shared.updateAt(id: 1, index: 5, value: startTime as AnyObject)
-                _ = PersistentEntity.shared.updateAt(id: 1, index: 4, value: lives as AnyObject)
+//                _ = PersistentEntity.shared.updateAt(id: 1, index: 5, value: startTime as AnyObject)
+//                _ = PersistentEntity.shared.updateAt(id: 1, index: 4, value: lives as AnyObject)
             }
         }
     }

@@ -1,20 +1,20 @@
 PODS:
   - Google-Mobile-Ads-SDK (7.27.0)
-  - SQLite.swift (0.11.4):
-    - SQLite.swift/standard (= 0.11.4)
-  - SQLite.swift/standard (0.11.4)
   - SwiftySKScrollView (2.1.0)
 
 DEPENDENCIES:
   - Google-Mobile-Ads-SDK
-  - SQLite.swift (~> 0.11.4)
   - SwiftySKScrollView
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Google-Mobile-Ads-SDK
+    - SwiftySKScrollView
 
 SPEC CHECKSUMS:
   Google-Mobile-Ads-SDK: 83f7f890e638ce8f1debd440ea363338c9f6be3b
-  SQLite.swift: 3e3bee21da701b5b9f87c4a672cb54f233505692
   SwiftySKScrollView: 4b6c324216ed1d155a91589e32a672dc9308b993
 
-PODFILE CHECKSUM: 56078bfcff86af66b192380b3528fe04a536419f
+PODFILE CHECKSUM: 68b488c2a9b9ab21c2b194898b00f32821546ccf
 
-COCOAPODS: 1.3.1
+COCOAPODS: 1.7.5

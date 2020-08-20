@@ -69,7 +69,7 @@ class GameController {
         
         view.presentScene(scene)
         backgroundMusic?.play()
-        timeLeft = 120 //TODO read from database
+        timeLeft = 999999 //TODO read from database
         beginGame()
     }
     

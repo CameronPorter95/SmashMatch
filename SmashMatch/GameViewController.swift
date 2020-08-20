@@ -11,8 +11,6 @@
 
 import UIKit
 import GameKit
-import SQLite
-import SQLite3
 import GoogleMobileAds
 
 class GameViewController: UIViewController, GKGameCenterControllerDelegate {
@@ -23,7 +21,7 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
     var levelSelection: LevelSelection?
     var credits: Credits?
     
-     var bannerView: GADBannerView!
+    var bannerView: GADBannerView!
     
     var gcEnabled = Bool() // Check if the user has Game Center enabled
     var gcDefaultLeaderBoard = String() // Check the default leaderboardID
@@ -37,7 +35,7 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initializeDatabase()
+        //initializeDatabase()
         NotificationCenter.default.addObserver(self, selector: #selector(self.showGameScene(_:)), name: Notification.Name.arcadeButtonPressed, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.showLevelSelection(_:)), name: Notification.Name.classicButtonPressed, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.showGameScene(_:)), name: Notification.Name.demolitionButtonPressed, object: nil)
@@ -52,12 +50,12 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
         bannerView = GADBannerView(adSize: kGADAdSizeBanner)
         var displayAds = true
         
-        if let persistentQuery: AnySequence<Row> = PersistentEntity.shared.queryFirst() {
-            for eachPersistent in persistentQuery {
-                displayAds = PersistentEntity.shared.getKeyAt(persistent: eachPersistent, index: 6)! as! Bool
-            }
-        }
-        
+//        if let persistentQuery: AnySequence<Row> = PersistentEntity.shared.queryFirst() {
+//            for eachPersistent in persistentQuery {
+//                displayAds = PersistentEntity.shared.getKeyAt(persistent: eachPersistent, index: 6)! as! Bool
+//            }
+//        }
+      
         addBannerViewToView(bannerView)
             
         
@@ -178,32 +176,33 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate {
         }
     }
     
-    func initializeDatabase(){
-        //Look for existing data in database, if not found run the following insert statement.
-        var tableHasValues = false
-        if let persistentQuery: AnySequence<Row> = PersistentEntity.shared.queryFirst() {
-            for eachPersistent in persistentQuery {
-                if PersistentEntity.shared.hasRow(persistent: eachPersistent) {
-                    tableHasValues = true
-                }
-            }
-        }
-        if(!tableHasValues){
-            print("------------------INSERTING INITAL DATA INTO DATABASE------------------------------------")
-            //Inserts the initial values into the database (only calls this if row does not already exist).
-            _ = PersistentEntity.shared.insert(soundEffectsEnabled: true, musicEnabled: true, numberOfLives: 3, timeStopped: 0,
-                                               displayAds: true, highscoreArcade: 0, highscoreDemolition: 0, highestLevelAchieved: 1)
-        }
-        
-        //Print the status of the persistent row, should have values at this point.
-        print("-----------------------DATABASE ROW AFTER LOAD-----------------------------")
-        if let persistentQuery: AnySequence<Row> = PersistentEntity.shared.queryFirst() {
-            for eachPersistent in persistentQuery {
-                PersistentEntity.shared.toString(persistent: eachPersistent)
-            }
-        }
-    }
-    
+//    func initializeDatabase(){
+//        print(Int("2") as Any)
+//        //Look for existing data in database, if not found run the following insert statement.
+//        var tableHasValues = false
+//        if let persistentQuery: AnySequence<Row> = PersistentEntity.shared.queryFirst() {
+//            for eachPersistent in persistentQuery {
+//                if PersistentEntity.shared.hasRow(persistent: eachPersistent) {
+//                    tableHasValues = true
+//                }
+//            }
+//        }
+//        if(!tableHasValues){
+//            print("------------------INSERTING INITAL DATA INTO DATABASE------------------------------------")
+//            //Inserts the initial values into the database (only calls this if row does not already exist).
+//            _ = PersistentEntity.shared.insert(soundEffectsEnabled: true, musicEnabled: true, numberOfLives: 3, timeStopped: 0,
+//                                               displayAds: true, highscoreArcade: 0, highscoreDemolition: 0, highestLevelAchieved: 1)
+//        }
+//
+//        //Print the status of the persistent row, should have values at this point.
+//        print("-----------------------DATABASE ROW AFTER LOAD-----------------------------")
+//        if let persistentQuery: AnySequence<Row> = PersistentEntity.shared.queryFirst() {
+//            for eachPersistent in persistentQuery {
+//                PersistentEntity.shared.toString(persistent: eachPersistent)
+//            }
+//        }
+//    }
+  
     func deallocScenes(){
         mainMenu = nil
         levelSelection = nil
